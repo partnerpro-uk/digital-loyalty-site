@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "digital-loyalty-site",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -17,33 +17,33 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",
-    "@portabletext/react": "^4.0.3",
-    "@sanity/client": "^7.12.0",
-    "@sanity/code-input": "^6.0.3",
-    "@sanity/color-input": "^6.0.2",
-    "@sanity/icons": "^3.7.4",
+    "@netlify/functions": "^5.0.0",
+    "@sanity/client": "^7.13.2",
     "@sanity/image-url": "^1.2.0",
-    "@sanity/vision": "^4.10.3",
     "@tailwindcss/vite": "^4.1.13",
-    "astro": "^5.13.8",
+    "astro": "^5.16.6",
     "astro-i18next": "^1.0.0-beta.21",
-    "deepl-node": "^1.20.0",
     "i18next": "^25.6.0",
     "marked": "^16.4.1",
     "motion": "^12.23.15",
+    "tailwindcss": "^4.1.13"
+  },
+  "devDependencies": {
+    "@portabletext/react": "^4.0.3",
+    "@sanity/code-input": "^7.0.2",
+    "@sanity/color-input": "^6.0.2",
+    "@sanity/icons": "^3.7.4",
+    "@sanity/vision": "^5.1.0",
+    "deepl-node": "^1.20.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-is": "^19.2.0",
-    "sanity": "^4.10.3",
+    "sanity": "^5.1.0",
     "sanity-plugin-asset-source-unsplash": "^7.0.0",
     "sanity-plugin-icon-picker": "^4.0.0",
     "sanity-plugin-media": "^4.1.1",
     "styled-components": "^6.1.19",
-    "tailwindcss": "^4.1.13",
+    "tsx": "^4.20.6",
     "uuid": "^13.0.0"
-  },
-  "devDependencies": {
-    "@netlify/functions": "^5.0.0",
-    "tsx": "^4.20.6"
   }
 }
