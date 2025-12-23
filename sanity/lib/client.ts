@@ -5,7 +5,7 @@ import type { Image } from '@sanity/types';
 
 // Create Sanity client
 export const client: SanityClient = createClient({
-  projectId: import.meta.env.SANITY_STUDIO_PROJECT_ID || import.meta.env.PUBLIC_SANITY_PROJECT_ID,
+  projectId: import.meta.env.SANITY_STUDIO_PROJECT_ID || import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'zutnuftx',
   dataset: import.meta.env.SANITY_STUDIO_DATASET || import.meta.env.PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2025-01-16',
   useCdn: import.meta.env.PROD, // Use CDN in production, fresh data in development
