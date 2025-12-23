@@ -2,6 +2,9 @@
   "name": "digital-loyalty-site",
   "type": "module",
   "version": "0.0.1",
+  "overrides": {
+    "esbuild": "^0.25.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -40,7 +43,6 @@
     "react-is": "^19.2.0",
     "sanity": "^5.1.0",
     "sanity-plugin-asset-source-unsplash": "^7.0.0",
-    "sanity-plugin-icon-picker": "^4.0.0",
     "sanity-plugin-media": "^4.1.1",
     "styled-components": "^6.1.19",
     "tsx": "^4.20.6",

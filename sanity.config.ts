@@ -4,7 +4,6 @@ import { visionTool } from '@sanity/vision';
 import { codeInput } from '@sanity/code-input';
 import { media } from 'sanity-plugin-media';
 import { unsplashImageAsset } from 'sanity-plugin-asset-source-unsplash';
-import { iconPicker } from 'sanity-plugin-icon-picker';
 
 import { blogPost } from './sanity/schemas/blogPost';
 import { category } from './sanity/schemas/category';
@@ -37,8 +36,7 @@ export default defineConfig({
     visionTool(),
     codeInput(),
     media(),
-    unsplashImageAsset(),
-    iconPicker()
+    unsplashImageAsset()
   ],
 
 
