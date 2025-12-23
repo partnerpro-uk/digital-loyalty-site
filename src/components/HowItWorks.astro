@@ -1,0 +1,203 @@
+---
+// How It Works section for Digital Loyalty
+// Fetches content from Sanity CMS with i18n fallback
+import i18next from '../i18next.config';
+import { getPageContentWithFallback } from '../../sanity/lib/pageContent';
+import { getLocaleFromPathname } from '../utils/i18n';
+
+const { t } = i18next;
+
+// Get current language from URL
+const currentLang = getLocaleFromPathname(Astro.url.pathname) || 'en';
+
+// Fetch page content from Sanity
+let pageContent = null;
+try {
+  pageContent = await getPageContentWithFallback('home', currentLang);
+} catch (e) {
+  console.warn('Could not fetch page content from Sanity, using i18n fallback');
+}
+
+// Use Sanity content with i18n fallback
+const howItWorks = pageContent?.howItWorks;
+const sectionBadge = howItWorks?.sectionBadge || t('common:labels.how_it_works');
+const sectionTitle = howItWorks?.title || t('pages:how_it_works.section_title');
+const sectionSubtitle = howItWorks?.subtitle || t('pages:how_it_works.section_subtitle');
+
+// Define step interface for type safety
+interface Step {
+  title: string;
+  description: string;
+  visualType: 'qr' | 'wallet' | 'stamps';
+  cardTitle?: string;
+  cardSubtitle?: string;
+  stampsCollected?: number;
+  stampsTotal?: number;
+  stampsLabel?: string;
+}
+
+// Default steps with i18n fallback
+const defaultSteps: Step[] = [
+  {
+    title: t('pages:how_it_works.step_1.title'),
+    description: t('pages:how_it_works.step_1.description'),
+    visualType: 'qr'
+  },
+  {
+    title: t('pages:how_it_works.step_2.title'),
+    description: t('pages:how_it_works.step_2.description'),
+    visualType: 'wallet',
+    cardTitle: 'Loyalty Card',
+    cardSubtitle: 'Your Business'
+  },
+  {
+    title: t('pages:how_it_works.step_3.title'),
+    description: t('pages:how_it_works.step_3.description'),
+    visualType: 'stamps',
+    stampsCollected: 5,
+    stampsTotal: 10,
+    stampsLabel: 'Stamps Collected'
+  }
+];
+
+// Use Sanity steps if available, otherwise use defaults
+const steps: Step[] = (howItWorks?.steps?.length ? howItWorks.steps : defaultSteps) as Step[];
+---
+
+<section id="how-it-works" class="py-20 bg-[var(--bg-secondary)]/30">
+  <div class="mx-auto max-w-7xl px-6">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] backdrop-blur mb-4">
+        <span>{sectionBadge}</span>
+      </div>
+      <h2 class="text-4xl font-bold tracking-tight sm:text-5xl text-[var(--text-primary)]">
+        {sectionTitle}
+      </h2>
+      <p class="mt-4 text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+        {sectionSubtitle}
+      </p>
+    </div>
+
+    <!-- Steps -->
+    <div class="space-y-20">
+      {steps.map((step, index) => {
+        const stepNumber = index + 1;
+        const isEven = stepNumber % 2 === 0;
+        const stepColors = ['bg-[#8b5cf6]', 'bg-[#a78bfa]', 'bg-[#c084fc]'];
+        const stepColor = stepColors[index] || stepColors[0];
+
+        return (
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Visual - alternates position */}
+            <div class={isEven ? 'order-2' : 'order-2 lg:order-1'}>
+              {step.visualType === 'qr' && (
+                <div class="relative mx-auto w-64 h-64 bg-gradient-to-br from-[#8b5cf6] to-[#a78bfa] rounded-2xl p-6 shadow-2xl flex items-center justify-center">
+                  <div class="w-full h-full bg-white rounded-xl p-5 flex items-center justify-center">
+                    <div class="w-full h-full relative">
+                      {/* QR Code pattern - clean 5x5 */}
+                      <div class="grid grid-cols-5 gap-2 w-full h-full">
+                        {/* Row 1 */}
+                        <div class="bg-[#8b5cf6] rounded"></div>
+                        <div class="bg-[#8b5cf6] rounded"></div>
+                        <div class="bg-transparent"></div>
+                        <div class="bg-[#8b5cf6] rounded"></div>
+                        <div class="bg-[#8b5cf6] rounded"></div>
+                        {/* Row 2 */}
+                        <div class="bg-[#8b5cf6] rounded"></div>
+                        <div class="bg-transparent"></div>
+                        <div class="bg-[#8b5cf6] rounded"></div>
+                        <div class="bg-transparent"></div>
+                        <div class="bg-[#8b5cf6] rounded"></div>
+                        {/* Row 3 */}
+                        <div class="bg-transparent"></div>
+                        <div class="bg-[#8b5cf6] rounded"></div>
+                        <div class="bg-[#8b5cf6] rounded"></div>
+                        <div class="bg-[#8b5cf6] rounded"></div>
+                        <div class="bg-transparent"></div>
+                        {/* Row 4 */}
+                        <div class="bg-[#8b5cf6] rounded"></div>
+                        <div class="bg-transparent"></div>
+                        <div class="bg-[#8b5cf6] rounded"></div>
+                        <div class="bg-transparent"></div>
+                        <div class="bg-[#8b5cf6] rounded"></div>
+                        {/* Row 5 */}
+                        <div class="bg-[#8b5cf6] rounded"></div>
+                        <div class="bg-[#8b5cf6] rounded"></div>
+                        <div class="bg-transparent"></div>
+                        <div class="bg-[#8b5cf6] rounded"></div>
+                        <div class="bg-[#8b5cf6] rounded"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {step.visualType === 'wallet' && (
+                <div class="relative mx-auto w-64 h-96 bg-gradient-to-br from-[#1f1f1f] to-[#0a0a0a] rounded-3xl p-3 shadow-2xl">
+                  <div class="w-full h-full bg-gradient-to-br from-[#8b5cf6] to-[#a78bfa] rounded-2xl p-6 flex flex-col items-center justify-center">
+                    <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-6">
+                      <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                      </svg>
+                    </div>
+                    <div class="text-white text-center mb-6">
+                      <p class="font-bold text-xl">{step.cardTitle || 'Loyalty Card'}</p>
+                      <p class="text-sm opacity-80">{step.cardSubtitle || 'Your Business'}</p>
+                    </div>
+                    <div class="flex gap-2">
+                      <div class="w-8 h-8 bg-white/30 rounded-full"></div>
+                      <div class="w-8 h-8 bg-white/30 rounded-full"></div>
+                      <div class="w-8 h-8 bg-white/30 rounded-full"></div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {step.visualType === 'stamps' && (
+                <div class="relative mx-auto w-64 h-96 bg-gradient-to-br from-[#1f1f1f] to-[#0a0a0a] rounded-3xl p-3 shadow-2xl">
+                  <div class="w-full h-full bg-gradient-to-br from-[#c084fc] to-[#8b5cf6] rounded-2xl p-6 flex flex-col items-center justify-center">
+                    <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mb-6">
+                      <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                    </div>
+                    <div class="text-white text-center">
+                      <p class="text-3xl font-bold mb-2">{step.stampsCollected || 5} of {step.stampsTotal || 10}</p>
+                      <p class="text-sm opacity-80 mb-6">{step.stampsLabel || 'Stamps Collected'}</p>
+                      <div class="grid grid-cols-5 gap-2">
+                        {Array.from({ length: step.stampsTotal || 10 }).map((_, i) => (
+                          <div class={`w-6 h-6 rounded-full ${i < (step.stampsCollected || 5) ? 'bg-white' : 'bg-white/30'}`}></div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Content - alternates position */}
+            <div class={isEven ? 'order-1' : 'order-1 lg:order-2'}>
+              <div class={`inline-flex items-center justify-center w-12 h-12 rounded-full ${stepColor} text-white font-bold text-xl mb-4`}>
+                {stepNumber}
+              </div>
+              <h3 class="text-3xl font-bold mb-4 text-[var(--text-primary)]">{step.title}</h3>
+              <p class="text-lg text-[var(--text-secondary)] leading-relaxed">
+                {step.description}
+              </p>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+
+  <!-- Motion animations -->
+  <script type="module">
+    import { animate, inView, stagger } from "motion";
+
+    inView("section > div > div", ({ target }) => {
+      animate(target, { opacity: [0, 1], y: [30, 0] }, { duration: 0.8, easing: "ease-out", delay: stagger(0.2) });
+    });
+  </script>
+</section>

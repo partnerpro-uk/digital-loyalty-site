@@ -1,0 +1,70 @@
+---
+// Animated card component demonstrating Motion features
+export interface Props {
+  title: string;
+  description: string;
+  color: string;
+}
+
+const { title, description, color } = Astro.props;
+---
+
+<div class="animated-card p-6 rounded-lg shadow-lg bg-gradient-to-br" style={`background: linear-gradient(135deg, ${color}40, ${color}80)`}>
+  <h3 class="text-xl font-semibold mb-2">{title}</h3>
+  <p class="text-gray-600">{description}</p>
+</div>
+
+<script>
+  import { animate, stagger } from 'motion';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.animated-card');
+    
+    // Stagger animation for multiple cards
+    animate(
+      cards,
+      { 
+        opacity: [0, 1], 
+        y: [50, 0],
+        scale: [0.9, 1]
+      },
+      { 
+        duration: 0.6,
+        delay: stagger(0.1)
+      }
+    );
+
+    // Add interactive hover effects
+    cards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        animate(card, 
+          { 
+            scale: 1.05, 
+            y: -10,
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+          }, 
+          { duration: 0.3 }
+        );
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        animate(card, 
+          { 
+            scale: 1, 
+            y: 0,
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+          }, 
+          { duration: 0.3 }
+        );
+      });
+    });
+  });
+</script>
+
+<style>
+  .animated-card {
+    opacity: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+</style>

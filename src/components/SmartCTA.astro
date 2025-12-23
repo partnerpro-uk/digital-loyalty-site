@@ -1,0 +1,209 @@
+---
+/**
+ * SmartCTA Component
+ * Renders CTAs based on site settings configuration
+ * Supports: form_modal, form_page, app_redirect, calendar modes
+ */
+
+import { getSiteSettings, getCtaConfig, buildCtaUrl, type CtaConfig, type CtaMode } from '../../sanity/lib/settings';
+import DynamicLeadForm from './forms/DynamicLeadForm.astro';
+import { client } from '../../sanity/lib/client';
+import { getLocaleFromPathname } from '../utils/i18n';
+
+interface Props {
+  /** Unique identifier for this CTA instance */
+  id: string;
+  /** Button/link text */
+  text: string;
+  /** Visual variant */
+  variant?: 'primary' | 'secondary' | 'gradient' | 'outline';
+  /** Size */
+  size?: 'sm' | 'md' | 'lg';
+  /** Context to pass (plan, source, etc.) */
+  context?: {
+    plan?: string;
+    source?: string;
+    [key: string]: string | undefined;
+  };
+  /** Force a specific mode (overrides site settings) */
+  forceMode?: CtaMode;
+  /** For enterprise-specific CTAs */
+  isEnterprise?: boolean;
+  /** Custom class names */
+  class?: string;
+  /** Show arrow icon */
+  showArrow?: boolean;
+}
+
+const {
+  id,
+  text,
+  variant = 'primary',
+  size = 'md',
+  context = {},
+  forceMode,
+  isEnterprise = false,
+  class: className = '',
+  showArrow = false
+} = Astro.props;
+
+// Get current language
+const currentLang = getLocaleFromPathname(Astro.url.pathname) || 'en';
+
+// Fetch site settings and CTA config
+const settings = await getSiteSettings();
+const ctaConfig = getCtaConfig(settings);
+
+// Determine which mode to use
+let mode: CtaMode | 'contact_form' | 'external' = forceMode || ctaConfig.ctaMode;
+
+// Handle enterprise-specific mode
+if (isEnterprise && ctaConfig.enterpriseCtaMode !== 'same') {
+  mode = ctaConfig.enterpriseCtaMode;
+}
+
+// Fetch form for modal modes
+let modalForm = null;
+if (mode === 'form_modal' || mode === 'contact_form') {
+  const formId = mode === 'contact_form' ? 'contact' : 'get-started';
+  try {
+    modalForm = await client.fetch(`
+      *[_type == "leadForm" && formId == $formId && language == $lang][0]{
+        heading,
+        subheading,
+        submitButtonText,
+        successMessage,
+        socialProofText,
+        fields,
+        successAction,
+        redirectUrl,
+        passContextToRedirect,
+        showLabels,
+        buttonVariant,
+        trackingEnabled
+      }
+    `, { formId, lang: currentLang });
+
+    if (!modalForm && currentLang !== 'en') {
+      modalForm = await client.fetch(`
+        *[_type == "leadForm" && formId == $formId && language == "en"][0]{
+          heading,
+          subheading,
+          submitButtonText,
+          successMessage,
+          socialProofText,
+          fields,
+          successAction,
+          redirectUrl,
+          passContextToRedirect,
+          showLabels,
+          buttonVariant,
+          trackingEnabled
+        }
+      `, { formId });
+    }
+  } catch (e) {
+    console.warn('Could not fetch lead form from Sanity');
+  }
+
+  // Default form if Sanity doesn't have one
+  if (!modalForm) {
+    modalForm = {
+      heading: mode === 'contact_form' ? 'Contact Our Team' : 'Start Your Free Trial',
+      subheading: mode === 'contact_form' ? "We'd love to hear from you." : 'No credit card required.',
+      submitButtonText: mode === 'contact_form' ? 'Send Message' : 'Create My Account',
+      successMessage: mode === 'contact_form' ? 'Thanks! We\'ll be in touch.' : 'Welcome aboard!',
+      socialProofText: 'Join 2,500+ businesses',
+      fields: [
+        { fieldId: 'email', type: 'email', label: 'Work Email', placeholder: 'you@company.com', required: true },
+        { fieldId: 'name', type: 'text', label: 'Full Name', placeholder: 'John Smith', required: true },
+        { fieldId: 'company', type: 'text', label: 'Company Name', placeholder: 'Acme Inc', required: mode === 'contact_form' }
+      ],
+      showLabels: true,
+      buttonVariant: 'gradient',
+      trackingEnabled: true
+    };
+  }
+  modalForm = { ...modalForm, variant: 'modal' };
+}
+
+// Build URLs for redirect modes
+let redirectUrl = '';
+if (mode === 'app_redirect' && ctaConfig.appSignupUrl) {
+  redirectUrl = ctaConfig.passContextToApp
+    ? buildCtaUrl(ctaConfig.appSignupUrl, { ...context, source: context.source || 'cta' })
+    : ctaConfig.appSignupUrl;
+} else if (mode === 'calendar') {
+  const calUrl = isEnterprise && ctaConfig.enterpriseCalendarUrl
+    ? ctaConfig.enterpriseCalendarUrl
+    : ctaConfig.calendarUrl;
+  redirectUrl = calUrl || '/contact';
+} else if (mode === 'external' && ctaConfig.enterpriseExternalUrl) {
+  redirectUrl = ctaConfig.enterpriseExternalUrl;
+} else if (mode === 'form_page') {
+  const params = new URLSearchParams();
+  if (context.plan) params.set('plan', context.plan);
+  if (context.source) params.set('source', context.source);
+  redirectUrl = `/get-started${params.toString() ? '?' + params.toString() : ''}`;
+}
+
+// Style classes based on variant and size
+const sizeClasses = {
+  sm: 'px-4 py-2 text-sm',
+  md: 'px-6 py-3 text-base',
+  lg: 'px-8 py-4 text-lg'
+};
+
+const variantClasses = {
+  primary: 'bg-[var(--bg-accent)] text-[var(--text-on-accent)] hover:opacity-90',
+  secondary: 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border border-[var(--border-color)] hover:bg-[var(--bg-secondary)]/70',
+  gradient: 'bg-gradient-to-r from-[#8b5cf6] to-[#a78bfa] text-white hover:shadow-lg',
+  outline: 'border-2 border-[var(--border-color)] text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]/30'
+};
+
+const baseClasses = `inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all cursor-pointer ${sizeClasses[size]} ${variantClasses[variant]} ${className}`;
+
+// Determine render type
+const isButton = mode === 'form_modal' || mode === 'contact_form';
+const isLink = mode === 'app_redirect' || mode === 'form_page' || mode === 'calendar' || mode === 'external';
+---
+
+{isButton ? (
+  <>
+    <button
+      type="button"
+      id={`cta-${id}`}
+      class={baseClasses}
+    >
+      {text}
+      {showArrow && (
+        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+        </svg>
+      )}
+    </button>
+
+    {modalForm && (
+      <DynamicLeadForm
+        form={modalForm}
+        formId={`smart-cta-${id}`}
+        triggerId={`#cta-${id}`}
+        context={{ ...context, source: context.source || 'smart_cta', language: currentLang }}
+      />
+    )}
+  </>
+) : isLink ? (
+  <a
+    href={redirectUrl}
+    class={baseClasses}
+    target={mode === 'external' ? '_blank' : undefined}
+    rel={mode === 'external' ? 'noopener noreferrer' : undefined}
+  >
+    {text}
+    {showArrow && (
+      <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+      </svg>
+    )}
+  </a>
+) : null}

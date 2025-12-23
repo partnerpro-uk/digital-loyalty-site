@@ -1,0 +1,26 @@
+{
+  "home": {
+    "title": "Digital Loyalty - Des cartes de fidélité modernes pour votre entreprise",
+    "description": "Créez des programmes de fidélisation numériques attrayants qui incitent vos clients à revenir. Configuration simple, fonctionnalités puissantes, aucun matériel n'est nécessaire.",
+    "keywords": "cartes de fidélité numériques, programme de fidélisation des clients, application de récompenses, cartes de portefeuille numériques, apple wallet, google wallet, logiciel de cartes de fidélité"
+  },
+  "features": {
+    "title": "Caractéristiques - Plate-forme de cartes de fidélité numériques",
+    "description": "Découvrez des fonctionnalités puissantes telles que des types de cartes polyvalents, une application scanner, des notifications push et des designs personnalisés pour votre programme de fidélisation.",
+    "keywords": "caractéristiques des cartes de fidélité, récompenses numériques, notifications push, scanner de code QR, cartes de fidélité personnalisées"
+  },
+  "pricing": {
+    "title": "Tarification - Plans de cartes de fidélité abordables",
+    "description": "Choisissez le plan idéal pour votre entreprise. De la startup à l'entreprise, nous avons des tarifs qui s'adaptent à vos besoins.",
+    "keywords": "prix des cartes de fidélité, coût des programmes de fidélisation, prix des récompenses numériques, plans de logiciels de fidélisation"
+  },
+  "blog": {
+    "title": "Blog - Fidélisation numérique : idées et conseils",
+    "description": "Découvrez les meilleures pratiques en matière de fidélisation de la clientèle, les stratégies des programmes de fidélisation et les conseils en matière de marketing numérique.",
+    "keywords": "conseils pour les programmes de fidélisation, fidélisation de la clientèle, marketing numérique, croissance de l'entreprise"
+  },
+  "og": {
+    "site_name": "Fidélisation numérique",
+    "type": "site web"
+  }
+}

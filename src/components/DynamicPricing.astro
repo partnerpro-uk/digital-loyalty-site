@@ -1,0 +1,380 @@
+---
+/**
+ * Dynamic Pricing Component
+ * Fetches pricing from Sanity and updates based on user's country/currency
+ * Supports configurable CTA modes: form_modal, form_page, app_redirect, calendar
+ */
+
+import { getPricingPlans, getPriceForCurrency, getLocalizedPlanName, getLocalizedFeatures, isEnterprisePlan, getPlanButtonConfig, calculateSavingsPercentage } from '../../sanity/lib/pricing';
+import { formatCurrency, calculatePerDay } from '../utils/currency';
+import { getLocaleFromPathname, type Locale } from '../utils/i18n';
+import i18next from '../i18next.config';
+import SmartCTA from './SmartCTA.astro';
+
+const { t } = i18next;
+
+// Get current language from URL
+const currentLocale = getLocaleFromPathname(Astro.url.pathname) as Locale;
+
+// Fetch pricing plans from Sanity for current language
+const plans = await getPricingPlans(currentLocale);
+
+// Default currency (will be replaced client-side)
+const defaultCurrency = 'USD';
+const defaultCountry = 'US';
+---
+
+<section id="pricing" class="py-20 bg-[var(--bg-primary)]"
+  data-i18n-per-day={t('common:pricing_page.billing.per_day')}
+  data-i18n-per-month={t('common:pricing_page.billing.per_month')}
+  data-i18n-per-year={t('common:pricing_page.billing.per_year')}
+  data-i18n-billed-annually={t('common:pricing_page.billing.billed_annually')}
+  data-i18n-save-with-yearly={t('common:pricing_page.billing.save_with_yearly')}
+  data-i18n-lets-talk={t('common:pricing_page.enterprise.lets_talk')}
+  data-i18n-contact-for-pricing={t('common:pricing_page.enterprise.contact_for_pricing')}
+>
+  <div class="mx-auto max-w-7xl px-6">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] backdrop-blur mb-4">
+        <span>💰 {t('common:labels.pricing')}</span>
+      </div>
+      <h2 class="text-4xl font-bold tracking-tight sm:text-5xl text-[var(--text-primary)] mb-4">
+        {t('pages:pricing.section_title')}
+      </h2>
+      <p class="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+        {t('pages:pricing.section_subtitle')}
+      </p>
+    </div>
+
+    <!-- Savings Display (dynamically updated) -->
+    <div id="savings-display" class="text-center mb-4">
+      <p class="text-sm text-[#8b5cf6] font-semibold">
+        <!-- Will be populated by JavaScript -->
+      </p>
+    </div>
+
+    <!-- Billing Period Toggle -->
+    <div class="flex justify-center mb-12">
+      <div class="inline-flex rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)]/30 p-1">
+        <button 
+          class="billing-toggle active px-6 py-2 rounded-md text-sm font-medium transition-all" 
+          data-period="monthly"
+        >
+          {t('common:pricing_page.billing.monthly')}
+        </button>
+        <button 
+          class="billing-toggle px-6 py-2 rounded-md text-sm font-medium transition-all" 
+          data-period="yearly"
+        >
+          {t('common:pricing_page.billing.yearly')}
+          <span id="yearly-savings-badge" class="ml-2 text-xs text-green-600 dark:text-green-400 font-semibold">
+            <!-- Dynamic savings % -->
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Pricing Cards -->
+    {plans.length === 0 ? (
+      <div class="text-center py-12">
+        <p class="text-[var(--text-secondary)]">
+          {t('common:pricing_page.no_plans')} <a href="https://digital-loyalty.sanity.studio" target="_blank" rel="noopener" class="text-[#8b5cf6] underline">{t('common:pricing_page.add_in_sanity')}</a>
+        </p>
+      </div>
+    ) : (
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        {plans.map(plan => {
+          const price = getPriceForCurrency(plan, defaultCurrency);
+          const planName = getLocalizedPlanName(plan);
+          const features = getLocalizedFeatures(plan);
+          const buttonConfig = getPlanButtonConfig(plan, t('common:buttons.contact_sales'), t('common:buttons.get_started'));
+          const isEnterprise = isEnterprisePlan(plan);
+          const savings = price ? calculateSavingsPercentage(price.monthly, price.yearly) : 0;
+          
+          return (
+            <div
+              class={`pricing-card group relative rounded-2xl border p-8 backdrop-blur transition-all duration-300 flex flex-col h-full ${
+                plan.popular
+                  ? 'border-[#8b5cf6]/50 bg-gradient-to-br from-[#8b5cf6]/10 to-[#a78bfa]/10 scale-105 hover:border-[#8b5cf6]'
+                  : 'border-[var(--border-color)] bg-[var(--bg-secondary)]/30 hover:border-[#8b5cf6]/50'
+              }`}
+              data-plan-id={plan.planId}
+              data-is-enterprise={isEnterprise}
+              data-savings={savings}
+            >
+              {plan.popular && (
+                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                  <span class="bg-gradient-to-r from-[#8b5cf6] to-[#a78bfa] text-white px-4 py-1 rounded-full text-sm font-medium">
+                    {t('common:labels.most_popular')}
+                  </span>
+                </div>
+              )}
+
+              <div class="text-center flex flex-col flex-grow">
+                <h3 class="text-2xl font-bold mb-4 text-[var(--text-primary)]">{planName}</h3>
+                
+                {isEnterprise ? (
+                  <>
+                    <div class="mb-2">
+                      <span class="price-amount text-4xl font-bold text-[var(--text-primary)]">
+                        {t('common:pricing_page.enterprise.lets_talk')}
+                      </span>
+                    </div>
+                    
+                    <div class="mb-2">
+                      <span class="price-period text-lg text-[var(--text-secondary)]">
+                        {t('common:pricing_page.enterprise.contact_for_pricing')}
+                      </span>
+                    </div>
+                    
+                    <div class="per-day text-sm text-[var(--text-secondary)] mb-8">
+                      {t('common:pricing_page.enterprise.get_in_touch')}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div class="mb-2">
+                      <span 
+                        class="price-amount text-5xl font-bold text-[var(--text-primary)]" 
+                        data-monthly={price?.monthly || 0}
+                        data-yearly={price?.yearly || 0}
+                        data-currency={defaultCurrency}
+                      >
+                        {formatCurrency(price?.monthly || 0, defaultCurrency, defaultCountry)}
+                      </span>
+                    </div>
+                    
+                    <div class="mb-1">
+                      <span class="price-period text-lg text-[var(--text-secondary)]">{t('common:pricing_page.billing.per_month')}</span>
+                    </div>
+
+                    <div class="billed-annually text-sm text-[#8b5cf6] font-medium mb-1 hidden">
+                      <!-- Will show: "Billed annually at $1,089" when yearly is selected -->
+                    </div>
+
+                    <div class="per-day text-sm text-[var(--text-secondary)] mb-8">
+                      {t('common:pricing_page.billing.per_day').replace('{{price}}', formatCurrency(calculatePerDay(price?.monthly || 0), defaultCurrency, defaultCountry, { decimals: 2 }))}
+                    </div>
+                  </>
+                )}
+
+                <ul class="space-y-3 mb-8 text-left flex-grow">
+                  {features.map(feature => (
+                    <li class="flex items-start gap-3">
+                      <svg class="w-5 h-5 text-[#8b5cf6] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span class="text-[var(--text-secondary)]">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div class="mt-auto">
+                  <SmartCTA
+                    id={`pricing-${plan.planId}`}
+                    text={buttonConfig.text}
+                    variant={plan.popular ? 'gradient' : 'primary'}
+                    size="md"
+                    context={{ plan: plan.planId, source: 'pricing' }}
+                    isEnterprise={isEnterprise}
+                    class="block w-full"
+                  />
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    )}
+  </div>
+</section>
+
+<script>
+  import { formatCurrency, calculatePerDay, calculateSavingsPercentage } from '../utils/currency';
+  import { getCurrentRegion } from '../utils/regionDetection';
+
+  let currentPeriod = 'monthly';
+  let currentCurrency = 'USD';
+  let currentCountry = 'US';
+  let pricesByPlan: Map<string, { monthly: number; yearly: number }> = new Map();
+
+  // Initialize with saved region
+  function initializePricing() {
+    const region = getCurrentRegion();
+    if (region) {
+      currentCountry = region.countryCode;
+      currentCurrency = region.currency;
+    }
+    
+    // Store initial prices for each plan
+    document.querySelectorAll('.pricing-card').forEach(card => {
+      const priceEl = card.querySelector('.price-amount') as HTMLElement;
+      if (priceEl && priceEl.dataset.monthly) {
+        const planId = (card as HTMLElement).dataset.planId || '';
+        pricesByPlan.set(planId, {
+          monthly: parseFloat(priceEl.dataset.monthly),
+          yearly: parseFloat(priceEl.dataset.yearly || '0')
+        });
+      }
+    });
+    
+    updateAllPrices();
+    updateSavingsDisplay();
+  }
+
+  // Calculate average savings across all non-enterprise plans
+  function calculateAverageSavings(): number {
+    let totalSavings = 0;
+    let count = 0;
+    
+    document.querySelectorAll('.pricing-card').forEach(card => {
+      const cardEl = card as HTMLElement;
+      const isEnterprise = cardEl.dataset.isEnterprise === 'true';
+      
+      if (!isEnterprise) {
+        const priceEl = card.querySelector('.price-amount') as HTMLElement;
+        if (priceEl && priceEl.dataset.monthly) {
+          const monthly = parseFloat(priceEl.dataset.monthly);
+          const yearly = parseFloat(priceEl.dataset.yearly || '0');
+          
+          if (monthly && yearly) {
+            const savings = calculateSavingsPercentage(monthly, yearly);
+            totalSavings += savings;
+            count++;
+          }
+        }
+      }
+    });
+    
+    return count > 0 ? Math.round(totalSavings / count) : 0;
+  }
+
+  // Update savings display above toggle
+  function updateSavingsDisplay() {
+    const avgSavings = calculateAverageSavings();
+    const savingsDisplay = document.getElementById('savings-display');
+    const yearlyBadge = document.getElementById('yearly-savings-badge');
+    const pricingSection = document.getElementById('pricing');
+    const saveWithYearlyTemplate = pricingSection?.dataset.i18nSaveWithYearly || 'Save {{percentage}}% with yearly';
+    const savePercentageTemplate = pricingSection?.dataset.i18nSaveWithYearly?.split(' with yearly')[0] || 'Save {{percentage}}%';
+    
+    if (savingsDisplay && avgSavings > 0) {
+      const savingsText = saveWithYearlyTemplate.replace('{{percentage}}', avgSavings.toString());
+      savingsDisplay.querySelector('p')!.textContent = savingsText;
+    }
+    
+    if (yearlyBadge && avgSavings > 0) {
+      const badgeText = savePercentageTemplate.replace('{{percentage}}', avgSavings.toString());
+      yearlyBadge.textContent = badgeText;
+    }
+  }
+
+  // Update all prices
+  function updateAllPrices() {
+    // Get translation strings from data attributes
+    const pricingSection = document.getElementById('pricing');
+    const perDayTemplate = pricingSection?.dataset.i18nPerDay || 'Just {{price}} per day';
+    const perMonthText = pricingSection?.dataset.i18nPerMonth || '/month';
+    const billedAnnuallyTemplate = pricingSection?.dataset.i18nBilledAnnually || 'Billed annually at {{price}}';
+
+    document.querySelectorAll('.pricing-card').forEach(card => {
+      const cardEl = card as HTMLElement;
+      const isEnterprise = cardEl.dataset.isEnterprise === 'true';
+
+      // Skip enterprise plans
+      if (isEnterprise) return;
+
+      const priceEl = card.querySelector('.price-amount') as HTMLElement;
+      const periodEl = card.querySelector('.price-period');
+      const billedAnnuallyEl = card.querySelector('.billed-annually') as HTMLElement;
+      const perDayEl = card.querySelector('.per-day');
+
+      if (priceEl && priceEl.dataset.monthly) {
+        const monthly = parseFloat(priceEl.dataset.monthly);
+        const yearly = parseFloat(priceEl.dataset.yearly || '0');
+
+        if (currentPeriod === 'monthly') {
+          // Monthly: show monthly price, hide billed annually
+          priceEl.textContent = formatCurrency(monthly, currentCurrency, currentCountry);
+          if (billedAnnuallyEl) {
+            billedAnnuallyEl.classList.add('hidden');
+          }
+        } else {
+          // Yearly: show monthly equivalent, show "billed annually at $X"
+          const monthlyEquivalent = yearly / 12;
+          priceEl.textContent = formatCurrency(monthlyEquivalent, currentCurrency, currentCountry);
+
+          if (billedAnnuallyEl) {
+            const formattedYearly = formatCurrency(yearly, currentCurrency, currentCountry);
+            billedAnnuallyEl.textContent = billedAnnuallyTemplate.replace('{{price}}', formattedYearly);
+            billedAnnuallyEl.classList.remove('hidden');
+          }
+        }
+
+        // Period text is always "/month" since we show monthly equivalent
+        if (periodEl) {
+          periodEl.textContent = perMonthText;
+        }
+
+        // Per-day calculation based on selected period
+        if (perDayEl) {
+          const basePrice = currentPeriod === 'monthly' ? monthly : yearly;
+          const daysInPeriod = currentPeriod === 'monthly' ? 30 : 365;
+          const perDay = basePrice / daysInPeriod;
+          const formattedPerDay = formatCurrency(perDay, currentCurrency, currentCountry, { decimals: 2 });
+          perDayEl.textContent = perDayTemplate.replace('{{price}}', formattedPerDay);
+        }
+      }
+    });
+
+    updateSavingsDisplay();
+  }
+
+  // Billing period toggle
+  document.addEventListener('DOMContentLoaded', () => {
+    // Period toggle buttons
+    document.querySelectorAll('.billing-toggle').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.billing-toggle').forEach(b => b.classList.remove('active'));
+        (e.currentTarget as HTMLElement).classList.add('active');
+        currentPeriod = (e.currentTarget as HTMLElement).dataset.period || 'monthly';
+        updateAllPrices();
+      });
+    });
+
+    // Initialize
+    initializePricing();
+  });
+
+  // Listen for region changes
+  window.addEventListener('regionChanged', ((e: CustomEvent) => {
+    currentCountry = e.detail.countryCode;
+    currentCurrency = e.detail.currency;
+    console.log('Pricing updated for:', e.detail.region?.countryName, currentCurrency);
+    updateAllPrices();
+  }) as EventListener);
+</script>
+
+<style>
+  .billing-toggle {
+    transition: all 0.2s;
+    color: var(--text-secondary);
+  }
+
+  .billing-toggle.active {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .pricing-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .pricing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
+  }
+</style>
+

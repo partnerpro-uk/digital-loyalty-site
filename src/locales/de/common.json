@@ -1,0 +1,130 @@
+{
+  "buttons": {
+    "get_started": "Los geht's",
+    "get_started_today": "Beginnen Sie heute",
+    "see_features": "Siehe Merkmale",
+    "create_your_card": "Erstellen Sie Ihre Karte",
+    "choose_plan": "Plan auswählen",
+    "contact_sales": "Kontakt Vertrieb",
+    "close": "Schließen Sie",
+    "previous": "Vorherige",
+    "next": "Weiter",
+    "book_demo": "Demo buchen",
+    "talk_to_sales": "Mit dem Vertrieb sprechen"
+  },
+  "labels": {
+    "web_app": "Web-Anwendung",
+    "fast_lightweight": "Schnell und leicht",
+    "no_signup": "Keine Anmeldung zum Ausprobieren",
+    "features": "Eigenschaften",
+    "key_features": "Wesentliche Merkmale",
+    "gallery": "Galerie",
+    "how_it_works": "Wie es funktioniert",
+    "pricing": "Preisgestaltung",
+    "most_popular": "Am beliebtesten",
+    "blog": "Blog",
+    "about": "Über",
+    "social_proof": "Vertraut von",
+    "problem_solution": "Das Problem",
+    "testimonials": "Bewertungen",
+    "faq": "FAQ",
+    "video": "Demo",
+    "contact": "Kontakt",
+    "ready_to_start": "Sind Sie bereit, loszulegen?",
+    "setup_minutes": "Richten Sie Ihr Kundenbindungsprogramm in wenigen Minuten ein"
+  },
+  "actions": {
+    "toggle_theme": "Thema umschalten",
+    "switch_language": "Sprache wechseln",
+    "select_country": "Land auswählen"
+  },
+  "country_selector": {
+    "select_country": "Land auswählen",
+    "modal_title": "Wählen Sie Ihr Land oder Ihre Region",
+    "modal_subtitle": "Ihre Auswahl wird Sprache und Währung aktualisieren",
+    "regions": {
+      "americas": "Amerika",
+      "europe": "Europa",
+      "middle_east_africa": "Naher Osten und Afrika",
+      "asia_pacific": "Asien-Pazifik"
+    }
+  },
+  "pricing_page": {
+    "billing": {
+      "monthly": "Monatlich",
+      "yearly": "Jährlich",
+      "quarterly": "Vierteljährlich",
+      "save_percentage": "Speichern {{Prozent}}%",
+      "per_month": "/Monat",
+      "per_year": "/Jahr",
+      "per_day": "Nur {{Preis}} pro Tag",
+      "billed_annually": "Jährlich abgerechnet mit {{price}}",
+      "save_with_yearly": "Sparen Sie {{Prozentsatz}}% mit jährlicher",
+      "annual_savings": "Speichern {{Prozent}}%"
+    },
+    "no_plans": "Es sind noch keine Preispläne verfügbar.",
+    "add_in_sanity": "Sie in Sanity Studio hinzufügen",
+    "enterprise": {
+      "lets_talk": "Lassen Sie uns reden",
+      "contact_for_pricing": "Kontaktieren Sie uns für Preise",
+      "get_in_touch": "Nehmen Sie Kontakt auf und erfahren Sie mehr"
+    }
+  },
+  "blog_page": {
+    "title": "Blog",
+    "subtitle": "Einblicke und Strategien",
+    "description": "Erfahren Sie, wie Sie wachstumsfördernde Kundenbindungsprogramme aufbauen und optimieren können.",
+    "featured_articles": "Ausgewählte Artikel",
+    "all_articles": "Alle Artikel",
+    "no_posts": "Noch keine Blogeinträge. Schauen Sie bald wieder vorbei!",
+    "filter_by_category": "Nach Kategorie filtern:",
+    "all_posts": "Alle Beiträge",
+    "read_more": "Mehr lesen",
+    "featured": "Ausgewählt"
+  },
+  "time": {
+    "reading_time": "{{Minuten}} min lesen"
+  },
+  "region_selector": {
+    "select_region": "Region auswählen",
+    "modal_title": "Wählen Sie Ihre Region",
+    "detected_title": "Wir haben es entdeckt:",
+    "detected_subtitle": "Sprache, Land und Währung",
+    "keep_settings": "Behalten Sie diese Einstellungen bei",
+    "change_region": "Wählen Sie eine andere Region",
+    "or_choose": "Oder wählen Sie eine andere Region:",
+    "regions": {
+      "americas": "Amerika",
+      "europe": "Europa",
+      "middle_east_africa": "Naher Osten und Afrika",
+      "asia_pacific": "Asien-Pazifik"
+    }
+  },
+  "forms": {
+    "email_label": "E-Mail",
+    "email_placeholder": "Ihre E-Mail eingeben",
+    "name_label": "Name",
+    "name_placeholder": "Ihr Name",
+    "company_label": "Unternehmen",
+    "company_placeholder": "Name des Unternehmens",
+    "message_label": "Nachricht",
+    "message_placeholder": "Wie können wir helfen?",
+    "submit": "Einreichen",
+    "submitting": "Einreichen...",
+    "success_title": "Ich danke Ihnen!",
+    "success_message": "Wir melden uns bald bei Ihnen.",
+    "error_title": "Etwas ist schief gelaufen",
+    "error_message": "Bitte versuchen Sie es später noch einmal.",
+    "required": "Erforderlich",
+    "invalid_email": "Bitte geben Sie eine gültige E-Mail ein"
+  },
+  "accessibility": {
+    "skip_to_content": "Zum Inhalt springen",
+    "menu": "Menü",
+    "close_menu": "Menü schließen",
+    "expand": "Erweitern Sie",
+    "collapse": "Kollabieren",
+    "play_video": "Video abspielen",
+    "pause_video": "Video anhalten"
+  }
+}

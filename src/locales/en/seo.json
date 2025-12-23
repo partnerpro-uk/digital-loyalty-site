@@ -1,0 +1,27 @@
+{
+  "home": {
+    "title": "Digital Loyalty - Modern Loyalty Cards for Your Business",
+    "description": "Create engaging digital loyalty programs that keep your customers coming back for more. Simple setup, powerful features, no hardware needed.",
+    "keywords": "digital loyalty cards, customer loyalty program, rewards app, digital wallet cards, apple wallet, google wallet, loyalty card software"
+  },
+  "features": {
+    "title": "Features - Digital Loyalty Card Platform",
+    "description": "Discover powerful features including versatile card types, scanner app, push notifications, and custom designs for your loyalty program.",
+    "keywords": "loyalty card features, digital rewards, push notifications, QR code scanner, custom loyalty cards"
+  },
+  "pricing": {
+    "title": "Pricing - Affordable Loyalty Card Plans",
+    "description": "Choose the perfect plan for your business. From startups to enterprises, we have pricing that scales with your needs.",
+    "keywords": "loyalty card pricing, loyalty program cost, digital rewards pricing, loyalty software plans"
+  },
+  "blog": {
+    "title": "Blog - Digital Loyalty Insights & Tips",
+    "description": "Learn best practices for customer retention, loyalty program strategies, and digital marketing tips.",
+    "keywords": "loyalty program tips, customer retention, digital marketing, business growth"
+  },
+  "og": {
+    "site_name": "Digital Loyalty",
+    "type": "website"
+  }
+}
+

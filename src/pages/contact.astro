@@ -1,0 +1,218 @@
+---
+/**
+ * Contact Page
+ * Contact form for enterprise inquiries and general questions
+ * Fetches form configuration from Sanity CMS
+ */
+
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import DynamicLeadForm from '../components/forms/DynamicLeadForm.astro';
+import { client } from '../../sanity/lib/client';
+import { getLocaleFromPathname } from '../utils/i18n';
+import i18next from '../i18next.config';
+
+const { t } = i18next;
+
+// Get current language from URL
+const currentLang = getLocaleFromPathname(Astro.url.pathname) || 'en';
+
+// Get context from URL params
+const source = Astro.url.searchParams.get('source') || 'direct';
+const plan = Astro.url.searchParams.get('plan') || '';
+
+// Fetch contact form config from Sanity (try current language first, fall back to English)
+let form = await client.fetch(`
+  *[_type == "leadForm" && formId == "contact" && language == $lang][0]{
+    heading,
+    subheading,
+    submitButtonText,
+    successMessage,
+    socialProofText,
+    fields,
+    successAction,
+    redirectUrl,
+    passContextToRedirect,
+    variant,
+    showLabels,
+    buttonVariant,
+    trackingEnabled
+  }
+`, { lang: currentLang });
+
+// Fall back to English if no translation found
+if (!form && currentLang !== 'en') {
+  form = await client.fetch(`
+    *[_type == "leadForm" && formId == "contact" && language == "en"][0]{
+      heading,
+      subheading,
+      submitButtonText,
+      successMessage,
+      socialProofText,
+      fields,
+      successAction,
+      redirectUrl,
+      passContextToRedirect,
+      variant,
+      showLabels,
+      buttonVariant,
+      trackingEnabled
+    }
+  `);
+}
+
+// Default form configuration if Sanity doesn't have one yet
+const defaultForm = {
+  heading: t('common:forms.contact_heading') || 'Contact Our Team',
+  subheading: t('common:forms.contact_subheading') || 'Have questions? We\'d love to hear from you.',
+  submitButtonText: t('common:buttons.send_message') || 'Send Message',
+  successMessage: t('common:forms.contact_success') || 'Thanks for reaching out! We\'ll get back to you soon.',
+  socialProofText: t('common:forms.contact_social_proof') || 'Typically respond within 24 hours',
+  fields: [
+    { fieldId: 'email', type: 'email', label: 'Work Email', placeholder: 'you@company.com', required: true },
+    { fieldId: 'name', type: 'text', label: 'Full Name', placeholder: 'John Smith', required: true },
+    { fieldId: 'company', type: 'text', label: 'Company Name', placeholder: 'Acme Inc', required: true },
+    { fieldId: 'phone', type: 'tel', label: 'Phone Number', placeholder: '+1 (555) 123-4567', required: false },
+    { fieldId: 'message', type: 'textarea', label: 'Message', placeholder: 'How can we help?', required: true }
+  ],
+  successAction: 'message',
+  variant: 'default',
+  showLabels: true,
+  buttonVariant: 'primary',
+  trackingEnabled: true
+};
+
+// Use Sanity form or defaults
+const formConfig = form || defaultForm;
+
+// Page metadata
+const pageTitle = t('pages:contact.title') || 'Contact Us - Digital Loyalty';
+const pageDescription = t('pages:contact.description') || 'Get in touch with our team for enterprise solutions, partnerships, or general inquiries.';
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+>
+  <Navigation />
+
+  <main class="min-h-screen bg-[var(--bg-primary)] pt-20 sm:pt-24 pb-12 sm:pb-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <!-- Page Header -->
+      <div class="text-center mb-8 sm:mb-12">
+        <div class="inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] backdrop-blur mb-4 sm:mb-6">
+          <span>💬</span>
+          <span>{t('common:labels.get_in_touch') || 'Get in Touch'}</span>
+        </div>
+
+        {source === 'pricing' && (
+          <p class="text-xs sm:text-sm text-[var(--text-secondary)] mb-3 sm:mb-4">
+            Interested in: <span class="font-semibold text-[var(--text-primary)]">Enterprise Plan</span>
+          </p>
+        )}
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-12 items-start">
+        <!-- Contact Info -->
+        <div class="order-2 lg:order-1">
+          <h1 class="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] mb-4">
+            {t('pages:contact.headline') || 'Let\'s Talk About Your Business'}
+          </h1>
+          <p class="text-lg text-[var(--text-secondary)] mb-8">
+            {t('pages:contact.subheadline') || 'Whether you\'re exploring enterprise solutions or have questions about our platform, we\'re here to help.'}
+          </p>
+
+          <!-- Contact Methods -->
+          <div class="space-y-6 mb-8">
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-10 h-10 rounded-full bg-[var(--bg-accent)]/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-[var(--bg-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-semibold text-[var(--text-primary)]">{t('pages:contact.email_us') || 'Email Us'}</h3>
+                <p class="text-[var(--text-secondary)]">enterprise@digitalloyalty.com</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-10 h-10 rounded-full bg-[var(--bg-accent)]/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-[var(--bg-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-semibold text-[var(--text-primary)]">{t('pages:contact.response_time') || 'Response Time'}</h3>
+                <p class="text-[var(--text-secondary)]">{t('pages:contact.response_time_value') || 'Within 24 hours'}</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-10 h-10 rounded-full bg-[var(--bg-accent)]/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-[var(--bg-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-semibold text-[var(--text-primary)]">{t('pages:contact.dedicated_support') || 'Dedicated Support'}</h3>
+                <p class="text-[var(--text-secondary)]">{t('pages:contact.dedicated_support_value') || 'Enterprise accounts get priority support'}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trust Badges -->
+          <div class="flex flex-wrap gap-4 text-sm text-[var(--text-secondary)]">
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              <span>SOC 2 Compliant</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              <span>GDPR Ready</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              <span>99.9% Uptime SLA</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Container -->
+        <div class="order-1 lg:order-2">
+          <DynamicLeadForm
+            form={formConfig}
+            formId="contact"
+            context={{
+              plan,
+              source,
+              language: currentLang
+            }}
+          />
+        </div>
+      </div>
+
+      <!-- Back Link -->
+      <div class="mt-12 text-center">
+        <a
+          href="/"
+          class="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors inline-flex items-center gap-2"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          {t('common:buttons.back_home') || 'Back to Home'}
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

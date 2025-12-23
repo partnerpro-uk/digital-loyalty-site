@@ -1,0 +1,33 @@
+---
+import Navigation from '../../components/Navigation.astro';
+import DynamicPricing from '../../components/DynamicPricing.astro';
+import Footer from '../../components/Footer.astro';
+import Layout from '../../layouts/Layout.astro';
+import { locales, defaultLocale } from '../../../astro-i18next.config';
+import i18next from '../../i18next.config';
+
+const { changeLanguage, t } = i18next;
+
+export function getStaticPaths() {
+  // Exclude default locale (en) since it's served at root /pricing
+  return locales
+    .filter((lang) => lang !== defaultLocale)
+    .map((lang) => ({
+      params: { lang },
+    }));
+}
+
+const { lang } = Astro.params;
+await changeLanguage(lang);
+---
+
+<Layout 
+  title={t('pages:pricing.page_title')}
+  description={t('pages:pricing.page_description')}
+>
+  <Navigation />
+  <DynamicPricing />
+  <Footer />
+</Layout>
+
+

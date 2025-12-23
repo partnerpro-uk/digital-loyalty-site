@@ -1,0 +1,77 @@
+---
+/**
+ * Table of Contents Component
+ * Generates a TOC from H2 headings in the content
+ */
+
+interface Props {
+  content: any[];
+  post: any;
+}
+
+const { content, post } = Astro.props;
+
+// Extract H2 headings from content
+function extractHeadings(content: any[]): Array<{text: string, id: string}> {
+  const headings: Array<{text: string, id: string}> = [];
+  
+  content.forEach((block: any) => {
+    if (block._type === 'block' && block.style === 'h2' && block.children) {
+      const text = block.children
+        .map((child: any) => child.text || '')
+        .join('')
+        .trim();
+      
+      if (text) {
+        const id = text
+          .toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-')
+          .replace(/^-|-$/g, '');
+        
+        headings.push({ text, id });
+      }
+    }
+  });
+  
+  return headings;
+}
+
+const headings = extractHeadings(content);
+---
+
+{headings.length > 0 && (
+  <aside class="sticky top-24 w-full">
+    <div class="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg p-3">
+      <h3 class="text-lg font-bold text-[var(--text-primary)] mb-4">Table of Contents</h3>
+      
+      <nav class="space-y-2">
+        {headings.map((heading, index) => (
+          <a 
+            href={`#${heading.id}`}
+            class="block text-sm text-[var(--text-secondary)] hover:text-[#8b5cf6] transition-colors py-1 border-l-2 border-transparent hover:border-[#8b5cf6] pl-3 hover:pl-4 transition-all duration-200"
+          >
+            {index + 1}. {heading.text}
+          </a>
+        ))}
+      </nav>
+      
+      <div class="mt-4 pt-4 border-t border-[var(--border-color)]">
+        <button 
+          onclick="document.querySelectorAll('h2').forEach(h2 => h2.scrollIntoView({behavior: 'smooth', block: 'start'}))"
+          class="text-xs text-[#8b5cf6] hover:text-[#a78bfa] transition-colors underline"
+        >
+          Jump to section
+        </button>
+      </div>
+    </div>
+  </aside>
+)}
+
+<style>
+  /* Smooth scrolling for anchor links */
+  html {
+    scroll-behavior: smooth;
+  }
+</style>

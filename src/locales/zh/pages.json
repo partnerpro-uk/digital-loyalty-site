@@ -1,0 +1,224 @@
+{
+  "hero": {
+    "title": "忠诚卡",
+    "title_highlight": "实际使用。",
+    "subtitle": "创建引人入胜的数字忠诚度计划，让客户流连忘返。",
+    "badge_items": [
+      "Web App",
+      "Fast & Lightweight",
+      "No signup to try"
+    ],
+    "marquee": {
+      "rewards_program": "奖励计划",
+      "points_system": "积分系统",
+      "tier_benefits": "分级福利",
+      "gamification": "游戏化"
+    }
+  },
+  "features": {
+    "section_title": "您需要的一切",
+    "section_subtitle": "创建、管理和发展忠诚度计划的强大功能",
+    "versatile_card_types": {
+      "title": "多种卡片类型",
+      "description": "邮票、积分、会员卡和优惠券--所有这些都可以定制，以完美契合您的品牌。"
+    },
+    "scanner_app": {
+      "title": "扫描仪应用程序",
+      "description": "无需额外硬件--使用我们的跨平台网络应用程序扫描和验证卡片。"
+    },
+    "unique_designs": {
+      "title": "独特的设计",
+      "description": "可完全定制的卡片，适合您的品牌形象，在竞争中脱颖而出。"
+    },
+    "push_notifications": {
+      "title": "推送通知",
+      "description": "发送即时营销通知，让客户持续参与并了解优惠信息。"
+    },
+    "simple_setup": {
+      "title": "简单设置",
+      "description": "扫描 QR 码，只需轻点 3 次即可安装。几分钟内即可运行您的忠诚度计划。"
+    },
+    "dashboard": {
+      "title": "仪表板",
+      "description": "通过详细的分析和洞察，在管理面板中跟踪一切。"
+    }
+  },
+  "gallery": {
+    "section_title": "独特的设计",
+    "section_subtitle": "完全可定制的卡片，适合您的品牌。每款设计都独一无二，专为您的企业量身定制。",
+    "examples": {
+      "coffee_shop": "咖啡店",
+      "fitness_studio": "健身工作室",
+      "restaurant": "餐厅",
+      "spa_wellness": "水疗与保健",
+      "retail_store": "零售店",
+      "salon": "沙龙"
+    }
+  },
+  "how_it_works": {
+    "section_title": "简单的设置过程",
+    "section_subtitle": "只需 3 个简单步骤即可运行您的忠诚度计划",
+    "step_1": {
+      "title": "扫描 QR 码",
+      "description": "顾客用手机摄像头扫描二维码，就可以直接将您的会员卡添加到他们的 Apple 或 Google 钱包中。"
+    },
+    "step_2": {
+      "title": "添加到钱包",
+      "description": "只需轻点 3 次，会员卡就会安装到他们的数字钱包中。无需下载应用程序。"
+    },
+    "step_3": {
+      "title": "赚取奖励",
+      "description": "客户每次访问都可收集印章或积分。跟踪他们的进展，观察参与度的增长。"
+    }
+  },
+  "pricing": {
+    "section_title": "简单、透明的定价",
+    "section_subtitle": "选择适合您业务需求的计划",
+    "starter": {
+      "name": "启动器",
+      "price": "$29",
+      "period": "/每月",
+      "features": {
+        "active_cards": "多达 500 张活动卡",
+        "designs": "基本贺卡设计",
+        "support": "电子邮件支持"
+      }
+    },
+    "professional": {
+      "name": "专业人员",
+      "price": "$79",
+      "period": "/每月",
+      "features": {
+        "active_cards": "多达 5,000 张激活卡",
+        "designs": "定制贺卡设计",
+        "notifications": "推送通知",
+        "support": "优先支持"
+      }
+    },
+    "enterprise": {
+      "name": "企业",
+      "price": "定制",
+      "period": "",
+      "features": {
+        "active_cards": "无限张激活卡",
+        "white_label": "白标解决方案",
+        "api": "应用程序接口访问",
+        "support": "专门支持"
+      }
+    },
+    "page_title": "定价计划 - 数字忠诚度",
+    "page_description": "选择最适合您企业的计划。定价灵活，无隐藏费用。"
+  },
+  "footer": {
+    "tagline": "创建引人入胜的数字忠诚度计划，让您的客户流连忘返。简单、强大、有效。"
+  },
+  "social_proof": {
+    "trust_statement": "受到全球 500 多家企业的信赖"
+  },
+  "problem_solution": {
+    "label": "问题所在",
+    "title": "不要再因遗忘忠诚客户卡而失去客户",
+    "subtitle": "传统的忠诚度计划之所以失败，主要有以下三个原因",
+    "problems": {
+      "paper_cards": {
+        "title": "纸质卡片丢失",
+        "description": "85% 的纸质会员卡会在一周内被扔掉。您在印刷和分发方面的投资会被直接扔进垃圾桶。"
+      },
+      "app_fatigue": {
+        "title": "应用程序疲劳是真实存在的",
+        "description": "客户不会为了您的奖励而下载其他应用程序。一般的手机已经有 80 多个应用程序在争夺注意力。"
+      },
+      "no_data": {
+        "title": "无参与数据",
+        "description": "没有客户行为洞察力，你就会盲目飞行。无法知道谁是你的最佳客户，也无法知道是什么驱动了他们。"
+      }
+    },
+    "solution_label": "解决方案",
+    "solution_title": "数字钱包卡",
+    "solution_description": "可在 Apple 和 Google 钱包中使用的卡片--始终与客户在一起。无需下载应用程序。不会丢失卡片。实时分析。"
+  },
+  "bento_features": {
+    "label": "为什么选择我们",
+    "title": "一个平台满足您的所有需求",
+    "subtitle": "专为现代企业设计的强大功能",
+    "items": {
+      "wallet_integration": {
+        "title": "苹果和谷歌钱包",
+        "description": "卡片就在客户的数字钱包中。无需应用程序。"
+      },
+      "real_time_updates": {
+        "title": "实时更新",
+        "description": "推送通知和即时余额更新让客户保持参与。"
+      },
+      "analytics": {
+        "title": "强大的分析功能",
+        "description": "通过详细的洞察和报告了解客户行为。"
+      },
+      "customization": {
+        "title": "完全定制",
+        "description": "通过无限的设计选项完美匹配您的品牌。"
+      },
+      "automation": {
+        "title": "智能自动化",
+        "description": "自动奖励、生日优惠和再参与活动。"
+      },
+      "integration": {
+        "title": "轻松集成",
+        "description": "可与您的 POS、电子商务和现有工具配合使用。"
+      }
+    }
+  },
+  "video_section": {
+    "label": "观看实际操作",
+    "title": "观看工作原理",
+    "subtitle": "2 分钟概述我们的平台",
+    "cta": "播放视频"
+  },
+  "testimonials": {
+    "label": "客户故事",
+    "title": "深受全球企业的喜爱",
+    "subtitle": "了解我们的客户如何看待忠诚度计划的变革"
+  },
+  "faq": {
+    "label": "常见问题",
+    "title": "常见问题",
+    "subtitle": "关于我们平台的所有信息"
+  },
+  "final_cta": {
+    "title": "准备好改革您的忠诚度计划了吗？",
+    "subtitle": "今天就免费开始。无需信用卡。随时取消。",
+    "primary_cta": "免费开始",
+    "secondary_cta": "预约演示",
+    "trust_text": "加入已在使用我们平台的 500 多家企业的行列"
+  },
+  "about": {
+    "page_title": "关于我们 - 数字忠诚度",
+    "page_description": "了解我们通过数字忠诚度计划帮助企业建立持久客户关系的使命。",
+    "hero_title": "我们的故事",
+    "hero_subtitle": "打造客户忠诚度的未来",
+    "mission_label": "我们的使命",
+    "mission_title": "让忠诚变得简单",
+    "mission_text": "我们相信，每个企业都应该使用现代忠诚度工具。我们的使命是帮助各种规模的企业通过简单、强大的数字忠诚度计划建立持久的客户关系。",
+    "story_label": "如何开始",
+    "story_title": "从问题到解决方案",
+    "story_text": "我们看到企业在过时的忠诚度系统中苦苦挣扎--纸质卡片丢失、昂贵的应用程序无人下载、对客户行为的洞察力为零。我们知道必须有更好的方法。于是，我们创建了它。",
+    "values_label": "我们的理念",
+    "values_title": "我们的价值观",
+    "values": {
+      "simplicity": {
+        "title": "简约",
+        "description": "技术应该是无形的。我们打造的工具只需工作，无需复杂。"
+      },
+      "fairness": {
+        "title": "公平性",
+        "description": "价格透明，无任何隐藏费用。所见即所得。"
+      },
+      "customer_first": {
+        "title": "客户至上",
+        "description": "您的成功就是我们的成功。我们将助您成长。"
+      }
+    },
+    "cta_title": "准备好改造您的忠诚度计划了吗？",
+    "cta_button": "免费开始"
+  }
+}

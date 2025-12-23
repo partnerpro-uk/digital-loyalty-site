@@ -1,0 +1,131 @@
+---
+/**
+ * News Template
+ * For news, announcements, and time-sensitive posts
+ */
+
+const { post } = Astro.props;
+---
+
+<article class="news-layout">
+  <header class="news-header mb-8">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="px-3 py-1 text-xs font-bold uppercase tracking-wide rounded-full bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20">
+        News
+      </span>
+      {post.publishedAt && (
+        <time datetime={post.publishedAt} class="text-sm text-[var(--text-secondary)]">
+          {new Date(post.publishedAt).toLocaleDateString(post.language, { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })}
+        </time>
+      )}
+    </div>
+    
+    {post.excerpt && (
+      <p class="text-xl font-semibold text-[var(--text-secondary)] leading-snug max-w-3xl">
+        {post.excerpt}
+      </p>
+    )}
+    
+    {post.author && (
+      <div class="flex items-center gap-3 mt-6">
+        {post.author.image && (
+          <img 
+            src={post.author.image.asset.url + '?w=40&h=40&fit=crop'} 
+            alt={post.author.name}
+            class="w-10 h-10 rounded-full"
+          />
+        )}
+        <div class="text-sm">
+          <p class="font-medium text-[var(--text-primary)]">{post.author.name}</p>
+          {post.category && (
+            <p class="text-[var(--text-secondary)]">
+              {post.category.name[post.language] || post.category.name.en}
+            </p>
+          )}
+        </div>
+      </div>
+    )}
+  </header>
+  
+  <div class="news-content prose prose-lg dark:prose-invert max-w-3xl">
+    <slot />
+  </div>
+  
+  {post.tags && post.tags.length > 0 && (
+    <footer class="mt-12 pt-8 border-t border-[var(--border-color)]">
+      <div class="flex flex-wrap gap-2">
+        {post.tags.map(tag => (
+          <span class="px-3 py-1 text-sm rounded-full bg-[var(--bg-secondary)] border border-[var(--border-color)]">
+            {tag.name[post.language] || tag.name.en}
+          </span>
+        ))}
+      </div>
+    </footer>
+  )}
+</article>
+
+<style>
+  .news-layout {
+    padding: 2rem 1.5rem;
+    max-w: 800px;
+    margin: 0 auto;
+  }
+  
+  .news-header h1 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+  }
+  
+  /* Compact, scannable content */
+  .news-content :global(p) {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+  
+  .news-content :global(h2) {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+  }
+  
+  .news-content :global(h3) {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+  
+  /* Highlight key facts */
+  .news-content :global(blockquote) {
+    background: var(--bg-secondary);
+    border-left: 4px solid #ef4444;
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    font-weight: 500;
+  }
+  
+  .news-content :global(strong) {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+  
+  @media (max-width: 768px) {
+    .news-header h1 {
+      font-size: 1.875rem;
+    }
+  }
+</style>
+
+

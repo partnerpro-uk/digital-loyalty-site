@@ -1,0 +1,26 @@
+{
+  "home": {
+    "title": "Digital Loyalty - Cartões de fidelização modernos para a sua empresa",
+    "description": "Crie programas de fidelização digitais envolventes que fazem com que os seus clientes voltem para mais. Configuração simples, funcionalidades poderosas, sem necessidade de hardware.",
+    "keywords": "cartões de fidelização digitais, programa de fidelização de clientes, aplicação de prémios, cartões de carteira digital, apple wallet, google wallet, software de cartões de fidelização"
+  },
+  "features": {
+    "title": "Caraterísticas - Plataforma digital de cartões de fidelização",
+    "description": "Descubra funcionalidades poderosas, incluindo tipos de cartões versáteis, aplicação de scanner, notificações push e designs personalizados para o seu programa de fidelização.",
+    "keywords": "caraterísticas dos cartões de fidelização, prémios digitais, notificações push, leitor de código QR, cartões de fidelização personalizados"
+  },
+  "pricing": {
+    "title": "Preços - Planos de cartões de fidelização acessíveis",
+    "description": "Escolha o plano perfeito para a sua empresa. De startups a empresas, temos preços que se adaptam às suas necessidades.",
+    "keywords": "preços dos cartões de fidelização, custo do programa de fidelização, preços dos prémios digitais, planos de software de fidelização"
+  },
+  "blog": {
+    "title": "Blogue - Insights e dicas sobre fidelização digital",
+    "description": "Aprenda as melhores práticas para a retenção de clientes, estratégias de programas de fidelização e dicas de marketing digital.",
+    "keywords": "dicas para programas de fidelização, retenção de clientes, marketing digital, crescimento empresarial"
+  },
+  "og": {
+    "site_name": "Fidelidade digital",
+    "type": "sítio Web"
+  }
+}

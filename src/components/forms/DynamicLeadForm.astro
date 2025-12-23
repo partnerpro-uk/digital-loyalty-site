@@ -1,0 +1,645 @@
+---
+/**
+ * Dynamic Lead Form Component
+ * Renders a form based on Sanity CMS configuration
+ * Supports multiple field types, webhooks, and context tracking
+ *
+ * Variants:
+ * - default: Card-style form centered on page
+ * - inline: Horizontal compact form (email + button)
+ * - fullpage: Full-width form for dedicated pages
+ * - modal: Popup/overlay form with backdrop and close button
+ */
+
+interface FormField {
+  fieldId: string;
+  type: 'email' | 'text' | 'tel' | 'select' | 'radio' | 'checkbox' | 'textarea' | 'hidden';
+  label?: string;
+  placeholder?: string;
+  required?: boolean;
+  options?: { label: string; value: string }[];
+  defaultValue?: string;
+  validation?: {
+    minLength?: number;
+    maxLength?: number;
+    pattern?: string;
+  };
+}
+
+interface LeadFormConfig {
+  heading?: string;
+  subheading?: string;
+  submitButtonText?: string;
+  successMessage?: string;
+  socialProofText?: string;
+  fields?: FormField[];
+  successAction?: 'message' | 'redirect' | 'app_redirect';
+  redirectUrl?: string;
+  passContextToRedirect?: boolean;
+  variant?: 'default' | 'inline' | 'fullpage' | 'modal';
+  showLabels?: boolean;
+  buttonVariant?: 'primary' | 'secondary' | 'gradient';
+  trackingEnabled?: boolean;
+}
+
+interface Props {
+  form: LeadFormConfig | null;
+  formId: string;
+  context?: {
+    plan?: string;
+    source?: string;
+    language?: string;
+    region?: string;
+  };
+  class?: string;
+  /** For modal variant: whether to show the modal initially */
+  isOpen?: boolean;
+  /** For modal variant: trigger element selector (e.g., "#open-waitlist-btn") */
+  triggerId?: string;
+}
+
+const { form, formId, context = {}, class: className = '', isOpen = false, triggerId } = Astro.props;
+
+// Collect UTM params from URL
+const url = Astro.url;
+const utmParams = {
+  utmSource: url.searchParams.get('utm_source') || undefined,
+  utmMedium: url.searchParams.get('utm_medium') || undefined,
+  utmCampaign: url.searchParams.get('utm_campaign') || undefined,
+  utmTerm: url.searchParams.get('utm_term') || undefined,
+  utmContent: url.searchParams.get('utm_content') || undefined
+};
+
+// Build full context
+const fullContext = {
+  ...context,
+  ...utmParams,
+  referrer: Astro.request.headers.get('referer') || undefined
+};
+
+// Button styles based on variant
+const buttonStyles = {
+  primary: 'bg-[var(--color-primary)] text-white hover:opacity-90',
+  secondary: 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border border-[var(--border-color)] hover:bg-[var(--bg-primary)]',
+  gradient: 'bg-gradient-to-r from-[#8b5cf6] to-[#a78bfa] text-white hover:shadow-lg hover:shadow-[#8b5cf6]/20'
+};
+
+// Form variant styles - responsive for mobile/tablet/desktop
+const variantStyles = {
+  default: 'w-full max-w-lg mx-auto p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/30 backdrop-blur-sm',
+  inline: 'w-full max-w-2xl mx-auto px-4 sm:px-0',
+  fullpage: 'w-full max-w-xl mx-auto px-4 sm:px-6',
+  modal: 'w-full max-w-[calc(100vw-2rem)] sm:max-w-md mx-auto p-4 sm:p-6 rounded-xl bg-[var(--bg-primary)] shadow-2xl relative'
+};
+
+const formVariant = form?.variant || 'default';
+const isModal = formVariant === 'modal';
+const buttonVariant = form?.buttonVariant || 'gradient';
+const showLabels = form?.showLabels !== false;
+
+// Default fallbacks if no form config
+const heading = form?.heading || 'Get Started';
+const subheading = form?.subheading || '';
+const submitButtonText = form?.submitButtonText || 'Submit';
+const successMessage = form?.successMessage || 'Thank you for signing up!';
+const socialProofText = form?.socialProofText || '';
+const fields = form?.fields || [
+  { fieldId: 'email', type: 'email' as const, label: 'Email', placeholder: 'you@example.com', required: true }
+];
+
+// Input field base classes - responsive
+const inputClasses = 'w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6]/50 focus:border-[#8b5cf6] transition-all';
+---
+
+{/* Modal Overlay Wrapper */}
+{isModal ? (
+  <div
+    id={`modal-overlay-${formId}`}
+    class:list={[
+      'fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6',
+      isOpen ? '' : 'hidden'
+    ]}
+    data-form-modal={formId}
+    data-trigger-id={triggerId}
+  >
+    {/* Backdrop - click to close */}
+    <div
+      class="modal-backdrop fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+      data-close-modal
+    ></div>
+
+    {/* Modal Content Container */}
+    <div
+      class:list={['dynamic-lead-form-wrapper z-10 animate-modal-in', variantStyles[formVariant], className]}
+      data-variant={formVariant}
+    >
+      {/* Close Button */}
+      <button
+        type="button"
+        class="absolute top-2 right-2 sm:top-3 sm:right-3 w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-full bg-[var(--bg-secondary)] hover:bg-[var(--bg-primary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors z-10"
+        data-close-modal
+        aria-label="Close"
+      >
+        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+
+      {heading && (
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-2 text-[var(--text-primary)] pr-8 sm:pr-0">
+          {heading}
+        </h2>
+      )}
+
+      {subheading && (
+        <p class="text-sm sm:text-base text-[var(--text-secondary)] text-center mb-4 sm:mb-6">
+          {subheading}
+        </p>
+      )}
+
+      {socialProofText && (
+        <div class="flex items-center justify-center gap-2 text-xs sm:text-sm text-[var(--text-secondary)] mb-4 sm:mb-6">
+          <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+          <span>{socialProofText}</span>
+        </div>
+      )}
+
+      <form
+        id={`form-${formId}`}
+        class="dynamic-lead-form space-y-3 sm:space-y-4"
+        data-form-id={formId}
+        data-context={JSON.stringify(fullContext)}
+        data-tracking={form?.trackingEnabled !== false ? 'true' : 'false'}
+        data-is-modal="true"
+      >
+        {fields.map((field) => (
+          <div class="form-field">
+            {showLabels && field.type !== 'hidden' && field.label && field.type !== 'checkbox' && (
+              <label
+                for={`${formId}-${field.fieldId}`}
+                class="block text-xs sm:text-sm font-medium mb-1 sm:mb-1.5 text-[var(--text-primary)]"
+              >
+                {field.label}
+                {field.required && <span class="text-red-500 ml-1">*</span>}
+              </label>
+            )}
+
+            {field.type === 'email' && (
+              <input type="email" id={`${formId}-${field.fieldId}`} name={field.fieldId}
+                placeholder={field.placeholder} required={field.required} class={inputClasses} />
+            )}
+
+            {field.type === 'text' && (
+              <input type="text" id={`${formId}-${field.fieldId}`} name={field.fieldId}
+                placeholder={field.placeholder} required={field.required}
+                minlength={field.validation?.minLength} maxlength={field.validation?.maxLength}
+                pattern={field.validation?.pattern} class={inputClasses} />
+            )}
+
+            {field.type === 'tel' && (
+              <input type="tel" id={`${formId}-${field.fieldId}`} name={field.fieldId}
+                placeholder={field.placeholder} required={field.required} class={inputClasses} />
+            )}
+
+            {field.type === 'textarea' && (
+              <textarea id={`${formId}-${field.fieldId}`} name={field.fieldId}
+                placeholder={field.placeholder} required={field.required} rows={3}
+                minlength={field.validation?.minLength} maxlength={field.validation?.maxLength}
+                class:list={[inputClasses, 'resize-y']} />
+            )}
+
+            {field.type === 'select' && (
+              <select id={`${formId}-${field.fieldId}`} name={field.fieldId}
+                required={field.required} class={inputClasses}>
+                <option value="">{field.placeholder || 'Select...'}</option>
+                {field.options?.map(opt => (
+                  <option value={opt.value} selected={opt.value === field.defaultValue}>{opt.label}</option>
+                ))}
+              </select>
+            )}
+
+            {field.type === 'radio' && field.options && (
+              <div class="flex flex-wrap gap-3 sm:gap-4">
+                {field.options.map(opt => (
+                  <label class="flex items-center gap-2 cursor-pointer text-sm sm:text-base">
+                    <input type="radio" name={field.fieldId} value={opt.value}
+                      required={field.required} checked={opt.value === field.defaultValue}
+                      class="w-4 h-4 text-[#8b5cf6] focus:ring-[#8b5cf6]" />
+                    <span class="text-[var(--text-primary)]">{opt.label}</span>
+                  </label>
+                ))}
+              </div>
+            )}
+
+            {field.type === 'checkbox' && (
+              <label class="flex items-start gap-2 sm:gap-3 cursor-pointer">
+                <input type="checkbox" id={`${formId}-${field.fieldId}`} name={field.fieldId}
+                  required={field.required} checked={field.defaultValue === 'true'}
+                  class="w-4 h-4 sm:w-5 sm:h-5 mt-0.5 text-[#8b5cf6] focus:ring-[#8b5cf6] rounded" />
+                <span class="text-xs sm:text-sm text-[var(--text-primary)]">{field.label}</span>
+              </label>
+            )}
+
+            {field.type === 'hidden' && (
+              <input type="hidden" name={field.fieldId} value={field.defaultValue || ''} />
+            )}
+          </div>
+        ))}
+
+        <button
+          type="submit"
+          class:list={[
+            'w-full py-3 sm:py-3.5 px-4 sm:px-6 rounded-lg font-semibold text-sm sm:text-base transition-all duration-300 flex items-center justify-center gap-2',
+            buttonStyles[buttonVariant]
+          ]}
+        >
+          <span class="button-text">{submitButtonText}</span>
+          <span class="button-loading hidden">
+            <svg class="animate-spin h-4 w-4 sm:h-5 sm:w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </span>
+        </button>
+      </form>
+
+      <!-- Success message -->
+      <div id={`success-${formId}`} class="form-success hidden text-center py-6 sm:py-8">
+        <div class="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-green-500/10 mb-3 sm:mb-4">
+          <svg class="w-6 h-6 sm:w-8 sm:h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+        </div>
+        <p class="text-base sm:text-lg font-semibold text-[var(--text-primary)]">{successMessage}</p>
+      </div>
+
+      <!-- Error message -->
+      <div id={`error-${formId}`} class="form-error hidden text-center py-3 sm:py-4 px-3 sm:px-4 rounded-lg bg-red-500/10 border border-red-500/20 mt-3 sm:mt-4">
+        <p class="text-red-600 text-xs sm:text-sm">Something went wrong. Please try again.</p>
+      </div>
+    </div>
+  </div>
+) : (
+  /* Non-Modal Wrapper */
+  <div
+    class:list={['dynamic-lead-form-wrapper', variantStyles[formVariant], className]}
+    data-variant={formVariant}
+  >
+    {heading && (
+      <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-2 text-[var(--text-primary)]">
+        {heading}
+      </h2>
+    )}
+
+    {subheading && (
+      <p class="text-sm sm:text-base text-[var(--text-secondary)] text-center mb-4 sm:mb-6">
+        {subheading}
+      </p>
+    )}
+
+    {socialProofText && (
+      <div class="flex items-center justify-center gap-2 text-xs sm:text-sm text-[var(--text-secondary)] mb-4 sm:mb-6">
+        <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+        </svg>
+        <span>{socialProofText}</span>
+      </div>
+    )}
+
+    <form
+      id={`form-${formId}`}
+      class="dynamic-lead-form space-y-3 sm:space-y-4"
+      data-form-id={formId}
+      data-context={JSON.stringify(fullContext)}
+      data-tracking={form?.trackingEnabled !== false ? 'true' : 'false'}
+    >
+      {fields.map((field) => (
+        <div class="form-field">
+          {showLabels && field.type !== 'hidden' && field.label && field.type !== 'checkbox' && (
+            <label
+              for={`${formId}-${field.fieldId}`}
+              class="block text-xs sm:text-sm font-medium mb-1 sm:mb-1.5 text-[var(--text-primary)]"
+            >
+              {field.label}
+              {field.required && <span class="text-red-500 ml-1">*</span>}
+            </label>
+          )}
+
+          {field.type === 'email' && (
+            <input type="email" id={`${formId}-${field.fieldId}`} name={field.fieldId}
+              placeholder={field.placeholder} required={field.required} class={inputClasses} />
+          )}
+
+          {field.type === 'text' && (
+            <input type="text" id={`${formId}-${field.fieldId}`} name={field.fieldId}
+              placeholder={field.placeholder} required={field.required}
+              minlength={field.validation?.minLength} maxlength={field.validation?.maxLength}
+              pattern={field.validation?.pattern} class={inputClasses} />
+          )}
+
+          {field.type === 'tel' && (
+            <input type="tel" id={`${formId}-${field.fieldId}`} name={field.fieldId}
+              placeholder={field.placeholder} required={field.required} class={inputClasses} />
+          )}
+
+          {field.type === 'textarea' && (
+            <textarea id={`${formId}-${field.fieldId}`} name={field.fieldId}
+              placeholder={field.placeholder} required={field.required} rows={4}
+              minlength={field.validation?.minLength} maxlength={field.validation?.maxLength}
+              class:list={[inputClasses, 'resize-y']} />
+          )}
+
+          {field.type === 'select' && (
+            <select id={`${formId}-${field.fieldId}`} name={field.fieldId}
+              required={field.required} class={inputClasses}>
+              <option value="">{field.placeholder || 'Select...'}</option>
+              {field.options?.map(opt => (
+                <option value={opt.value} selected={opt.value === field.defaultValue}>{opt.label}</option>
+              ))}
+            </select>
+          )}
+
+          {field.type === 'radio' && field.options && (
+            <div class="flex flex-wrap gap-3 sm:gap-4">
+              {field.options.map(opt => (
+                <label class="flex items-center gap-2 cursor-pointer text-sm sm:text-base">
+                  <input type="radio" name={field.fieldId} value={opt.value}
+                    required={field.required} checked={opt.value === field.defaultValue}
+                    class="w-4 h-4 text-[#8b5cf6] focus:ring-[#8b5cf6]" />
+                  <span class="text-[var(--text-primary)]">{opt.label}</span>
+                </label>
+              ))}
+            </div>
+          )}
+
+          {field.type === 'checkbox' && (
+            <label class="flex items-start gap-2 sm:gap-3 cursor-pointer">
+              <input type="checkbox" id={`${formId}-${field.fieldId}`} name={field.fieldId}
+                required={field.required} checked={field.defaultValue === 'true'}
+                class="w-4 h-4 sm:w-5 sm:h-5 mt-0.5 text-[#8b5cf6] focus:ring-[#8b5cf6] rounded" />
+              <span class="text-xs sm:text-sm text-[var(--text-primary)]">{field.label}</span>
+            </label>
+          )}
+
+          {field.type === 'hidden' && (
+            <input type="hidden" name={field.fieldId} value={field.defaultValue || ''} />
+          )}
+        </div>
+      ))}
+
+      <button
+        type="submit"
+        class:list={[
+          'w-full py-3 sm:py-3.5 px-4 sm:px-6 rounded-lg font-semibold text-sm sm:text-base transition-all duration-300 flex items-center justify-center gap-2',
+          buttonStyles[buttonVariant]
+        ]}
+      >
+        <span class="button-text">{submitButtonText}</span>
+        <span class="button-loading hidden">
+          <svg class="animate-spin h-4 w-4 sm:h-5 sm:w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </span>
+      </button>
+    </form>
+
+    <!-- Success message -->
+    <div id={`success-${formId}`} class="form-success hidden text-center py-6 sm:py-8">
+      <div class="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-green-500/10 mb-3 sm:mb-4">
+        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+      </div>
+      <p class="text-base sm:text-lg font-semibold text-[var(--text-primary)]">{successMessage}</p>
+    </div>
+
+    <!-- Error message -->
+    <div id={`error-${formId}`} class="form-error hidden text-center py-3 sm:py-4 px-3 sm:px-4 rounded-lg bg-red-500/10 border border-red-500/20 mt-3 sm:mt-4">
+      <p class="text-red-600 text-xs sm:text-sm">Something went wrong. Please try again.</p>
+    </div>
+  </div>
+)}
+
+<style>
+  /* Modal animation */
+  @keyframes modal-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95) translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  .animate-modal-in {
+    animation: modal-in 0.2s ease-out forwards;
+  }
+
+  /* Prevent body scroll when modal is open */
+  :global(body.modal-open) {
+    overflow: hidden;
+  }
+
+  /* Safe area padding for notched devices */
+  @supports (padding: max(0px)) {
+    [data-form-modal] {
+      padding-left: max(1rem, env(safe-area-inset-left));
+      padding-right: max(1rem, env(safe-area-inset-right));
+      padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    }
+  }
+</style>
+
+<script>
+  // Type declaration for PostHog
+  declare global {
+    interface Window {
+      posthog?: {
+        capture: (event: string, properties?: Record<string, any>) => void;
+      };
+    }
+  }
+
+  // Modal functionality
+  function initModals() {
+    document.querySelectorAll('[data-form-modal]').forEach(modal => {
+      const modalEl = modal as HTMLElement;
+      const formId = modalEl.dataset.formModal;
+      const triggerId = modalEl.dataset.triggerId;
+
+      // TELEPORT: Move modal to body to escape parent stacking context
+      // This fixes modals rendering inside pricing cards or other containers
+      if (modalEl.parentElement !== document.body) {
+        document.body.appendChild(modalEl);
+      }
+
+      // Open modal from trigger button
+      if (triggerId) {
+        const triggerEl = document.querySelector(triggerId);
+        if (triggerEl) {
+          triggerEl.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal(formId!);
+          });
+        }
+      }
+
+      // Close modal on backdrop or close button click
+      modalEl.querySelectorAll('[data-close-modal]').forEach(closeEl => {
+        closeEl.addEventListener('click', () => {
+          closeModal(formId!);
+        });
+      });
+
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modalEl.classList.contains('hidden')) {
+          closeModal(formId!);
+        }
+      });
+    });
+  }
+
+  function openModal(formId: string) {
+    const modal = document.getElementById(`modal-overlay-${formId}`);
+    if (modal) {
+      modal.classList.remove('hidden');
+      document.body.classList.add('modal-open');
+
+      // Track modal open
+      if (window.posthog) {
+        window.posthog.capture('modal_opened', { form_id: formId });
+      }
+    }
+  }
+
+  function closeModal(formId: string) {
+    const modal = document.getElementById(`modal-overlay-${formId}`);
+    if (modal) {
+      modal.classList.add('hidden');
+      document.body.classList.remove('modal-open');
+
+      // Track modal close
+      if (window.posthog) {
+        window.posthog.capture('modal_closed', { form_id: formId });
+      }
+    }
+  }
+
+  // Expose functions globally for programmatic control
+  (window as any).openLeadFormModal = openModal;
+  (window as any).closeLeadFormModal = closeModal;
+
+  // Form submission handling
+  document.querySelectorAll('.dynamic-lead-form').forEach(formEl => {
+    const form = formEl as HTMLFormElement;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formId = form.dataset.formId || '';
+      const context = JSON.parse(form.dataset.context || '{}');
+      const trackingEnabled = form.dataset.tracking === 'true';
+      const isModal = form.dataset.isModal === 'true';
+
+      // Get UI elements
+      const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+      const buttonText = form.querySelector('.button-text') as HTMLElement;
+      const buttonLoading = form.querySelector('.button-loading') as HTMLElement;
+      const successEl = document.getElementById(`success-${formId}`);
+      const errorEl = document.getElementById(`error-${formId}`);
+
+      // Collect form data
+      const formData = new FormData(form);
+      const data: Record<string, string> = {};
+      formData.forEach((value, key) => {
+        data[key] = value.toString();
+      });
+
+      // Start loading state
+      if (buttonText) buttonText.classList.add('hidden');
+      if (buttonLoading) buttonLoading.classList.remove('hidden');
+      if (submitBtn) submitBtn.disabled = true;
+      if (errorEl) errorEl.classList.add('hidden');
+
+      // Track form submission start
+      if (trackingEnabled && window.posthog) {
+        window.posthog.capture('form_submitted', {
+          form_id: formId,
+          form_type: 'lead_capture',
+          is_modal: isModal,
+          ...context
+        });
+      }
+
+      try {
+        const response = await fetch('/.netlify/functions/lead-capture', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ formId, data, context })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          // Hide form, show success
+          form.classList.add('hidden');
+          if (successEl) successEl.classList.remove('hidden');
+
+          // Track success
+          if (trackingEnabled && window.posthog) {
+            window.posthog.capture('form_success', { form_id: formId });
+          }
+
+          // Handle redirect if specified
+          if (result.redirect) {
+            setTimeout(() => {
+              window.location.href = result.redirect;
+            }, 1500);
+          } else if (isModal) {
+            // Auto-close modal after showing success for a moment
+            setTimeout(() => {
+              closeModal(formId);
+              // Reset form for next use
+              form.classList.remove('hidden');
+              if (successEl) successEl.classList.add('hidden');
+              form.reset();
+            }, 2500);
+          }
+        } else {
+          throw new Error(result.error || 'Submission failed');
+        }
+      } catch (error) {
+        // Show error message
+        if (errorEl) errorEl.classList.remove('hidden');
+
+        // Track error
+        if (trackingEnabled && window.posthog) {
+          window.posthog.capture('form_error', {
+            form_id: formId,
+            error: error instanceof Error ? error.message : 'Unknown error'
+          });
+        }
+
+        console.error('[Lead Form] Error:', error);
+      } finally {
+        // Reset button state
+        if (buttonText) buttonText.classList.remove('hidden');
+        if (buttonLoading) buttonLoading.classList.add('hidden');
+        if (submitBtn) submitBtn.disabled = false;
+      }
+    });
+  });
+
+  // Initialize modals on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initModals);
+  } else {
+    initModals();
+  }
+</script>

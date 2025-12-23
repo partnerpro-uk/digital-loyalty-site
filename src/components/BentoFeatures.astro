@@ -1,0 +1,240 @@
+---
+// Bento Grid Features section - Modern balanced layout
+// Fetches content from Sanity CMS with i18n fallback
+import i18next from '../i18next.config';
+import { getPageContentWithFallback } from '../../sanity/lib/pageContent';
+import { getLocaleFromPathname } from '../utils/i18n';
+
+const { t } = i18next;
+
+// Get current language from URL
+const currentLang = getLocaleFromPathname(Astro.url.pathname) || 'en';
+
+// Fetch page content from Sanity
+let pageContent = null;
+try {
+  pageContent = await getPageContentWithFallback('home', currentLang);
+} catch (e) {
+  console.warn('Could not fetch page content from Sanity, using i18n fallback');
+}
+
+// Use Sanity content with i18n fallback
+const features = pageContent?.features;
+const sectionLabel = features?.sectionBadge || t('pages:bento_features.label');
+const sectionTitle = features?.title || t('pages:bento_features.title');
+const sectionSubtitle = features?.subtitle || t('pages:bento_features.subtitle');
+
+// Feature items from Sanity or i18n fallback - items is an array in Sanity
+const getFeatureItem = (icon: string, i18nKey: string) => {
+  const sanityItem = features?.items?.find((item: any) => item.icon === icon);
+  return {
+    title: sanityItem?.title || t(`pages:bento_features.items.${i18nKey}.title`),
+    description: sanityItem?.description || t(`pages:bento_features.items.${i18nKey}.description`)
+  };
+};
+
+const walletIntegration = getFeatureItem('wallet', 'wallet_integration');
+const realTimeUpdates = getFeatureItem('notifications', 'real_time_updates');
+const analyticsItem = getFeatureItem('analytics', 'analytics');
+const customizationItem = getFeatureItem('customization', 'customization');
+const automationItem = getFeatureItem('automation', 'automation');
+const integrationItem = getFeatureItem('integration', 'integration');
+---
+
+<section id="bento-features" class="py-20 bg-[var(--bg-secondary)]/30">
+  <div class="mx-auto max-w-7xl px-6">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] backdrop-blur mb-4">
+        <span>{sectionLabel}</span>
+      </div>
+      <h2 class="text-4xl font-bold tracking-tight sm:text-5xl text-[var(--text-primary)]">
+        {sectionTitle}
+      </h2>
+      <p class="mt-4 text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+        {sectionSubtitle}
+      </p>
+    </div>
+
+    <!-- Bento Grid - Balanced 3x2 layout -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 max-w-6xl mx-auto">
+      <!-- Row 1: Hero card (2 cols) + Regular card -->
+
+      <!-- Large Hero Card (spans 2 cols) - Wallet Integration -->
+      <div class="bento-item md:col-span-2 group relative rounded-2xl border border-[var(--border-color)] bg-[var(--bg-primary)] p-6 lg:p-8 overflow-hidden hover:border-[#8b5cf6]/50 transition-all duration-300">
+        <div class="absolute inset-0 bg-gradient-to-br from-[#8b5cf6]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <!-- Background pattern -->
+        <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-gradient-to-br from-[#8b5cf6]/20 to-[#a78bfa]/10 rounded-full blur-3xl"></div>
+
+        <div class="relative h-full flex flex-col">
+          <div class="w-12 h-12 bg-gradient-to-br from-[#8b5cf6] to-[#a78bfa] rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-[#8b5cf6]/20">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+            </svg>
+          </div>
+
+          <h3 class="text-xl lg:text-2xl font-bold mb-3 text-[var(--text-primary)]">
+            {walletIntegration.title}
+          </h3>
+          <p class="text-[var(--text-secondary)] leading-relaxed mb-6 max-w-lg">
+            {walletIntegration.description}
+          </p>
+
+          <!-- Wallet buttons -->
+          <div class="mt-auto flex flex-wrap gap-3">
+            <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-black text-white text-sm font-medium">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+              </svg>
+              Apple Wallet
+            </div>
+            <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-[var(--border-color)] text-[var(--text-primary)] text-sm font-medium">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+              </svg>
+              Google Wallet
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real-Time Updates -->
+      <div class="bento-item group relative rounded-2xl border border-[var(--border-color)] bg-[var(--bg-primary)] p-6 hover:border-[#8b5cf6]/50 transition-all duration-300">
+        <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#8b5cf6]/5 to-[#a78bfa]/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="relative">
+          <div class="w-12 h-12 bg-gradient-to-br from-[#a78bfa] to-[#c084fc] rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2 text-[var(--text-primary)]">
+            {realTimeUpdates.title}
+          </h3>
+          <p class="text-[var(--text-secondary)] text-sm leading-relaxed">
+            {realTimeUpdates.description}
+          </p>
+        </div>
+      </div>
+
+      <!-- Row 2: 3 equal cards -->
+
+      <!-- Analytics -->
+      <div class="bento-item group relative rounded-2xl border border-[var(--border-color)] bg-[var(--bg-primary)] p-6 hover:border-[#8b5cf6]/50 transition-all duration-300">
+        <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#8b5cf6]/5 to-[#a78bfa]/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="relative">
+          <div class="w-12 h-12 bg-gradient-to-br from-[#c084fc] to-[#8b5cf6] rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2 text-[var(--text-primary)]">
+            {analyticsItem.title}
+          </h3>
+          <p class="text-[var(--text-secondary)] text-sm leading-relaxed">
+            {analyticsItem.description}
+          </p>
+        </div>
+      </div>
+
+      <!-- Customization -->
+      <div class="bento-item group relative rounded-2xl border border-[var(--border-color)] bg-[var(--bg-primary)] p-6 hover:border-[#8b5cf6]/50 transition-all duration-300">
+        <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#8b5cf6]/5 to-[#a78bfa]/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="relative">
+          <div class="w-12 h-12 bg-gradient-to-br from-[#7c3aed] to-[#8b5cf6] rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2 text-[var(--text-primary)]">
+            {customizationItem.title}
+          </h3>
+          <p class="text-[var(--text-secondary)] text-sm leading-relaxed">
+            {customizationItem.description}
+          </p>
+        </div>
+      </div>
+
+      <!-- Automation -->
+      <div class="bento-item group relative rounded-2xl border border-[var(--border-color)] bg-[var(--bg-primary)] p-6 hover:border-[#8b5cf6]/50 transition-all duration-300">
+        <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#8b5cf6]/5 to-[#a78bfa]/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="relative">
+          <div class="w-12 h-12 bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2 text-[var(--text-primary)]">
+            {automationItem.title}
+          </h3>
+          <p class="text-[var(--text-secondary)] text-sm leading-relaxed">
+            {automationItem.description}
+          </p>
+        </div>
+      </div>
+
+      <!-- Row 3: Regular card + Wide card (2 cols) -->
+
+      <!-- Integration -->
+      <div class="bento-item group relative rounded-2xl border border-[var(--border-color)] bg-[var(--bg-primary)] p-6 hover:border-[#8b5cf6]/50 transition-all duration-300">
+        <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#8b5cf6]/5 to-[#a78bfa]/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="relative">
+          <div class="w-12 h-12 bg-gradient-to-br from-[#a78bfa] to-[#7c3aed] rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2 text-[var(--text-primary)]">
+            {integrationItem.title}
+          </h3>
+          <p class="text-[var(--text-secondary)] text-sm leading-relaxed">
+            {integrationItem.description}
+          </p>
+        </div>
+      </div>
+
+      <!-- Wide bottom card - CTA or additional feature -->
+      <div class="bento-item md:col-span-2 group relative rounded-2xl border border-[var(--border-color)] bg-gradient-to-br from-[#8b5cf6]/10 to-[#a78bfa]/5 p-6 hover:border-[#8b5cf6]/50 transition-all duration-300">
+        <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#8b5cf6]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="relative flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-[#8b5cf6] to-[#a78bfa] rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold text-[var(--text-primary)]">
+                {t('common:labels.ready_to_start')}
+              </h3>
+              <p class="text-[var(--text-secondary)] text-sm">
+                {t('common:labels.setup_minutes')}
+              </p>
+            </div>
+          </div>
+          <a href="#pricing" class="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-gradient-to-r from-[#8b5cf6] to-[#a78bfa] text-white font-semibold hover:shadow-lg hover:shadow-[#8b5cf6]/20 transition-all">
+            {t('common:buttons.get_started')}
+            <svg class="w-4 h-4 ms-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Motion animations -->
+  <script type="module">
+    import { animate, inView, stagger } from "motion";
+
+    inView("#bento-features .bento-item", () => {
+      animate(
+        "#bento-features .bento-item",
+        { opacity: [0, 1], y: [30, 0] },
+        { duration: 0.6, easing: "ease-out", delay: stagger(0.1) }
+      );
+    }, { amount: 0.2 });
+  </script>
+</section>

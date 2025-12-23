@@ -1,0 +1,165 @@
+---
+/**
+ * Get Started Page
+ * Lead capture form that fetches configuration from Sanity CMS
+ * Supports context passing (plan, source, UTM params)
+ */
+
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import DynamicLeadForm from '../components/forms/DynamicLeadForm.astro';
+import { client } from '../../sanity/lib/client';
+import { getLocaleFromPathname } from '../utils/i18n';
+import i18next from '../i18next.config';
+
+const { t } = i18next;
+
+// Get current language from URL
+const currentLang = getLocaleFromPathname(Astro.url.pathname) || 'en';
+
+// Get context from URL params
+const plan = Astro.url.searchParams.get('plan') || '';
+const source = Astro.url.searchParams.get('source') || 'direct';
+
+// Fetch form config from Sanity (try current language first, fall back to English)
+let form = await client.fetch(`
+  *[_type == "leadForm" && formId == "get-started" && language == $lang][0]{
+    heading,
+    subheading,
+    submitButtonText,
+    successMessage,
+    socialProofText,
+    fields,
+    successAction,
+    redirectUrl,
+    passContextToRedirect,
+    variant,
+    showLabels,
+    buttonVariant,
+    trackingEnabled
+  }
+`, { lang: currentLang });
+
+// Fall back to English if no translation found
+if (!form && currentLang !== 'en') {
+  form = await client.fetch(`
+    *[_type == "leadForm" && formId == "get-started" && language == "en"][0]{
+      heading,
+      subheading,
+      submitButtonText,
+      successMessage,
+      socialProofText,
+      fields,
+      successAction,
+      redirectUrl,
+      passContextToRedirect,
+      variant,
+      showLabels,
+      buttonVariant,
+      trackingEnabled
+    }
+  `);
+}
+
+// Default form configuration if Sanity doesn't have one yet
+const defaultForm = {
+  heading: t('common:forms.get_started_heading') || 'Start Your Free Trial',
+  subheading: t('common:forms.get_started_subheading') || 'No credit card required. Cancel anytime.',
+  submitButtonText: t('common:buttons.create_account') || 'Create My Account',
+  successMessage: t('common:forms.success_message') || 'Thank you! We\'ll be in touch soon.',
+  socialProofText: t('common:forms.social_proof') || 'Trusted by 500+ businesses',
+  fields: [
+    { fieldId: 'email', type: 'email', label: 'Work Email', placeholder: 'you@company.com', required: true },
+    { fieldId: 'name', type: 'text', label: 'Full Name', placeholder: 'John Smith', required: true },
+    { fieldId: 'company', type: 'text', label: 'Company Name', placeholder: 'Acme Inc', required: false }
+  ],
+  successAction: 'message',
+  variant: 'default',
+  showLabels: true,
+  buttonVariant: 'gradient',
+  trackingEnabled: true
+};
+
+// Use Sanity form or defaults
+const formConfig = form || defaultForm;
+
+// Page metadata
+const pageTitle = t('pages:get_started.title') || 'Get Started - Digital Loyalty';
+const pageDescription = t('pages:get_started.description') || 'Start your free trial and transform your customer loyalty program today.';
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+>
+  <Navigation />
+
+  <main class="min-h-screen bg-[var(--bg-primary)] pt-20 sm:pt-24 pb-12 sm:pb-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <!-- Page Header -->
+      <div class="text-center mb-8 sm:mb-12">
+        <div class="inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] backdrop-blur mb-4 sm:mb-6">
+          <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+          <span>{t('common:labels.limited_time_offer') || 'Free Trial Available'}</span>
+        </div>
+
+        {plan && (
+          <p class="text-xs sm:text-sm text-[var(--text-secondary)] mb-3 sm:mb-4">
+            Selected plan: <span class="font-semibold text-[var(--text-primary)] capitalize">{plan}</span>
+          </p>
+        )}
+      </div>
+
+      <!-- Form Container -->
+      <DynamicLeadForm
+        form={formConfig}
+        formId="get-started"
+        context={{
+          plan,
+          source,
+          language: currentLang
+        }}
+      />
+
+      <!-- Trust Indicators -->
+      <div class="mt-8 sm:mt-12 text-center">
+        <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs sm:text-sm text-[var(--text-secondary)]">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            <span>{t('common:trust.secure_data') || 'SSL Encrypted'}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{t('common:trust.setup_time') || '5 min setup'}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+            </svg>
+            <span>{t('common:trust.no_credit_card') || 'No credit card'}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Back Link -->
+      <div class="mt-6 sm:mt-8 text-center">
+        <a
+          href="/"
+          class="text-xs sm:text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors inline-flex items-center gap-2"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          {t('common:buttons.back_home') || 'Back to Home'}
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

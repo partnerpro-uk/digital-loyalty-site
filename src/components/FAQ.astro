@@ -1,0 +1,200 @@
+---
+// FAQ Accordion section with schema.org markup
+// Fetches content from Sanity CMS with i18n fallback
+import i18next from '../i18next.config';
+import { getFaqItems, generateFaqSchema } from '../../sanity/lib/faq';
+import { getPageContentWithFallback } from '../../sanity/lib/pageContent';
+import { getLocaleFromPathname } from '../utils/i18n';
+
+const { t } = i18next;
+
+// Get current locale from URL
+const currentLocale = getLocaleFromPathname(Astro.url.pathname) || 'en';
+
+// Fetch page content from Sanity for section headers
+let pageContent = null;
+try {
+  pageContent = await getPageContentWithFallback('home', currentLocale);
+} catch (e) {
+  console.warn('Could not fetch page content from Sanity, using i18n fallback');
+}
+
+// Use Sanity content with i18n fallback for section headers
+const faqSection = pageContent?.faq;
+const sectionLabel = faqSection?.sectionBadge || t('pages:faq.label');
+const sectionTitle = faqSection?.title || t('pages:faq.title');
+const sectionSubtitle = faqSection?.subtitle || t('pages:faq.subtitle');
+
+// Fetch FAQ items from Sanity
+const faqItems = await getFaqItems(currentLocale);
+
+// Placeholder FAQs if no Sanity data
+const placeholderFaqs = [
+  {
+    _id: '1',
+    question: 'How does the digital wallet integration work?',
+    answer: 'Your loyalty card is added directly to Apple Wallet or Google Wallet with just 3 taps. Customers scan a QR code, tap "Add to Wallet", and they\'re done. No app download required.',
+    category: 'general',
+    order: 1
+  },
+  {
+    _id: '2',
+    question: 'What types of loyalty programs can I create?',
+    answer: 'We support stamp cards, points-based rewards, tiered memberships, and digital coupons. Each can be fully customized to match your brand and business needs.',
+    category: 'general',
+    order: 2
+  },
+  {
+    _id: '3',
+    question: 'Can I send notifications to my customers?',
+    answer: 'Yes! Push notifications are included in Professional and Enterprise plans. Send instant updates about new offers, point balances, or special promotions directly to their phone.',
+    category: 'technical',
+    order: 3
+  },
+  {
+    _id: '4',
+    question: 'Is there a free trial?',
+    answer: 'Yes, we offer a 14-day free trial with full access to all features. No credit card required to start. You can upgrade, downgrade, or cancel anytime.',
+    category: 'pricing',
+    order: 4
+  },
+  {
+    _id: '5',
+    question: 'How long does setup take?',
+    answer: 'Most businesses are up and running within an hour. Create your card design, customize your rewards structure, and start sharing your QR code with customers immediately.',
+    category: 'getting_started',
+    order: 5
+  },
+  {
+    _id: '6',
+    question: 'Is my customer data secure?',
+    answer: 'Absolutely. We use industry-standard encryption and are fully GDPR compliant. Your data is stored securely and you maintain full ownership. We never sell or share customer information.',
+    category: 'security',
+    order: 6
+  },
+  {
+    _id: '7',
+    question: 'Can I export my data?',
+    answer: 'Yes, you can export all your customer data, transaction history, and analytics at any time. You own your data and can take it with you if you ever decide to leave.',
+    category: 'security',
+    order: 7
+  },
+  {
+    _id: '8',
+    question: 'Do you offer API access?',
+    answer: 'API access is available on Enterprise plans. Integrate your loyalty program with your existing POS, CRM, or e-commerce platform for seamless automation.',
+    category: 'technical',
+    order: 8
+  }
+];
+
+const displayFaqs = faqItems.length > 0 ? faqItems : placeholderFaqs;
+
+// Generate FAQ schema for SEO
+const faqSchema = generateFaqSchema(displayFaqs);
+---
+
+<section id="faq" class="py-20 bg-[var(--bg-primary)]">
+  <div class="mx-auto max-w-7xl px-6">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] backdrop-blur mb-4">
+        <span>{sectionLabel}</span>
+      </div>
+      <h2 class="text-4xl font-bold tracking-tight sm:text-5xl text-[var(--text-primary)]">
+        {sectionTitle}
+      </h2>
+      <p class="mt-4 text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+        {sectionSubtitle}
+      </p>
+    </div>
+
+    <!-- FAQ Accordion -->
+    <div class="max-w-3xl mx-auto space-y-4">
+      {displayFaqs.map((faq, index) => (
+        <div class="faq-item group rounded-2xl border border-[var(--border-color)] bg-[var(--bg-primary)] overflow-hidden hover:border-[#8b5cf6]/30 transition-colors">
+          <button
+            class="faq-trigger w-full text-left px-6 py-5 flex justify-between items-center gap-4"
+            aria-expanded="false"
+            aria-controls={`faq-content-${index}`}
+          >
+            <span class="font-semibold text-[var(--text-primary)] pr-4">{faq.question}</span>
+            <span class="faq-icon flex-shrink-0 w-6 h-6 rounded-full bg-[var(--bg-secondary)] flex items-center justify-center transition-transform duration-300">
+              <svg class="w-4 h-4 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </span>
+          </button>
+          <div
+            id={`faq-content-${index}`}
+            class="faq-content hidden"
+            role="region"
+          >
+            <div class="px-6 pb-5 pt-0">
+              <p class="text-[var(--text-secondary)] leading-relaxed">{faq.answer}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Contact CTA -->
+    <div class="mt-12 text-center">
+      <p class="text-[var(--text-secondary)] mb-4">
+        Still have questions?
+      </p>
+      <a
+        href="#contact"
+        class="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-[var(--border-color)] text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]/50 transition-colors"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+        </svg>
+        Contact Support
+      </a>
+    </div>
+  </div>
+
+  <!-- FAQ Schema for SEO -->
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <!-- Accordion functionality -->
+  <script>
+    document.querySelectorAll('.faq-trigger').forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        const content = trigger.nextElementSibling as HTMLElement;
+        const icon = trigger.querySelector('.faq-icon') as HTMLElement;
+        const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+
+        // Close all other items
+        document.querySelectorAll('.faq-trigger').forEach((otherTrigger) => {
+          if (otherTrigger !== trigger) {
+            otherTrigger.setAttribute('aria-expanded', 'false');
+            const otherContent = otherTrigger.nextElementSibling as HTMLElement;
+            const otherIcon = otherTrigger.querySelector('.faq-icon') as HTMLElement;
+            otherContent?.classList.add('hidden');
+            otherIcon?.classList.remove('rotate-180');
+          }
+        });
+
+        // Toggle current item
+        trigger.setAttribute('aria-expanded', String(!isExpanded));
+        content?.classList.toggle('hidden');
+        icon?.classList.toggle('rotate-180');
+      });
+    });
+  </script>
+
+  <!-- Motion animations -->
+  <script type="module">
+    import { animate, inView, stagger } from "motion";
+
+    inView("#faq .faq-item", () => {
+      animate(
+        "#faq .faq-item",
+        { opacity: [0, 1], y: [20, 0] },
+        { duration: 0.5, easing: "ease-out", delay: stagger(0.08) }
+      );
+    }, { amount: 0.2 });
+  </script>
+</section>

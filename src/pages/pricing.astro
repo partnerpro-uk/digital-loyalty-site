@@ -1,0 +1,20 @@
+---
+import Navigation from '../components/Navigation.astro';
+import DynamicPricing from '../components/DynamicPricing.astro';
+import Footer from '../components/Footer.astro';
+import Layout from '../layouts/Layout.astro';
+import i18next from '../i18next.config';
+
+const { t } = i18next;
+---
+
+<Layout 
+  title={t('pages:pricing.page_title')}
+  description={t('pages:pricing.page_description')}
+>
+  <Navigation />
+  <DynamicPricing />
+  <Footer />
+</Layout>
+
+

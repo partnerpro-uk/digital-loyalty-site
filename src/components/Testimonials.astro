@@ -1,0 +1,178 @@
+---
+// Testimonials / Wall of Love section
+// Fetches content from Sanity CMS with i18n fallback
+import i18next from '../i18next.config';
+import { getTestimonials, getTestimonialImageUrl, renderStarRating } from '../../sanity/lib/testimonials';
+import { getPageContentWithFallback } from '../../sanity/lib/pageContent';
+import { getLocaleFromPathname } from '../utils/i18n';
+
+const { t } = i18next;
+
+// Get current locale from URL
+const currentLocale = getLocaleFromPathname(Astro.url.pathname) || 'en';
+
+// Fetch page content from Sanity for section headers
+let pageContent = null;
+try {
+  pageContent = await getPageContentWithFallback('home', currentLocale);
+} catch (e) {
+  console.warn('Could not fetch page content from Sanity, using i18n fallback');
+}
+
+// Use Sanity content with i18n fallback for section headers
+const testimonialsSection = pageContent?.testimonials;
+const sectionLabel = testimonialsSection?.sectionBadge || t('pages:testimonials.label');
+const sectionTitle = testimonialsSection?.title || t('pages:testimonials.title');
+const sectionSubtitle = testimonialsSection?.subtitle || t('pages:testimonials.subtitle');
+
+// Fetch testimonials from Sanity
+const testimonials = await getTestimonials(currentLocale);
+
+// Placeholder testimonials if no Sanity data
+const placeholderTestimonials = [
+  {
+    _id: '1',
+    name: 'Sarah Johnson',
+    role: 'Owner',
+    company: 'Sunrise Cafe',
+    quote: 'Our customer retention increased by 40% within the first three months. The digital wallet integration means customers always have their loyalty card with them.',
+    rating: 5,
+    featured: true
+  },
+  {
+    _id: '2',
+    name: 'Michael Chen',
+    role: 'Marketing Director',
+    company: 'FitZone Gym',
+    quote: 'The analytics dashboard gives us insights we never had before. We can now see exactly which rewards drive the most engagement.',
+    rating: 5,
+    featured: false
+  },
+  {
+    _id: '3',
+    name: 'Emma Williams',
+    role: 'Founder',
+    company: 'Bloom Beauty Salon',
+    quote: 'Setup took less than an hour and our clients love how easy it is. No more lost punch cards means happier customers.',
+    rating: 5,
+    featured: false
+  },
+  {
+    _id: '4',
+    name: 'David Park',
+    role: 'General Manager',
+    company: 'Fresh Bites Restaurant',
+    quote: 'The push notifications feature has been a game-changer for our slow days. We can instantly reach customers with special offers.',
+    rating: 5,
+    featured: true
+  }
+];
+
+const displayTestimonials = testimonials.length > 0 ? testimonials : placeholderTestimonials;
+---
+
+<section id="testimonials" class="py-20 bg-[var(--bg-secondary)]/30">
+  <div class="mx-auto max-w-7xl px-6">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] backdrop-blur mb-4">
+        <span>{sectionLabel}</span>
+      </div>
+      <h2 class="text-4xl font-bold tracking-tight sm:text-5xl text-[var(--text-primary)]">
+        {sectionTitle}
+      </h2>
+      <p class="mt-4 text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+        {sectionSubtitle}
+      </p>
+    </div>
+
+    <!-- Testimonials Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+      {displayTestimonials.map((testimonial, index) => (
+        <div
+          class={`testimonial-card group relative rounded-2xl border border-[var(--border-color)] bg-[var(--bg-primary)] p-6 md:p-8 hover:border-[#8b5cf6]/50 transition-all duration-300 ${testimonial.featured ? 'ring-2 ring-[#8b5cf6]/20' : ''}`}
+        >
+          <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#8b5cf6]/5 to-[#a78bfa]/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+          <div class="relative">
+            <!-- Quote icon -->
+            <div class="absolute -top-2 -left-2 w-8 h-8 text-[#8b5cf6]/20">
+              <svg fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+              </svg>
+            </div>
+
+            <!-- Rating stars -->
+            {testimonial.rating && (
+              <div class="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <svg
+                    class={`w-5 h-5 ${i < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                ))}
+              </div>
+            )}
+
+            <!-- Quote text -->
+            <blockquote class="text-[var(--text-primary)] text-lg leading-relaxed mb-6">
+              "{testimonial.quote}"
+            </blockquote>
+
+            <!-- Author info -->
+            <div class="flex items-center gap-4">
+              <!-- Avatar -->
+              {testimonial.image ? (
+                <img
+                  src={getTestimonialImageUrl(testimonial.image, 48)}
+                  alt={testimonial.name}
+                  class="w-12 h-12 rounded-full object-cover border-2 border-[var(--border-color)]"
+                  loading="lazy"
+                />
+              ) : (
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#a78bfa] flex items-center justify-center text-white font-semibold text-lg">
+                  {testimonial.name.charAt(0)}
+                </div>
+              )}
+
+              <div>
+                <div class="font-semibold text-[var(--text-primary)]">{testimonial.name}</div>
+                <div class="text-sm text-[var(--text-secondary)]">
+                  {testimonial.role}, {testimonial.company}
+                </div>
+              </div>
+            </div>
+
+            <!-- Featured badge -->
+            {testimonial.featured && (
+              <div class="absolute top-4 right-4">
+                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-[#8b5cf6]/10 text-[#8b5cf6] text-xs font-medium">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                  Featured
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Motion animations -->
+  <script type="module">
+    import { animate, inView, stagger } from "motion";
+
+    inView("#testimonials .testimonial-card", () => {
+      animate(
+        "#testimonials .testimonial-card",
+        { opacity: [0, 1], y: [30, 0] },
+        { duration: 0.6, easing: "ease-out", delay: stagger(0.1) }
+      );
+    }, { amount: 0.2 });
+  </script>
+</section>

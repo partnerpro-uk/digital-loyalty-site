@@ -1,0 +1,224 @@
+{
+  "hero": {
+    "title": "Cartões de fidelidade pessoas",
+    "title_highlight": "efetivamente utilizar.",
+    "subtitle": "Crie programas de fidelização digitais envolventes que façam com que os seus clientes voltem para mais.",
+    "badge_items": [
+      "Web App",
+      "Fast & Lightweight",
+      "No signup to try"
+    ],
+    "marquee": {
+      "rewards_program": "Programa de recompensas",
+      "points_system": "Sistema de pontos",
+      "tier_benefits": "Benefícios de nível",
+      "gamification": "Gamificação"
+    }
+  },
+  "features": {
+    "section_title": "Tudo o que precisa",
+    "section_subtitle": "Funcionalidades poderosas para criar, gerir e fazer crescer o seu programa de fidelização",
+    "versatile_card_types": {
+      "title": "Tipos de cartões versáteis",
+      "description": "Selos, pontos, adesões e cupões - todos personalizáveis para se adaptarem perfeitamente à sua marca."
+    },
+    "scanner_app": {
+      "title": "Aplicação de scanner",
+      "description": "Não é necessário hardware adicional - utilize a nossa aplicação Web multiplataforma para digitalizar e validar cartões."
+    },
+    "unique_designs": {
+      "title": "Designs únicos",
+      "description": "Cartões totalmente personalizáveis para se adaptarem à identidade da sua marca e se destacarem da concorrência."
+    },
+    "push_notifications": {
+      "title": "Notificações push",
+      "description": "Envie notificações de marketing instantâneas para manter os clientes envolvidos e informados sobre as ofertas."
+    },
+    "simple_setup": {
+      "title": "Configuração simples",
+      "description": "Digitalize o código QR e instale-o em apenas 3 toques. Ponha o seu programa de fidelização a funcionar em minutos."
+    },
+    "dashboard": {
+      "title": "Painel de controlo",
+      "description": "Acompanhe tudo no seu painel de administração com análises e informações detalhadas."
+    }
+  },
+  "gallery": {
+    "section_title": "Designs únicos",
+    "section_subtitle": "Cartões totalmente personalizáveis para se adaptarem à sua marca. Cada desenho é único e adaptado ao seu negócio.",
+    "examples": {
+      "coffee_shop": "Cafetaria",
+      "fitness_studio": "Estúdio de fitness",
+      "restaurant": "Restaurante",
+      "spa_wellness": "Spa e bem-estar",
+      "retail_store": "Loja de retalho",
+      "salon": "Salão de beleza"
+    }
+  },
+  "how_it_works": {
+    "section_title": "Processo de configuração simples",
+    "section_subtitle": "Ponha o seu programa de fidelização a funcionar em apenas 3 passos simples",
+    "step_1": {
+      "title": "Digitalizar código QR",
+      "description": "Os clientes digitalizam o código QR com a câmara do seu telemóvel para adicionar o seu cartão de fidelização diretamente à sua Apple ou Google Wallet."
+    },
+    "step_2": {
+      "title": "Adicionar à carteira",
+      "description": "Com apenas 3 toques, o cartão de fidelidade é instalado na sua carteira digital. Não é necessário descarregar a aplicação."
+    },
+    "step_3": {
+      "title": "Ganhar recompensas",
+      "description": "Os clientes acumulam selos ou pontos em cada visita. Acompanhe o seu progresso e veja o envolvimento aumentar."
+    }
+  },
+  "pricing": {
+    "section_title": "Preços simples e transparentes",
+    "section_subtitle": "Escolha o plano que se adapta às necessidades da sua empresa",
+    "starter": {
+      "name": "Arranque",
+      "price": "$29",
+      "period": "/mês",
+      "features": {
+        "active_cards": "Até 500 cartões activos",
+        "designs": "Desenhos básicos de cartões",
+        "support": "Apoio por correio eletrónico"
+      }
+    },
+    "professional": {
+      "name": "Profissional",
+      "price": "$79",
+      "period": "/mês",
+      "features": {
+        "active_cards": "Até 5.000 cartões activos",
+        "designs": "Desenhos de cartões personalizados",
+        "notifications": "Notificações push",
+        "support": "Apoio prioritário"
+      }
+    },
+    "enterprise": {
+      "name": "Empresa",
+      "price": "Personalizado",
+      "period": "",
+      "features": {
+        "active_cards": "Cartões activos ilimitados",
+        "white_label": "Solução de marca branca",
+        "api": "Acesso à API",
+        "support": "Suporte dedicado"
+      }
+    },
+    "page_title": "Planos de preços - Digital Loyalty",
+    "page_description": "Escolha o plano perfeito para a sua empresa. Preços flexíveis sem taxas ocultas."
+  },
+  "footer": {
+    "tagline": "Crie programas de fidelização digitais envolventes que fazem com que os seus clientes voltem para mais. Simples, poderoso e eficaz."
+  },
+  "social_proof": {
+    "trust_statement": "Confiado por mais de 500 empresas em todo o mundo"
+  },
+  "problem_solution": {
+    "label": "O problema",
+    "title": "Pare de perder clientes devido a cartões de fidelização esquecidos",
+    "subtitle": "Os programas de fidelização tradicionais falham por três razões principais",
+    "problems": {
+      "paper_cards": {
+        "title": "Os cartões em papel perdem-se",
+        "description": "85% dos cartões de fidelização em papel são deitados fora no espaço de uma semana. O seu investimento na impressão e distribuição vai diretamente para o lixo."
+      },
+      "app_fatigue": {
+        "title": "O cansaço das aplicações é real",
+        "description": "Os clientes não descarregarão outra aplicação apenas para obterem as suas recompensas. Um telemóvel normal já tem mais de 80 aplicações a competir pela atenção."
+      },
+      "no_data": {
+        "title": "Não há dados de participação",
+        "description": "Está a voar às cegas sem informações sobre o comportamento dos clientes. Não há forma de saber quem são os seus melhores clientes ou o que os motiva."
+      }
+    },
+    "solution_label": "A solução",
+    "solution_title": "Cartões de carteira digital",
+    "solution_description": "Cartões que estão na Apple e na Google Wallet - sempre com os seus clientes. Sem downloads de aplicações. Sem cartões perdidos. Análises em tempo real."
+  },
+  "bento_features": {
+    "label": "Porquê escolher-nos",
+    "title": "Tudo o que precisa numa única plataforma",
+    "subtitle": "Funcionalidades poderosas concebidas para empresas modernas",
+    "items": {
+      "wallet_integration": {
+        "title": "Apple e Google Wallet",
+        "description": "Os cartões estão onde os clientes já se encontram - na sua carteira digital. Não é necessária uma aplicação."
+      },
+      "real_time_updates": {
+        "title": "Actualizações em tempo real",
+        "description": "As notificações push e as actualizações instantâneas do saldo mantêm os clientes envolvidos."
+      },
+      "analytics": {
+        "title": "Análises poderosas",
+        "description": "Compreender o comportamento dos clientes com informações e relatórios pormenorizados."
+      },
+      "customization": {
+        "title": "Personalização total",
+        "description": "Combine a sua marca na perfeição com opções de design ilimitadas."
+      },
+      "automation": {
+        "title": "Automação inteligente",
+        "description": "Recompensas automatizadas, ofertas de aniversário e campanhas de reativação."
+      },
+      "integration": {
+        "title": "Integração fácil",
+        "description": "Funciona com o seu POS, comércio eletrónico e ferramentas existentes."
+      }
+    }
+  },
+  "video_section": {
+    "label": "Ver em ação",
+    "title": "Ver como funciona",
+    "subtitle": "Uma visão geral de 2 minutos da nossa plataforma",
+    "cta": "Reproduzir vídeo"
+  },
+  "testimonials": {
+    "label": "Histórias de clientes",
+    "title": "Adorado por empresas de todo o mundo",
+    "subtitle": "Veja o que os nossos clientes têm a dizer sobre a transformação dos seus programas de fidelização"
+  },
+  "faq": {
+    "label": "FAQ",
+    "title": "Perguntas mais frequentes",
+    "subtitle": "Tudo o que precisa de saber sobre a nossa plataforma"
+  },
+  "final_cta": {
+    "title": "Pronto para transformar o seu programa de fidelização?",
+    "subtitle": "Comece hoje gratuitamente. Não é necessário cartão de crédito. Cancele em qualquer altura.",
+    "primary_cta": "Começar gratuitamente",
+    "secondary_cta": "Marcar uma demonstração",
+    "trust_text": "Junte-se a mais de 500 empresas que já utilizam a nossa plataforma"
+  },
+  "about": {
+    "page_title": "Sobre nós - Digital Loyalty",
+    "page_description": "Saiba mais sobre a nossa missão de ajudar as empresas a criar relações duradouras com os clientes através de programas de fidelização digitais.",
+    "hero_title": "A nossa história",
+    "hero_subtitle": "Construir o futuro da fidelização dos clientes",
+    "mission_label": "A nossa missão",
+    "mission_title": "Tornar a fidelização simples",
+    "mission_text": "Acreditamos que todas as empresas merecem ter acesso a ferramentas modernas de fidelização. A nossa missão é ajudar empresas de todas as dimensões a construir relações duradouras com os clientes através de programas de fidelização digitais simples e poderosos.",
+    "story_label": "Como começou",
+    "story_title": "Do problema à solução",
+    "story_text": "Vimos empresas que se debatiam com sistemas de fidelização desactualizados - cartões em papel que se perdiam, aplicações dispendiosas que não eram descarregadas e zero conhecimentos sobre o comportamento dos clientes. Sabíamos que tinha de haver uma forma melhor. Por isso, construímo-la.",
+    "values_label": "O que defendemos",
+    "values_title": "Os nossos valores",
+    "values": {
+      "simplicity": {
+        "title": "Simplicidade",
+        "description": "A tecnologia deve ser invisível. Construímos ferramentas que simplesmente funcionam, sem complexidade."
+      },
+      "fairness": {
+        "title": "Equidade",
+        "description": "Preços transparentes, sem taxas ocultas. O que vê é o que paga."
+      },
+      "customer_first": {
+        "title": "O cliente em primeiro lugar",
+        "description": "O seu sucesso é o nosso sucesso. Estamos aqui para o ajudar a crescer."
+      }
+    },
+    "cta_title": "Pronto para transformar o seu programa de fidelização?",
+    "cta_button": "Começar gratuitamente"
+  }
+}

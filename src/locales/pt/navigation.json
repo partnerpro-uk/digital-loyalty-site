@@ -1,0 +1,42 @@
+{
+  "brand": {
+    "name": "Fidelidade digital"
+  },
+  "menu": {
+    "features": "Caraterísticas",
+    "how_it_works": "Como funciona",
+    "pricing": "Preços",
+    "blog": "Blogue",
+    "contact": "Contacto",
+    "about": "Sobre"
+  },
+  "footer": {
+    "product": {
+      "title": "Produto"
+    },
+    "support": {
+      "title": "Apoio",
+      "help_center": "Centro de ajuda",
+      "documentation": "Documentação",
+      "api_reference": "Referência da API"
+    },
+    "company": {
+      "title": "Empresa",
+      "about": "Sobre",
+      "blog": "Blogue",
+      "contact": "Contacto"
+    },
+    "legal": {
+      "title": "Jurídico",
+      "privacy": "Política de privacidade",
+      "terms": "Termos do serviço",
+      "cookies": "Política de cookies"
+    },
+    "copyright": "© 2024 Digital Loyalty. Todos os direitos reservados."
+  },
+  "social": {
+    "twitter": "Twitter",
+    "instagram": "Instagram",
+    "linkedin": "LinkedIn"
+  }
+}

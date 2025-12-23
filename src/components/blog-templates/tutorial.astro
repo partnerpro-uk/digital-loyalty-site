@@ -1,0 +1,201 @@
+---
+/**
+ * Tutorial Template
+ * For step-by-step tutorial and guide posts
+ */
+
+const { post } = Astro.props;
+---
+
+<article class="tutorial-layout">
+  <header class="tutorial-header mb-12">
+    {post.excerpt && (
+      <p class="text-xl text-[var(--text-secondary)] max-w-3xl leading-relaxed">
+        {post.excerpt}
+      </p>
+    )}
+    
+    {post.author && (
+      <div class="flex items-center gap-4 mt-8 p-4 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)]">
+        {post.author.image && (
+          <img 
+            src={post.author.image.asset.url} 
+            alt={post.author.name}
+            class="w-12 h-12 rounded-full"
+          />
+        )}
+        <div>
+          <p class="font-semibold text-[var(--text-primary)]">{post.author.name}</p>
+          {post.author.bio && (
+            <p class="text-sm text-[var(--text-secondary)]">
+              {post.author.bio[post.language] || post.author.bio.en}
+            </p>
+          )}
+        </div>
+      </div>
+    )}
+  </header>
+  
+  <div class="tutorial-content prose prose-lg dark:prose-invert max-w-3xl">
+    <slot />
+  </div>
+  
+  {post.relatedPosts && post.relatedPosts.length > 0 && (
+    <aside class="mt-16 pt-8 border-t border-[var(--border-color)]">
+      <h3 class="text-2xl font-bold mb-6 text-[var(--text-primary)]">Related Tutorials</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {post.relatedPosts.map(related => (
+          <a 
+            href={`/${post.language === 'en' ? '' : post.language + '/'}blog/${related.slug.current}`}
+            class="group block p-4 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[#8b5cf6] transition-all"
+          >
+            <h4 class="font-semibold text-[var(--text-primary)] group-hover:text-[#8b5cf6] transition-colors mb-2">
+              {related.title}
+            </h4>
+            {related.excerpt && (
+              <p class="text-sm text-[var(--text-secondary)] line-clamp-2">
+                {related.excerpt}
+              </p>
+            )}
+          </a>
+        ))}
+      </div>
+    </aside>
+  )}
+</article>
+
+<style>
+  .tutorial-layout {
+    padding: 3rem 1.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  .tutorial-header h1 {
+    font-size: 2.75rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+  }
+  
+  /* Step numbering */
+  .tutorial-content :global(h2) {
+    counter-increment: step;
+    position: relative;
+    padding-left: 3.5rem;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .tutorial-content :global(h2::before) {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.25rem;
+  }
+  
+  .tutorial-content :global(h2) {
+    counter-reset: none;
+  }
+  
+  .tutorial-content :global(h3) {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Code blocks */
+  .tutorial-content :global(pre) {
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+  
+  .tutorial-content :global(code) {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+  
+  .tutorial-content :global(pre code) {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+  
+  /* Numbered lists */
+  .tutorial-content :global(ol) {
+    counter-reset: list-item;
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .tutorial-content :global(ol li) {
+    counter-increment: list-item;
+    position: relative;
+    padding-left: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .tutorial-content :global(ol li::before) {
+    content: counter(list-item);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    background: #3b82f6;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+  
+  /* Note/Tip boxes */
+  .tutorial-content :global(blockquote) {
+    border-left: 4px solid #3b82f6;
+    background: var(--bg-secondary);
+    padding: 1rem 1.5rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1.5rem 0;
+  }
+  
+  @media (max-width: 768px) {
+    .tutorial-header h1 {
+      font-size: 2rem;
+    }
+    
+    .tutorial-content :global(h2) {
+      padding-left: 3rem;
+      font-size: 1.5rem;
+    }
+    
+    .tutorial-content :global(h2::before) {
+      width: 2rem;
+      height: 2rem;
+      font-size: 1rem;
+    }
+  }
+</style>
+
+

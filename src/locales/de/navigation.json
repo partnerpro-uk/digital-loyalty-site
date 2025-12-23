@@ -1,0 +1,42 @@
+{
+  "brand": {
+    "name": "Digitale Loyalität"
+  },
+  "menu": {
+    "features": "Eigenschaften",
+    "how_it_works": "Wie es funktioniert",
+    "pricing": "Preisgestaltung",
+    "blog": "Blog",
+    "contact": "Kontakt",
+    "about": "Über"
+  },
+  "footer": {
+    "product": {
+      "title": "Produkt"
+    },
+    "support": {
+      "title": "Unterstützung",
+      "help_center": "Hilfe-Center",
+      "documentation": "Dokumentation",
+      "api_reference": "API-Referenz"
+    },
+    "company": {
+      "title": "Unternehmen",
+      "about": "Über",
+      "blog": "Blog",
+      "contact": "Kontakt"
+    },
+    "legal": {
+      "title": "Rechtliches",
+      "privacy": "Datenschutzbestimmungen",
+      "terms": "Bedingungen der Dienstleistung",
+      "cookies": "Cookie-Richtlinie"
+    },
+    "copyright": "© 2024 Digitale Loyalität. Alle Rechte vorbehalten."
+  },
+  "social": {
+    "twitter": "Twitter",
+    "instagram": "Instagram",
+    "linkedin": "LinkedIn"
+  }
+}

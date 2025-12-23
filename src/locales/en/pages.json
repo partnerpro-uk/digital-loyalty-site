@@ -1,0 +1,221 @@
+{
+  "hero": {
+    "title": "Loyalty cards people",
+    "title_highlight": "actually use.",
+    "subtitle": "Create engaging digital loyalty programs that keep your customers coming back for more.",
+    "badge_items": ["Web App", "Fast & Lightweight", "No signup to try"],
+    "marquee": {
+      "rewards_program": "Rewards Program",
+      "points_system": "Points System",
+      "tier_benefits": "Tier Benefits",
+      "gamification": "Gamification"
+    }
+  },
+  "features": {
+    "section_title": "Everything You Need",
+    "section_subtitle": "Powerful features to create, manage, and grow your loyalty program",
+    "versatile_card_types": {
+      "title": "Versatile Card Types",
+      "description": "Stamps, points, memberships, and coupons - all customizable to fit your brand perfectly."
+    },
+    "scanner_app": {
+      "title": "Scanner App",
+      "description": "No additional hardware needed - use our cross-platform web application to scan and validate cards."
+    },
+    "unique_designs": {
+      "title": "Unique Designs",
+      "description": "Fully customizable cards to fit your brand identity and stand out from the competition."
+    },
+    "push_notifications": {
+      "title": "Push Notifications",
+      "description": "Send instant marketing notifications to keep customers engaged and informed about offers."
+    },
+    "simple_setup": {
+      "title": "Simple Setup",
+      "description": "Scan the QR code and install in just 3 taps. Get your loyalty program running in minutes."
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "Track everything within your admin panel with detailed analytics and insights."
+    }
+  },
+  "gallery": {
+    "section_title": "Unique Designs",
+    "section_subtitle": "Fully customizable cards to fit your brand. Each design is unique and tailored to your business.",
+    "examples": {
+      "coffee_shop": "Coffee Shop",
+      "fitness_studio": "Fitness Studio",
+      "restaurant": "Restaurant",
+      "spa_wellness": "Spa & Wellness",
+      "retail_store": "Retail Store",
+      "salon": "Salon"
+    }
+  },
+  "how_it_works": {
+    "section_title": "Simple Setup Process",
+    "section_subtitle": "Get your loyalty program running in just 3 simple steps",
+    "step_1": {
+      "title": "Scan QR Code",
+      "description": "Customers scan the QR code with their phone camera to add your loyalty card directly to their Apple or Google Wallet."
+    },
+    "step_2": {
+      "title": "Add to Wallet",
+      "description": "With just 3 taps, the loyalty card is installed in their digital wallet. No app downloads required."
+    },
+    "step_3": {
+      "title": "Earn Rewards",
+      "description": "Customers collect stamps or points with each visit. Track their progress and watch engagement grow."
+    }
+  },
+  "pricing": {
+    "page_title": "Pricing Plans - Digital Loyalty",
+    "page_description": "Choose the perfect plan for your business. Flexible pricing with no hidden fees.",
+    "section_title": "Simple, Transparent Pricing",
+    "section_subtitle": "Choose the plan that fits your business needs",
+    "starter": {
+      "name": "Starter",
+      "price": "$29",
+      "period": "/month",
+      "features": {
+        "active_cards": "Up to 500 active cards",
+        "designs": "Basic card designs",
+        "support": "Email support"
+      }
+    },
+    "professional": {
+      "name": "Professional",
+      "price": "$79",
+      "period": "/month",
+      "features": {
+        "active_cards": "Up to 5,000 active cards",
+        "designs": "Custom card designs",
+        "notifications": "Push notifications",
+        "support": "Priority support"
+      }
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "price": "Custom",
+      "period": "",
+      "features": {
+        "active_cards": "Unlimited active cards",
+        "white_label": "White-label solution",
+        "api": "API access",
+        "support": "Dedicated support"
+      }
+    }
+  },
+  "footer": {
+    "tagline": "Create engaging digital loyalty programs that keep your customers coming back for more. Simple, powerful, and effective."
+  },
+  "social_proof": {
+    "trust_statement": "Trusted by 500+ businesses worldwide"
+  },
+  "problem_solution": {
+    "label": "The Problem",
+    "title": "Stop Losing Customers to Forgotten Loyalty Cards",
+    "subtitle": "Traditional loyalty programs fail for three key reasons",
+    "problems": {
+      "paper_cards": {
+        "title": "Paper cards get lost",
+        "description": "85% of paper loyalty cards are thrown away within a week. Your investment in printing and distribution goes straight to the trash."
+      },
+      "app_fatigue": {
+        "title": "App fatigue is real",
+        "description": "Customers won't download another app just for your rewards. The average phone already has 80+ apps competing for attention."
+      },
+      "no_data": {
+        "title": "No engagement data",
+        "description": "You're flying blind without customer behavior insights. No way to know who your best customers are or what drives them."
+      }
+    },
+    "solution_label": "The Solution",
+    "solution_title": "Digital Wallet Cards",
+    "solution_description": "Cards that live in Apple & Google Wallet - always with your customers. No app downloads. No lost cards. Real-time analytics."
+  },
+  "bento_features": {
+    "label": "Why Choose Us",
+    "title": "Everything You Need in One Platform",
+    "subtitle": "Powerful features designed for modern businesses",
+    "items": {
+      "wallet_integration": {
+        "title": "Apple & Google Wallet",
+        "description": "Cards live where customers already are - their digital wallet. No app needed."
+      },
+      "real_time_updates": {
+        "title": "Real-Time Updates",
+        "description": "Push notifications and instant balance updates keep customers engaged."
+      },
+      "analytics": {
+        "title": "Powerful Analytics",
+        "description": "Understand customer behavior with detailed insights and reports."
+      },
+      "customization": {
+        "title": "Full Customization",
+        "description": "Match your brand perfectly with unlimited design options."
+      },
+      "automation": {
+        "title": "Smart Automation",
+        "description": "Automated rewards, birthday offers, and re-engagement campaigns."
+      },
+      "integration": {
+        "title": "Easy Integration",
+        "description": "Works with your POS, e-commerce, and existing tools."
+      }
+    }
+  },
+  "video_section": {
+    "label": "See It In Action",
+    "title": "Watch How It Works",
+    "subtitle": "A 2-minute overview of our platform",
+    "cta": "Play Video"
+  },
+  "testimonials": {
+    "label": "Customer Stories",
+    "title": "Loved by Businesses Worldwide",
+    "subtitle": "See what our customers have to say about transforming their loyalty programs"
+  },
+  "faq": {
+    "label": "FAQ",
+    "title": "Frequently Asked Questions",
+    "subtitle": "Everything you need to know about our platform"
+  },
+  "final_cta": {
+    "title": "Ready to Transform Your Loyalty Program?",
+    "subtitle": "Start free today. No credit card required. Cancel anytime.",
+    "primary_cta": "Get Started Free",
+    "secondary_cta": "Book a Demo",
+    "trust_text": "Join 500+ businesses already using our platform"
+  },
+  "about": {
+    "page_title": "About Us - Digital Loyalty",
+    "page_description": "Learn about our mission to help businesses build lasting customer relationships through digital loyalty programs.",
+    "hero_title": "Our Story",
+    "hero_subtitle": "Building the future of customer loyalty",
+    "mission_label": "Our Mission",
+    "mission_title": "Making Loyalty Simple",
+    "mission_text": "We believe every business deserves access to modern loyalty tools. Our mission is to help businesses of all sizes build lasting customer relationships through simple, powerful digital loyalty programs.",
+    "story_label": "How It Started",
+    "story_title": "From Problem to Solution",
+    "story_text": "We saw businesses struggling with outdated loyalty systems - paper cards getting lost, expensive apps nobody downloads, and zero insights into customer behavior. We knew there had to be a better way. So we built it.",
+    "values_label": "What We Stand For",
+    "values_title": "Our Values",
+    "values": {
+      "simplicity": {
+        "title": "Simplicity",
+        "description": "Technology should be invisible. We build tools that just work, without complexity."
+      },
+      "fairness": {
+        "title": "Fairness",
+        "description": "Transparent pricing with no hidden fees. What you see is what you pay."
+      },
+      "customer_first": {
+        "title": "Customer First",
+        "description": "Your success is our success. We're here to help you grow."
+      }
+    },
+    "cta_title": "Ready to transform your loyalty program?",
+    "cta_button": "Get Started Free"
+  }
+}
+

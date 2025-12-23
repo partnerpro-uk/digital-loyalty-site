@@ -1,0 +1,130 @@
+{
+  "buttons": {
+    "get_started": "Comenzar",
+    "get_started_today": "Empiece hoy mismo",
+    "see_features": "Ver características",
+    "create_your_card": "Cree su tarjeta",
+    "choose_plan": "Elegir plan",
+    "contact_sales": "Contacto de ventas",
+    "close": "Cerrar",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "book_demo": "Reservar una demostración",
+    "talk_to_sales": "Hable con ventas"
+  },
+  "labels": {
+    "web_app": "Aplicación web",
+    "fast_lightweight": "Rápido y ligero",
+    "no_signup": "No es necesario registrarse para probar",
+    "features": "Características",
+    "key_features": "Características principales",
+    "gallery": "Galería",
+    "how_it_works": "Cómo funciona",
+    "pricing": "Precios",
+    "most_popular": "Más populares",
+    "blog": "Blog",
+    "about": "Acerca de",
+    "social_proof": "De confianza",
+    "problem_solution": "El problema",
+    "testimonials": "Reseñas",
+    "faq": "PREGUNTAS FRECUENTES",
+    "video": "Demo",
+    "contact": "Póngase en contacto con",
+    "ready_to_start": "¿Listo para empezar?",
+    "setup_minutes": "Configure su programa de fidelización en cuestión de minutos"
+  },
+  "actions": {
+    "toggle_theme": "Alternar tema",
+    "switch_language": "Cambiar de idioma",
+    "select_country": "Seleccione un país"
+  },
+  "country_selector": {
+    "select_country": "Seleccionar país",
+    "modal_title": "Elija su país o región",
+    "modal_subtitle": "Tu selección actualizará el idioma y la moneda",
+    "regions": {
+      "americas": "América",
+      "europe": "Europa",
+      "middle_east_africa": "Oriente Medio y África",
+      "asia_pacific": "Asia-Pacífico"
+    }
+  },
+  "pricing_page": {
+    "billing": {
+      "monthly": "Mensualmente",
+      "yearly": "Anualmente",
+      "quarterly": "Trimestral",
+      "save_percentage": "Ahorrar {{porcentaje}}%",
+      "per_month": "/mes",
+      "per_year": "/año",
+      "per_day": "Sólo {{precio}} por día",
+      "billed_annually": "Facturado anualmente a {{price}}",
+      "save_with_yearly": "Ahorre un {{porcentaje}}% con la cuota anual",
+      "annual_savings": "Ahorrar {{porcentaje}}%"
+    },
+    "no_plans": "Aún no hay planes de precios disponibles.",
+    "add_in_sanity": "Añádelos en Sanity Studio",
+    "enterprise": {
+      "lets_talk": "Hablemos",
+      "contact_for_pricing": "Póngase en contacto con nosotros",
+      "get_in_touch": "Más información"
+    }
+  },
+  "blog_page": {
+    "title": "Blog",
+    "subtitle": "Ideas y estrategias",
+    "description": "Aprenda a crear y optimizar programas de fidelización de clientes que impulsen el crecimiento.",
+    "featured_articles": "Artículos destacados",
+    "all_articles": "Todos los artículos",
+    "no_posts": "Aún no hay entradas en el blog. Vuelve pronto.",
+    "filter_by_category": "Filtrar por categoría:",
+    "all_posts": "Todos los mensajes",
+    "read_more": "Seguir leyendo",
+    "featured": "Destacados"
+  },
+  "time": {
+    "reading_time": "{{minutos}} min leer"
+  },
+  "region_selector": {
+    "select_region": "Seleccionar región",
+    "modal_title": "Seleccione su región",
+    "detected_title": "Lo detectamos:",
+    "detected_subtitle": "Lengua, país y moneda",
+    "keep_settings": "Mantenga estos ajustes",
+    "change_region": "Elija otra región",
+    "or_choose": "O elige otra región:",
+    "regions": {
+      "americas": "América",
+      "europe": "Europa",
+      "middle_east_africa": "Oriente Medio y África",
+      "asia_pacific": "Asia-Pacífico"
+    }
+  },
+  "forms": {
+    "email_label": "Correo electrónico",
+    "email_placeholder": "Introduzca su dirección de correo electrónico",
+    "name_label": "Nombre",
+    "name_placeholder": "Su nombre",
+    "company_label": "Empresa",
+    "company_placeholder": "Nombre de la empresa",
+    "message_label": "Mensaje",
+    "message_placeholder": "¿Cómo podemos ayudarle?",
+    "submit": "Enviar",
+    "submitting": "Presentar...",
+    "success_title": "Gracias.",
+    "success_message": "Pronto nos pondremos en contacto.",
+    "error_title": "Algo salió mal",
+    "error_message": "Vuelva a intentarlo más tarde.",
+    "required": "Requerido",
+    "invalid_email": "Introduzca una dirección de correo electrónico válida"
+  },
+  "accessibility": {
+    "skip_to_content": "Ir al contenido",
+    "menu": "Menú",
+    "close_menu": "Cerrar menú",
+    "expand": "Ampliar",
+    "collapse": "Colapso",
+    "play_video": "Reproducir vídeo",
+    "pause_video": "Pausar vídeo"
+  }
+}

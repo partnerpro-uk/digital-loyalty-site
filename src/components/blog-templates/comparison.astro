@@ -1,0 +1,124 @@
+---
+/**
+ * Comparison Template
+ * For competitor comparison blog posts with enhanced table styling
+ */
+
+const { post } = Astro.props;
+---
+
+<article class="comparison-layout">
+  <header class="comparison-header mb-12 text-center">
+    {post.excerpt && (
+      <p class="text-xl text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed">
+        {post.excerpt}
+      </p>
+    )}
+  </header>
+  
+  <div class="comparison-content prose prose-lg dark:prose-invert max-w-4xl mx-auto">
+    <slot />
+  </div>
+  
+  {post.category && (
+    <div class="mt-12 pt-8 border-t border-[var(--border-color)]">
+      <div class="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
+        <span class="px-3 py-1 rounded-full bg-[var(--bg-secondary)] border border-[var(--border-color)]">
+          {post.category.name[post.language] || post.category.name.en}
+        </span>
+        {post.tags && post.tags.map(tag => (
+          <span class="px-3 py-1 rounded-full bg-[var(--bg-secondary)] border border-[var(--border-color)]">
+            {tag.name[post.language] || tag.name.en}
+          </span>
+        ))}
+      </div>
+    </div>
+  )}
+</article>
+
+<style>
+  .comparison-layout {
+    padding: 3rem 1.5rem;
+  }
+  
+  .comparison-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--text-primary) 0%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Enhanced table styling for comparisons */
+  .comparison-content :global(table) {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 2rem 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .comparison-content :global(thead) {
+    background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+    color: white;
+  }
+  
+  .comparison-content :global(th) {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .comparison-content :global(td) {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+  }
+  
+  .comparison-content :global(tbody tr:last-child td) {
+    border-bottom: none;
+  }
+  
+  .comparison-content :global(tbody tr:hover td) {
+    background: var(--bg-primary);
+  }
+  
+  /* Highlight columns */
+  .comparison-content :global(td:first-child) {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  
+  /* Checkmarks and X marks */
+  .comparison-content :global(td:has(svg)) {
+    text-align: center;
+  }
+  
+  /* Two-column layout for side-by-side comparison */
+  .comparison-content :global(.comparison-grid) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+  
+  @media (max-width: 768px) {
+    .comparison-content :global(.comparison-grid) {
+      grid-template-columns: 1fr;
+    }
+    
+    .comparison-header h1 {
+      font-size: 2rem;
+    }
+  }
+</style>
+
+

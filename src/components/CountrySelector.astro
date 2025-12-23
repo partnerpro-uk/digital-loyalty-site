@@ -1,0 +1,271 @@
+---
+/**
+ * Country Selector Component
+ * Floating button + modal for selecting country/region
+ * Auto-detects country on first visit
+ */
+
+import { countryRegions } from '../config/countries';
+import i18next from '../i18next.config';
+
+const { t } = i18next;
+
+// Get region names from translations
+const regionNames: Record<string, string> = {
+  'Americas': t('common:country_selector.regions.americas'),
+  'Europe': t('common:country_selector.regions.europe'),
+  'Middle East & Africa': t('common:country_selector.regions.middle_east_africa'),
+  'Asia Pacific': t('common:country_selector.regions.asia_pacific')
+};
+---
+
+<!-- Floating Country Selector Button -->
+<div id="country-selector" class="fixed bottom-4 right-4 z-50">
+  <button
+    id="country-toggle"
+    class="flex items-center gap-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-full px-4 py-3 shadow-lg hover:shadow-xl transition-all hover:scale-105"
+    aria-label={t('common:actions.select_country')}
+  >
+    <span id="current-flag" class="text-xl">🌍</span>
+    <span id="current-country" class="text-sm font-medium text-[var(--text-primary)]">{t('common:country_selector.select_country')}</span>
+    <svg class="w-4 h-4 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+    </svg>
+  </button>
+</div>
+
+<!-- Country Selection Modal -->
+<div 
+  id="country-modal" 
+  class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modal-title"
+>
+  <div class="bg-[var(--bg-primary)] rounded-2xl max-w-5xl w-full max-h-[85vh] overflow-hidden shadow-2xl animate-scale-in">
+    <!-- Header -->
+    <div class="border-b border-[var(--border-color)] p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 id="modal-title" class="text-2xl font-bold text-[var(--text-primary)] mb-1">
+            {t('common:country_selector.modal_title')}
+          </h2>
+          <p class="text-sm text-[var(--text-secondary)]">
+            {t('common:country_selector.modal_subtitle')}
+          </p>
+        </div>
+        <button 
+          id="close-modal"
+          class="p-2 hover:bg-[var(--bg-secondary)] rounded-lg transition-colors"
+          aria-label="Close modal"
+        >
+          <svg class="w-6 h-6 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Countries Grid -->
+    <div class="p-6 overflow-y-auto max-h-[calc(85vh-120px)]">
+      {Object.entries(countryRegions).map(([regionName, countryList]) => (
+        <div class="mb-8 last:mb-0">
+          <h3 class="text-lg font-bold mb-4 text-[var(--text-primary)] flex items-center gap-2">
+            {regionNames[regionName] || regionName}
+            <span class="text-xs font-normal text-[var(--text-secondary)]">({countryList.length})</span>
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {countryList.map(country => (
+              <button
+                class="country-option text-left px-4 py-3 rounded-lg hover:bg-[var(--bg-secondary)] border border-transparent hover:border-[var(--border-color)] transition-all flex items-center gap-3 group"
+                data-country={country.code}
+                data-language={country.language}
+                data-language-region={country.languageRegion}
+                data-currency={country.currency}
+              >
+                <span class="text-2xl group-hover:scale-110 transition-transform">{country.flag}</span>
+                <div class="flex-1">
+                  <div class="font-medium text-[var(--text-primary)] group-hover:text-[#8b5cf6] transition-colors">
+                    {country.name}
+                  </div>
+                  <div class="text-xs text-[var(--text-secondary)] mt-0.5">
+                    {country.nativeName} • {country.currencySymbol} {country.currency}
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+  import { detectUserCountry, saveUserCountry, getCurrentCountry } from '../utils/geolocation';
+  import { getCountryByCode } from '../config/countries';
+
+  let isInitialized = false;
+
+  // Auto-detect country on first visit
+  async function initializeCountry() {
+    if (isInitialized) return;
+    isInitialized = true;
+
+    try {
+      const detectedCountry = await detectUserCountry();
+      updateCurrentCountry(detectedCountry, false); // false = don't redirect
+    } catch (error) {
+      console.error('Country initialization failed:', error);
+      updateCurrentCountry('US', false);
+    }
+  }
+
+  function updateCurrentCountry(countryCode: string, shouldRedirect: boolean = true) {
+    const country = getCountryByCode(countryCode);
+    if (!country) {
+      console.error('Invalid country code:', countryCode);
+      return;
+    }
+
+    // Update UI
+    const flagEl = document.getElementById('current-flag');
+    const nameEl = document.getElementById('current-country');
+    
+    if (flagEl) flagEl.textContent = country.flag;
+    if (nameEl) nameEl.textContent = country.name;
+    
+    // Save preference
+    saveUserCountry(countryCode);
+    
+    // Dispatch event for other components (like Pricing)
+    // NOTE: Currency and language are now INDEPENDENT
+    // Country selector only changes CURRENCY
+    // Language must be changed separately via LanguageSwitcher
+    window.dispatchEvent(new CustomEvent('countryChanged', {
+      detail: {
+        countryCode: country.code,
+        currency: country.currency,
+        currencySymbol: country.currencySymbol,
+        country: country
+      }
+    }));
+
+    console.log('✅ Currency changed to:', country.currency, country.currencySymbol);
+    
+    // Do NOT redirect to language path
+    // Users should use the LanguageSwitcher for language changes
+  }
+
+  function showCountryModal() {
+    const modal = document.getElementById('country-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function hideCountryModal() {
+    const modal = document.getElementById('country-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', () => {
+    // Toggle button
+    const toggleBtn = document.getElementById('country-toggle');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', showCountryModal);
+    }
+
+    // Close button
+    const closeBtn = document.getElementById('close-modal');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', hideCountryModal);
+    }
+
+    // Close on backdrop click
+    const modal = document.getElementById('country-modal');
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          hideCountryModal();
+        }
+      });
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        hideCountryModal();
+      }
+    });
+
+    // Country selection
+    document.querySelectorAll('.country-option').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const target = e.currentTarget as HTMLElement;
+        const countryCode = target.dataset.country;
+        
+        if (countryCode) {
+          updateCurrentCountry(countryCode, true); // true = redirect to new language
+          hideCountryModal();
+        }
+      });
+    });
+
+    // Initialize country detection
+    initializeCountry();
+  });
+</script>
+
+<style>
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.2s ease-out;
+  }
+
+  #country-modal {
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Smooth scrollbar */
+  #country-modal ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  #country-modal ::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: 4px;
+  }
+
+  #country-modal ::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+  }
+
+  #country-modal ::-webkit-scrollbar-thumb:hover {
+    background: #8b5cf6;
+  }
+</style>
+

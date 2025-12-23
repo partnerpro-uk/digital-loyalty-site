@@ -1,0 +1,583 @@
+---
+/**
+ * Region Selector Component
+ * Unified selector for Country + Language + Currency
+ * Auto-detects on first visit with option to change
+ */
+
+import { regionGroups, type Region } from '../config/regions';
+import i18next from '../i18next.config';
+
+const { t } = i18next;
+
+// Get region names from translations
+const regionNames: Record<string, string> = {
+  'Americas': t('common:region_selector.regions.americas'),
+  'Europe': t('common:region_selector.regions.europe'),
+  'Middle East & Africa': t('common:region_selector.regions.middle_east_africa'),
+  'Asia Pacific': t('common:region_selector.regions.asia_pacific')
+};
+---
+
+<!-- Floating Region Selector Button -->
+<div id="region-selector" class="fixed bottom-4 right-4 z-50">
+  <button
+    id="region-toggle"
+    class="flex items-center gap-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-full px-4 py-3 shadow-lg hover:shadow-xl transition-all hover:scale-105"
+    aria-label={t('common:region_selector.select_region')}
+  >
+    <span id="current-flag" class="text-xl">🌍</span>
+    <div class="flex flex-col items-start">
+      <span id="current-region" class="text-sm font-medium text-[var(--text-primary)]">{t('common:region_selector.select_region')}</span>
+      <span id="current-details" class="text-xs text-[var(--text-secondary)]"></span>
+    </div>
+    <svg class="w-4 h-4 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+    </svg>
+  </button>
+</div>
+
+<!-- Auto-Detection Banner (shows on first visit) -->
+<div 
+  id="detection-banner"
+  class="fixed top-16 left-1/2 transform -translate-x-1/2 z-40 hidden animate-slide-down"
+>
+  <div class="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg p-4 max-w-md">
+    <div class="flex items-start gap-3">
+      <span class="text-2xl">📍</span>
+      <div class="flex-1">
+        <h3 class="font-semibold text-[var(--text-primary)] mb-1">
+          {t('common:region_selector.detected_title')}
+        </h3>
+        <div id="detected-info" class="text-sm text-[var(--text-secondary)] mb-3">
+          <div id="detected-region-name"></div>
+          <div id="detected-region-details" class="text-xs opacity-75"></div>
+        </div>
+        <div class="flex gap-2">
+          <button 
+            id="keep-detection"
+            class="px-4 py-2 bg-[#8b5cf6] text-white rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
+          >
+            ✓ {t('common:region_selector.keep_settings')}
+          </button>
+          <button 
+            id="change-detection"
+            class="px-4 py-2 border border-[var(--border-color)] text-[var(--text-primary)] rounded-lg text-sm font-medium hover:bg-[var(--bg-secondary)] transition-colors"
+          >
+            {t('common:region_selector.change_region')}
+          </button>
+        </div>
+      </div>
+      <button 
+        id="close-banner"
+        class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Region Selection Modal -->
+<div 
+  id="region-modal" 
+  class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modal-title"
+>
+      <div class="bg-[var(--bg-primary)] rounded-2xl max-w-6xl w-full max-h-[85vh] overflow-hidden shadow-2xl animate-scale-in border border-[var(--border-color)]">
+    <!-- Header -->
+    <div class="border-b border-[var(--border-color)] px-6 py-4">
+      <div class="flex items-center justify-between">
+        <h2 id="modal-title" class="text-xl font-bold text-[var(--text-primary)]">
+          {t('common:region_selector.modal_title')}
+        </h2>
+        <button 
+          id="close-modal"
+          class="p-2 hover:bg-[var(--bg-secondary)] rounded-lg transition-colors"
+          aria-label={t('common:buttons.close')}
+        >
+          <svg class="w-5 h-5 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Regions Grid -->
+    <div class="p-5 overflow-y-auto max-h-[calc(85vh-80px)]">
+      {Object.entries(regionGroups).map(([regionName, regionList]) => {
+        // Group regions by country
+        const countriesMap = new Map();
+        regionList.forEach(region => {
+          if (!countriesMap.has(region.countryCode)) {
+            countriesMap.set(region.countryCode, []);
+          }
+          countriesMap.get(region.countryCode).push(region);
+        });
+        
+        return (
+          <div class="mb-6 last:mb-0">
+                <h3 class="text-sm font-semibold mb-3 text-[var(--text-primary)] uppercase tracking-wide flex items-center gap-2">
+                  {regionNames[regionName] || regionName}
+                  <span class="text-xs font-normal text-[var(--text-secondary)] lowercase">({countriesMap.size})</span>
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+              {Array.from(countriesMap.entries()).map(([countryCode, regions]) => {
+                const mainRegion = regions[0];
+                const hasMultipleLanguages = regions.length > 1;
+                
+                return (
+                  <div class="country-card border border-[var(--border-color)] rounded-lg p-2 hover:border-[#8b5cf6]/50 hover:bg-[var(--bg-secondary)]/30 transition-all group" data-country-code={countryCode}>
+                    {/* Country Header */}
+                    <div class="flex items-center justify-between gap-2 mb-1.5">
+                      <div class="flex items-center gap-1.5 flex-1 min-w-0">
+                        <span class="text-lg flex-shrink-0">{mainRegion.flag}</span>
+                        <div class="font-semibold text-sm text-[var(--text-primary)] truncate">
+                          {mainRegion.countryName}
+                        </div>
+                      </div>
+                      <div class="text-[10px] font-medium text-[var(--text-secondary)]/60 flex-shrink-0 uppercase tracking-wide">
+                        {mainRegion.currencySymbol}{mainRegion.currency}
+                      </div>
+                    </div>
+                    
+                    {/* Language Pills */}
+                    <div class="flex flex-wrap gap-1">
+                      {regions.map((region: Region) => (
+                        <button
+                          class="region-option language-pill px-2.5 py-1 rounded-full text-xs font-medium border transition-all"
+                          data-region-id={region.id}
+                          data-country-code={region.countryCode}
+                          data-language={region.language}
+                          data-currency={region.currency}
+                        >
+                          {region.nativeLanguageName}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</div>
+
+<script>
+  import { detectUserRegion, saveUserRegion, getCurrentRegion, hasSeenDetection, markDetectionSeen } from '../utils/regionDetection';
+  import { getRegionById } from '../config/regions';
+
+  let isInitialized = false;
+  let detectedRegion: any = null;
+
+  // Auto-detect region on first visit
+  async function initializeRegion() {
+    if (isInitialized) return;
+    isInitialized = true;
+
+    try {
+      const region = await detectUserRegion();
+      detectedRegion = region;
+      updateCurrentRegion(region.id, false); // false = don't redirect yet
+
+      // Show detection banner if first visit
+      if (!hasSeenDetection()) {
+        showDetectionBanner(region);
+      }
+    } catch (error) {
+      console.error('Region initialization failed:', error);
+      const fallbackRegion = getCurrentRegion();
+      updateCurrentRegion(fallbackRegion.id, false);
+    }
+  }
+
+  function showDetectionBanner(region: any) {
+    const banner = document.getElementById('detection-banner');
+    const regionName = document.getElementById('detected-region-name');
+    const regionDetails = document.getElementById('detected-region-details');
+    
+    if (banner && regionName && regionDetails) {
+      regionName.textContent = `${region.flag} ${region.countryName}`;
+      regionDetails.textContent = `${region.nativeLanguageName} • ${region.currencySymbol} ${region.currency}`;
+      
+      banner.classList.remove('hidden');
+      
+      // Auto-hide after 10 seconds
+      setTimeout(() => {
+        hideBanner();
+      }, 10000);
+    }
+  }
+
+  function hideBanner() {
+    const banner = document.getElementById('detection-banner');
+    if (banner) {
+      banner.classList.add('hidden');
+      markDetectionSeen();
+    }
+  }
+
+  function updateCurrentRegion(regionId: string, shouldRedirect: boolean = true) {
+    const region = getRegionById(regionId);
+    if (!region) {
+      console.error('Invalid region ID:', regionId);
+      return;
+    }
+
+    // Update floating button UI
+    const flagEl = document.getElementById('current-flag');
+    const nameEl = document.getElementById('current-region');
+    const detailsEl = document.getElementById('current-details');
+    
+    if (flagEl) flagEl.textContent = region.flag;
+    if (nameEl) nameEl.textContent = region.countryName;
+    if (detailsEl) detailsEl.textContent = `${region.nativeLanguageName} • ${region.currencySymbol}`;
+    
+    // Save preference
+    saveUserRegion(regionId);
+    
+    // Dispatch event for other components (like Pricing)
+    window.dispatchEvent(new CustomEvent('regionChanged', {
+      detail: {
+        region,
+        regionId,
+        countryCode: region.countryCode,
+        language: region.language,
+        currency: region.currency,
+        currencySymbol: region.currencySymbol
+      }
+    }));
+
+    console.log('✅ Region changed to:', region.countryName, region.language, region.currency);
+    
+    // Redirect to correct language path if needed
+    if (shouldRedirect) {
+      const currentPath = window.location.pathname;
+      const currentLang = currentPath.split('/')[1];
+      const newLang = region.language;
+      
+      // Only redirect if language changed
+      if (currentLang !== newLang && !currentPath.startsWith(`/${newLang}/`)) {
+        // Preserve the rest of the path
+        const pathWithoutLang = currentPath.replace(/^\/[a-z]{2}(\/|$)/, '/');
+        const newPath = newLang === 'en' ? pathWithoutLang : `/${newLang}${pathWithoutLang}`;
+        
+        console.log('Redirecting to:', newPath);
+        window.location.href = newPath;
+      }
+    }
+  }
+
+  function showRegionModal() {
+    const modal = document.getElementById('region-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      
+      // Highlight active pills and country card when modal opens
+      setTimeout(() => {
+        const currentRegion = getCurrentRegion();
+        if (currentRegion) {
+          // Highlight language pill
+          document.querySelectorAll('.language-pill').forEach(pill => {
+            pill.classList.remove('active');
+          });
+          const activePill = document.querySelector(`.language-pill[data-region-id="${currentRegion.id}"]`);
+          if (activePill) {
+            activePill.classList.add('active');
+          }
+
+          // Highlight country card
+          document.querySelectorAll('.country-card').forEach(card => {
+            card.classList.remove('active-country');
+          });
+          const activeCard = document.querySelector(`.country-card[data-country-code="${currentRegion.countryCode}"]`);
+          if (activeCard) {
+            activeCard.classList.add('active-country');
+          }
+        }
+      }, 50);
+    }
+  }
+
+  function hideRegionModal() {
+    const modal = document.getElementById('region-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', () => {
+    // Toggle button
+    const toggleBtn = document.getElementById('region-toggle');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', showRegionModal);
+    }
+
+    // Detection banner buttons
+    const keepBtn = document.getElementById('keep-detection');
+    if (keepBtn) {
+      keepBtn.addEventListener('click', () => {
+        hideBanner();
+        // Already saved, just confirm
+      });
+    }
+
+    const changeBtn = document.getElementById('change-detection');
+    if (changeBtn) {
+      changeBtn.addEventListener('click', () => {
+        hideBanner();
+        showRegionModal();
+      });
+    }
+
+    const closeBannerBtn = document.getElementById('close-banner');
+    if (closeBannerBtn) {
+      closeBannerBtn.addEventListener('click', hideBanner);
+    }
+
+    // Close modal button
+    const closeBtn = document.getElementById('close-modal');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', hideRegionModal);
+    }
+
+    // Close on backdrop click
+    const modal = document.getElementById('region-modal');
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          hideRegionModal();
+        }
+      });
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        hideRegionModal();
+        hideBanner();
+      }
+    });
+
+    // Region selection
+    document.querySelectorAll('.region-option').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const target = e.currentTarget as HTMLElement;
+        const regionId = target.dataset.regionId;
+        
+        if (regionId) {
+          updateCurrentRegion(regionId, true); // true = redirect to new language
+          hideRegionModal();
+        }
+      });
+    });
+
+    // Highlight current language pills and country card
+    function highlightActivePills() {
+      const currentRegion = getCurrentRegion();
+      if (!currentRegion) return;
+
+      // Remove all active states first
+      document.querySelectorAll('.language-pill').forEach(pill => {
+        pill.classList.remove('active');
+      });
+      document.querySelectorAll('.country-card').forEach(card => {
+        card.classList.remove('active-country');
+      });
+
+      // Add active state to current region's pill
+      const activePill = document.querySelector(`.language-pill[data-region-id="${currentRegion.id}"]`);
+      if (activePill) {
+        activePill.classList.add('active');
+      }
+
+      // Add active state to current country's card
+      const activeCard = document.querySelector(`.country-card[data-country-code="${currentRegion.countryCode}"]`);
+      if (activeCard) {
+        activeCard.classList.add('active-country');
+      }
+    }
+
+    // Initialize region detection
+    initializeRegion();
+    
+    // Highlight active pills after initialization
+    setTimeout(highlightActivePills, 100);
+  });
+</script>
+
+<style>
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes slide-down {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -20px);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.2s ease-out;
+  }
+
+  .animate-slide-down {
+    animation: slide-down 0.3s ease-out;
+  }
+
+  #region-modal {
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Smooth scrollbar */
+  #region-modal ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  #region-modal ::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: 4px;
+  }
+
+  #region-modal ::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+  }
+
+  #region-modal ::-webkit-scrollbar-thumb:hover {
+    background: #8b5cf6;
+  }
+
+  /* Country card hover effects */
+  .country-card {
+    cursor: pointer;
+    border-color: rgba(255, 255, 255, 0.06);
+    transition: all 0.2s ease;
+  }
+
+  /* Light mode card borders */
+  :global(:not(.dark)) .country-card {
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .country-card:hover {
+    border-color: rgba(140, 123, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+  }
+
+  /* Active country card - persistent hover state */
+  .country-card.active-country {
+    background: var(--bg-secondary)/30;
+    border-color: rgba(140, 123, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+  }
+
+  /* Keep active card highlighted even when hovering */
+  .country-card.active-country:hover {
+    border-color: rgba(140, 123, 255, 0.4);
+    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.2);
+  }
+
+  /* Language pill - Premium refinements with clear hierarchy */
+  .language-pill {
+    cursor: pointer;
+    /* Idle state - calm, subtle purple */
+    background: rgba(140, 123, 255, 0.10);
+    color: #CFC8E8;
+    border-color: rgba(255, 255, 255, 0.06);
+    transform: scale(1);
+    transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Light mode adjustments for better visibility */
+  :global(:not(.dark)) .language-pill {
+    color: #6B5A9D;
+    border-color: rgba(0, 0, 0, 0.08);
+    background: rgba(140, 123, 255, 0.12);
+  }
+
+  .language-pill:hover {
+    /* Hover state - darker, more prominent than active */
+    background: linear-gradient(90deg, #7D6EF5, #6B58E8);
+    color: #FFFFFF;
+    border-color: rgba(140, 123, 255, 0.3);
+    transform: scale(1.02);
+    box-shadow: 
+      0 2px 8px rgba(122, 92, 255, 0.2),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+
+  /* Light mode - reduce glow spread */
+  :global(:not(.dark)) .language-pill:hover {
+    box-shadow: 
+      0 2px 6px rgba(122, 92, 255, 0.15),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+
+  .language-pill:active {
+    transform: scale(0.98);
+  }
+
+  /* Active/selected state - slightly darker, distinct from hover */
+  .language-pill.active {
+    background: linear-gradient(90deg, #8776F0, #7562E0);
+    color: #FFFFFF;
+    border-color: rgba(140, 123, 255, 0.35);
+    box-shadow: 
+      0 2px 8px rgba(122, 92, 255, 0.2),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+
+  /* Light mode - reduce glow spread on active */
+  :global(:not(.dark)) .language-pill.active {
+    box-shadow: 
+      0 2px 6px rgba(122, 92, 255, 0.15),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+
+  /* Ensure active state stays solid (no scale) */
+  .language-pill.active:hover {
+    background: linear-gradient(90deg, #7D6EF5, #6B58E8);
+    transform: scale(1);
+    box-shadow: 
+      0 2px 10px rgba(122, 92, 255, 0.25),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  /* Light mode - reduce glow spread on active:hover */
+  :global(:not(.dark)) .language-pill.active:hover {
+    box-shadow: 
+      0 2px 7px rgba(122, 92, 255, 0.18),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+</style>
+

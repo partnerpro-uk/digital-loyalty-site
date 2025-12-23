@@ -1,0 +1,43 @@
+{
+  "brand": {
+    "name": "Digital Loyalty"
+  },
+  "menu": {
+    "features": "Features",
+    "how_it_works": "How It Works",
+    "pricing": "Pricing",
+    "blog": "Blog",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "footer": {
+    "product": {
+      "title": "Product"
+    },
+    "support": {
+      "title": "Support",
+      "help_center": "Help Center",
+      "documentation": "Documentation",
+      "api_reference": "API Reference"
+    },
+    "company": {
+      "title": "Company",
+      "about": "About",
+      "blog": "Blog",
+      "contact": "Contact"
+    },
+    "legal": {
+      "title": "Legal",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "cookies": "Cookie Policy"
+    },
+    "copyright": "© 2024 Digital Loyalty. All rights reserved."
+  },
+  "social": {
+    "twitter": "Twitter",
+    "instagram": "Instagram",
+    "linkedin": "LinkedIn"
+  }
+}
+

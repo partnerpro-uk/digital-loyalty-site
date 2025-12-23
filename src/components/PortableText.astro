@@ -1,0 +1,292 @@
+---
+/**
+ * PortableText Renderer for Sanity Content
+ * Renders rich text content from Sanity CMS
+ */
+
+import { getImageUrl } from '../../sanity/lib/client';
+
+interface Props {
+  content: any[];
+}
+
+const { content } = Astro.props;
+
+// Helper to render a single block
+function renderBlock(block: any): string {
+  if (!block) return '';
+  
+  switch (block._type) {
+    case 'block':
+      return renderTextBlock(block);
+    case 'image':
+      return renderImage(block);
+    case 'code':
+      return renderCode(block);
+    default:
+      return '';
+  }
+}
+
+function renderTextBlock(block: any): string {
+  const style = block.style || 'normal';
+  const children = block.children || [];
+  const markDefs = block.markDefs || [];
+  
+  let content = children
+    .map((child: any) => {
+      if (child._type === 'span') {
+        let text = child.text || '';
+        
+        // Apply marks (bold, italic, links, etc.)
+        if (child.marks && child.marks.length > 0) {
+          child.marks.forEach((mark: string) => {
+            // Check if it's a link (mark will be a reference to markDefs)
+            const linkDef = markDefs.find((def: any) => def._key === mark);
+            if (linkDef && linkDef._type === 'link') {
+              const href = linkDef.href || '';
+              const isExternal = href.startsWith('http');
+              const target = isExternal ? 'target="_blank" rel="noopener noreferrer"' : '';
+              
+              // Check if this is a CTA-style link (in a heading with "Ready", "Get Started", "Start", "Book", "Learn More", etc.)
+              const isCTA = style === 'h3' && (
+                text.toLowerCase().includes('start') || 
+                text.toLowerCase().includes('book') || 
+                text.toLowerCase().includes('get') ||
+                text.toLowerCase().includes('demo') ||
+                text.toLowerCase().includes('trial') ||
+                text.toLowerCase().includes('learn')
+              );
+              
+              if (isCTA) {
+                text = `<a href="${href}" ${target} class="cta-button inline-block px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-full hover:shadow-2xl hover:scale-105 transition-all duration-300 no-underline text-lg mt-4">${text}</a>`;
+              } else {
+                text = `<a href="${href}" ${target} class="text-link">${text}</a>`;
+              }
+            } else {
+              // Regular formatting marks
+              switch (mark) {
+                case 'strong':
+                  text = `<strong>${text}</strong>`;
+                  break;
+                case 'em':
+                  text = `<em>${text}</em>`;
+                  break;
+                case 'code':
+                  text = `<code>${text}</code>`;
+                  break;
+              }
+            }
+          });
+        }
+        
+        return text;
+      }
+      return '';
+    })
+    .join('');
+  
+  // Apply block style with semantic HTML
+  // Check if this heading contains a CTA
+  const hasCTA = content.includes('cta-button');
+  
+          switch (style) {
+            case 'h2':
+              // Generate ID from heading text for TOC
+              const headingText = children.map((child: any) => child.text || '').join('').trim();
+              const headingId = headingText
+                .toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '');
+              
+              return `<h2 id="${headingId}" class="text-3xl font-bold mt-12 mb-6 text-[var(--text-primary)] scroll-mt-24" itemprop="headline">${content}</h2>`;
+            case 'h3':
+              return `<h3 class="${hasCTA ? 'text-center mt-12 mb-8 scroll-mt-24' : 'text-2xl font-bold mt-8 mb-4 text-[var(--text-primary)] scroll-mt-24'}">${content}</h3>`;
+            case 'h4':
+              return `<h4 class="text-xl font-bold mt-6 mb-3 text-[var(--text-primary)]">${content}</h4>`;
+    case 'blockquote':
+      return `<blockquote class="border-l-4 border-[#8b5cf6] pl-6 py-4 italic my-8 text-lg text-[var(--text-secondary)] bg-[var(--bg-secondary)]/30 rounded-r-lg" cite="">${content}</blockquote>`;
+    case 'normal':
+    default:
+      if (block.listItem) {
+        if (block.listItem === 'bullet') {
+          return `<li class="ml-6 mb-2 text-[var(--text-secondary)]" itemprop="text">${content}</li>`;
+        } else if (block.listItem === 'number') {
+          return `<li class="ml-6 mb-2 text-[var(--text-secondary)]" itemprop="text">${content}</li>`;
+        }
+      }
+      return `<p class="mb-6 text-lg leading-relaxed text-[var(--text-secondary)]" itemprop="text">${content}</p>`;
+  }
+}
+
+function renderImage(block: any): string {
+  const imageUrl = getImageUrl(block, 1200, 800);
+  const alt = block.alt || '';
+  const caption = block.caption || '';
+  
+  return `
+    <figure class="my-8" itemscope itemtype="https://schema.org/ImageObject">
+      <img 
+        src="${imageUrl}" 
+        alt="${alt}"
+        class="rounded-lg w-full"
+        loading="lazy"
+        itemprop="contentUrl"
+        width="1200"
+        height="800"
+      />
+      ${caption ? `<figcaption class="text-sm text-[var(--text-secondary)] mt-2 text-center italic" itemprop="caption">${caption}</figcaption>` : ''}
+      <meta itemprop="description" content="${alt}" />
+    </figure>
+  `;
+}
+
+function renderCode(block: any): string {
+  const code = block.code || '';
+  const language = block.language || 'text';
+  
+  return `
+    <div class="my-6">
+      <pre class="bg-[var(--bg-secondary)] rounded-lg p-4 overflow-x-auto"><code class="language-${language}">${escapeHtml(code)}</code></pre>
+    </div>
+  `;
+}
+
+function escapeHtml(text: string): string {
+  const map: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return text.replace(/[&<>"']/g, (m) => map[m]);
+}
+
+// Group list items
+function groupContent(blocks: any[]): any[] {
+  const grouped: any[] = [];
+  let currentList: any[] | null = null;
+  let currentListType: string | null = null;
+  
+  blocks.forEach(block => {
+    if (block.listItem) {
+      if (currentList && currentListType === block.listItem) {
+        currentList.push(block);
+      } else {
+        if (currentList) {
+          grouped.push({ _type: 'list', listType: currentListType, items: currentList });
+        }
+        currentList = [block];
+        currentListType = block.listItem;
+      }
+    } else {
+      if (currentList) {
+        grouped.push({ _type: 'list', listType: currentListType, items: currentList });
+        currentList = null;
+        currentListType = null;
+      }
+      grouped.push(block);
+    }
+  });
+  
+  if (currentList) {
+    grouped.push({ _type: 'list', listType: currentListType, items: currentList });
+  }
+  
+  return grouped;
+}
+
+const groupedContent = groupContent(content);
+
+// Render all content to HTML string
+const renderedHtml = groupedContent.map((item: any) => {
+  if (item._type === 'list') {
+    const listItems = item.items.map((block: any) => renderBlock(block)).join('');
+    if (item.listType === 'bullet') {
+      return `<ul class="list-disc ml-6 mb-4" itemprop="text">${listItems}</ul>`;
+    } else if (item.listType === 'number') {
+      return `<ol class="list-decimal ml-6 mb-4" itemprop="text">${listItems}</ol>`;
+    }
+  }
+  return renderBlock(item);
+}).join('');
+---
+
+<div class="portable-text prose prose-lg max-w-none" set:html={renderedHtml}></div>
+
+<style>
+  .portable-text {
+    color: var(--text-secondary);
+    line-height: 1.75;
+  }
+  
+  .portable-text h2,
+  .portable-text h3,
+  .portable-text h4 {
+    color: var(--text-primary);
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  
+  .portable-text strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+  
+  .portable-text code {
+    background: var(--bg-secondary);
+    padding: 0.2em 0.4em;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
+    font-family: 'Courier New', monospace;
+    color: #8b5cf6;
+  }
+  
+  .portable-text :global(.text-link) {
+    color: #8b5cf6;
+    text-decoration: underline;
+    transition: all 0.2s;
+  }
+  
+  .portable-text :global(.text-link:hover) {
+    color: #a78bfa;
+  }
+  
+  .portable-text :global(.cta-button) {
+    display: inline-block;
+    margin-top: 1rem;
+    text-decoration: none !important;
+    box-shadow: 0 10px 25px -5px rgba(139, 92, 246, 0.3);
+  }
+  
+  .portable-text :global(.cta-button:hover) {
+    box-shadow: 0 20px 40px -5px rgba(139, 92, 246, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  .portable-text img {
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+  }
+  
+  .portable-text blockquote {
+    border-color: #8b5cf6;
+  }
+  
+  .portable-text ul,
+  .portable-text ol {
+    color: var(--text-secondary);
+    margin: 1.5rem 0;
+  }
+  
+  .portable-text ul {
+    list-style-type: disc;
+  }
+  
+  .portable-text ol {
+    list-style-type: decimal;
+  }
+</style>

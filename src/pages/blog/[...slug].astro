@@ -1,0 +1,270 @@
+---
+/**
+ * Blog Post Page (English - Default Language)
+ * Fetches content from Sanity CMS
+ */
+
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import PortableText from '../../components/PortableText.astro';
+import { client, getImageUrl, BLOG_POST_QUERY, type BlogPost } from '../../../sanity/lib/client';
+import i18next from '../../i18next.config';
+
+// Import blog templates
+import ComparisonTemplate from '../../components/blog-templates/comparison.astro';
+import TutorialTemplate from '../../components/blog-templates/tutorial.astro';
+import NewsTemplate from '../../components/blog-templates/news.astro';
+import GuideTemplate from '../../components/blog-templates/guide.astro';
+import GeneralTemplate from '../../components/blog-templates/general.astro';
+
+const { t } = i18next;
+
+export async function getStaticPaths() {
+  // Fetch all published English blog posts
+  const posts = await client.fetch(`
+    *[_type == "blogPost" && language == "en" && status == "published"] {
+      slug
+    }
+  `);
+
+  return posts.map((post: any) => ({
+    params: { slug: post.slug.current }
+  }));
+}
+
+const { slug } = Astro.params;
+
+// Fetch the blog post
+const post: BlogPost | null = await client.fetch(BLOG_POST_QUERY, {
+  slug,
+  lang: 'en'
+});
+
+if (!post) {
+  return Astro.redirect('/404');
+}
+
+// Translations are now included in the post.translations field from the query
+const translations = post.translations || [];
+
+// Get image URLs
+const thumbnailImageUrl = getImageUrl(post.thumbnailImage, 1200, 630);
+const ogImageUrl = post.socialShareImage ? getImageUrl(post.socialShareImage, 1200, 630) : thumbnailImageUrl;
+
+// Format date
+const publishedDate = new Date(post.publishedAt).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+
+// SEO meta
+const pageTitle = post.seoTitle || post.title;
+const pageDescription = post.seoDescription || post.excerpt || post.title;
+const keywords = post.seoKeywords?.join(', ') || '';
+
+// Structured Data for SEO
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": post.title,
+  "description": post.excerpt,
+  "image": [
+    thumbnailImageUrl,
+    ...(post.socialShareImage ? [ogImageUrl] : [])
+  ],
+  "author": {
+    "@type": "Person",
+    "name": post.author?.name || "Digital Loyalty",
+    "url": post.author?.social?.website || "https://digitalloyalty.com"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Digital Loyalty",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://digitalloyalty.com/logo.png"
+    }
+  },
+  "datePublished": post.publishedAt,
+  "dateModified": post.publishedAt,
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": `https://digitalloyalty.com/blog/${post.slug.current}`
+  },
+  "articleSection": post.category?.name?.en || "Business",
+  "keywords": keywords,
+  "wordCount": post.content?.reduce((count: number, block: any) => {
+    if (block.children) {
+      return count + block.children.reduce((blockCount: number, child: any) => {
+        return blockCount + (child.text?.length || 0);
+      }, 0);
+    }
+    return count;
+  }, 0) || 0,
+  "inLanguage": post.language || "en",
+  "isAccessibleForFree": true,
+  "genre": "Business",
+  "about": {
+    "@type": "Thing",
+    "name": post.category?.name?.en || "Customer Retention"
+  }
+};
+
+// Use a single universal template for all posts
+const TemplateComponent = GeneralTemplate;
+---
+
+<Layout 
+  title={pageTitle}
+  description={pageDescription}
+  keywords={keywords}
+  image={ogImageUrl}
+  type="article"
+  publishedTime={post.publishedAt}
+  modifiedTime={post.publishedAt}
+  author={post.author?.name || "Digital Loyalty"}
+  section={post.category?.name?.en || "Business"}
+  tags={post.tags?.map((tag: any) => tag.name.en).join(', ') || ''}
+>
+  <Navigation />
+  
+  <main class="bg-[var(--bg-primary)] min-h-screen pt-16">
+    <!-- Breadcrumb with Schema.org markup -->
+    <nav class="mx-auto max-w-7xl px-6 py-8 text-sm" aria-label="Breadcrumb">
+      <ol itemscope itemtype="https://schema.org/BreadcrumbList" class="flex items-center flex-wrap gap-2">
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="flex items-center">
+          <a href="/" class="text-[var(--text-secondary)] hover:text-[#8b5cf6]" itemprop="item">
+            <span itemprop="name">Home</span>
+          </a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="mx-2 text-[var(--text-secondary)]">/</span>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="flex items-center">
+          <a href="/blog" class="text-[var(--text-secondary)] hover:text-[#8b5cf6]" itemprop="item">
+            <span itemprop="name">Blog</span>
+          </a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <span class="mx-2 text-[var(--text-secondary)]">/</span>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="flex items-center">
+          <span class="text-[var(--text-primary)] truncate max-w-xs md:max-w-md lg:max-w-lg" itemprop="name" title={post.title}>{post.title}</span>
+          <meta itemprop="position" content="3" />
+        </li>
+      </ol>
+    </nav>
+
+    <!-- Semrush-Style Banner Section -->
+    <div class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-800 dark:via-slate-700 dark:to-slate-600 text-slate-800 dark:text-slate-100 py-16 mb-12">
+      <div class="mx-auto max-w-7xl px-6">
+        <!-- Category Tags -->
+        {post.category && (
+          <div class="mb-4">
+            <a 
+              href={`/blog/category/${post.category.slug.current}`}
+              class="inline-block px-3 py-1 bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-200 text-sm font-semibold rounded-full hover:bg-slate-300 dark:hover:bg-slate-500 transition-all duration-200 uppercase tracking-wide"
+              itemprop="articleSection"
+            >
+              {post.category.name[post.language] || post.category.name.en}
+            </a>
+          </div>
+        )}
+
+        <!-- Main Title -->
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 leading-tight max-w-5xl" itemprop="headline">
+          {post.title}
+        </h1>
+
+        <!-- Author & Meta Info -->
+        <div class="flex flex-wrap items-center gap-6 text-lg">
+          {post.author && (
+            <div class="flex items-center gap-3" itemprop="author" itemscope itemtype="https://schema.org/Person">
+              {post.author.image && (
+                <img 
+                  src={post.author.image.asset.url + '?w=40&h=40&fit=crop'} 
+                  alt={post.author.name}
+                  class="w-10 h-10 rounded-full border-2 border-slate-300 dark:border-slate-500"
+                  itemprop="image"
+                />
+              )}
+              <div>
+                <span class="font-semibold" itemprop="name">{post.author.name}</span>
+                {post.author.title && (
+                  <span class="text-slate-600 dark:text-slate-300 text-sm block">{post.author.title}</span>
+                )}
+              </div>
+            </div>
+          )}
+          
+          {post.publishedAt && (
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+              </svg>
+              <time datetime={post.publishedAt} itemprop="datePublished">
+                {new Date(post.publishedAt).toLocaleDateString(post.language, { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}
+              </time>
+            </div>
+          )}
+          
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+            </svg>
+            <span>{Math.ceil(post.content?.reduce((count: number, block: any) => {
+              if (block.children) {
+                return count + block.children.reduce((blockCount: number, child: any) => {
+                  return blockCount + (child.text?.length || 0);
+                }, 0);
+              }
+              return count;
+            }, 0) / 300) || 5} min read</span>
+          </div>
+        </div>
+
+        <!-- Language Selector (if translations exist) -->
+        {translations && translations.length > 0 && (
+          <div class="mt-6">
+            <div class="inline-flex items-center gap-3 px-4 py-2 bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600">
+              <span class="text-sm text-slate-600 dark:text-slate-300">Available in:</span>
+              {translations.map((translation: any) => (
+                <a 
+                  href={translation.language === 'en' ? `/blog/${translation.slug.current}` : `/${translation.language}/blog/${translation.slug.current}`}
+                  class="text-sm font-medium text-slate-800 dark:text-slate-100 hover:text-slate-600 dark:hover:text-slate-300 transition-colors underline"
+                >
+                  {translation.language.toUpperCase()}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+
+    <!-- Content starts directly after banner (Semrush style) -->
+
+    <!-- Render Template with Content -->
+    <TemplateComponent post={post}>
+      <PortableText content={post.content} />
+    </TemplateComponent>
+  </main>
+
+  <Footer />
+</Layout>
+
+<!-- Structured Data for SEO -->
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

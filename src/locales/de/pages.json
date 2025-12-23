@@ -1,0 +1,224 @@
+{
+  "hero": {
+    "title": "Treuekarten Menschen",
+    "title_highlight": "tatsächlich verwenden.",
+    "subtitle": "Erstellen Sie ansprechende digitale Kundenbindungsprogramme, damit Ihre Kunden immer wieder kommen.",
+    "badge_items": [
+      "Web App",
+      "Fast & Lightweight",
+      "No signup to try"
+    ],
+    "marquee": {
+      "rewards_program": "Belohnungsprogramm",
+      "points_system": "Punktesystem",
+      "tier_benefits": "Tierische Leistungen",
+      "gamification": "Gamification"
+    }
+  },
+  "features": {
+    "section_title": "Alles was Sie brauchen",
+    "section_subtitle": "Leistungsstarke Funktionen zur Erstellung, Verwaltung und zum Ausbau Ihres Kundenbindungsprogramms",
+    "versatile_card_types": {
+      "title": "Vielseitige Kartentypen",
+      "description": "Briefmarken, Punkte, Mitgliedschaften und Gutscheine - alles anpassbar, um Ihre Marke perfekt zu unterstützen."
+    },
+    "scanner_app": {
+      "title": "Scanner-App",
+      "description": "Keine zusätzliche Hardware erforderlich - verwenden Sie unsere plattformübergreifende Webanwendung zum Scannen und Validieren von Karten."
+    },
+    "unique_designs": {
+      "title": "Einzigartige Designs",
+      "description": "Vollständig anpassbare Karten, die zu Ihrer Markenidentität passen und sich von der Konkurrenz abheben."
+    },
+    "push_notifications": {
+      "title": "Push-Benachrichtigungen",
+      "description": "Senden Sie sofortige Marketing-Benachrichtigungen, um die Kunden zu binden und über Angebote zu informieren."
+    },
+    "simple_setup": {
+      "title": "Einfache Einrichtung",
+      "description": "Scannen Sie den QR-Code und installieren Sie ihn mit nur 3 Fingertipps. Bringen Sie Ihr Treueprogramm in wenigen Minuten zum Laufen."
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "Verfolgen Sie alles in Ihrem Verwaltungsbereich mit detaillierten Analysen und Einblicken."
+    }
+  },
+  "gallery": {
+    "section_title": "Einzigartige Designs",
+    "section_subtitle": "Vollständig anpassbare Karten, die zu Ihrer Marke passen. Jedes Design ist einzigartig und auf Ihr Unternehmen zugeschnitten.",
+    "examples": {
+      "coffee_shop": "Kaffeehaus",
+      "fitness_studio": "Fitness-Studio",
+      "restaurant": "Restaurant",
+      "spa_wellness": "Spa & Wellness",
+      "retail_store": "Einzelhandelsgeschäft",
+      "salon": "Salon"
+    }
+  },
+  "how_it_works": {
+    "section_title": "Einfacher Einrichtungsprozess",
+    "section_subtitle": "Bringen Sie Ihr Kundenbindungsprogramm in nur 3 einfachen Schritten zum Laufen",
+    "step_1": {
+      "title": "QR-Code scannen",
+      "description": "Die Kunden scannen den QR-Code mit ihrer Handykamera, um Ihre Kundenkarte direkt zu ihrer Apple- oder Google-Wallet hinzuzufügen."
+    },
+    "step_2": {
+      "title": "Zur Brieftasche hinzufügen",
+      "description": "Mit nur 3 Fingertipps ist die Treuekarte in der digitalen Brieftasche installiert. Keine App-Downloads erforderlich."
+    },
+    "step_3": {
+      "title": "Belohnungen verdienen",
+      "description": "Die Kunden sammeln bei jedem Besuch Stempel oder Punkte. Verfolgen Sie ihre Fortschritte und beobachten Sie, wie das Engagement wächst."
+    }
+  },
+  "pricing": {
+    "section_title": "Einfache, transparente Preisgestaltung",
+    "section_subtitle": "Wählen Sie den Plan, der zu Ihren geschäftlichen Anforderungen passt",
+    "starter": {
+      "name": "Starter",
+      "price": "$29",
+      "period": "/Monat",
+      "features": {
+        "active_cards": "Bis zu 500 aktive Karten",
+        "designs": "Grundlegende Kartendesigns",
+        "support": "E-Mail-Unterstützung"
+      }
+    },
+    "professional": {
+      "name": "Professionell",
+      "price": "$79",
+      "period": "/Monat",
+      "features": {
+        "active_cards": "Bis zu 5.000 aktive Karten",
+        "designs": "Individuelle Kartengestaltung",
+        "notifications": "Push-Benachrichtigungen",
+        "support": "Vorrangige Unterstützung"
+      }
+    },
+    "enterprise": {
+      "name": "Unternehmen",
+      "price": "Benutzerdefiniert",
+      "period": "",
+      "features": {
+        "active_cards": "Unbegrenzt aktive Karten",
+        "white_label": "White-Label-Lösung",
+        "api": "API-Zugang",
+        "support": "Engagierte Unterstützung"
+      }
+    },
+    "page_title": "Preispläne - Digitale Kundentreue",
+    "page_description": "Wählen Sie den perfekten Plan für Ihr Unternehmen. Flexible Preise ohne versteckte Gebühren."
+  },
+  "footer": {
+    "tagline": "Erstellen Sie ansprechende digitale Kundenbindungsprogramme, die Ihre Kunden dazu bringen, immer wieder zu kommen. Einfach, leistungsstark und effektiv."
+  },
+  "social_proof": {
+    "trust_statement": "Mehr als 500 Unternehmen weltweit vertrauen darauf"
+  },
+  "problem_solution": {
+    "label": "Das Problem",
+    "title": "Verlieren Sie keine Kunden mehr durch vergessene Treuekarten",
+    "subtitle": "Traditionelle Kundenbindungsprogramme scheitern aus drei Hauptgründen",
+    "problems": {
+      "paper_cards": {
+        "title": "Papierkarten gehen verloren",
+        "description": "85 % der Kundenkarten aus Papier werden innerhalb einer Woche weggeworfen. Ihre Investition in Druck und Verteilung landet direkt im Müll."
+      },
+      "app_fatigue": {
+        "title": "App-Müdigkeit ist real",
+        "description": "Die Kunden werden keine weitere App herunterladen, nur um Ihre Prämien zu erhalten. Auf einem durchschnittlichen Telefon gibt es bereits mehr als 80 Apps, die um Aufmerksamkeit konkurrieren."
+      },
+      "no_data": {
+        "title": "Keine Daten zum Engagement",
+        "description": "Ohne Einblicke in das Kundenverhalten sind Sie aufgeschmissen. Sie können nicht wissen, wer Ihre besten Kunden sind oder was sie antreibt."
+      }
+    },
+    "solution_label": "Die Lösung",
+    "solution_title": "Digitale Brieftaschenkarten",
+    "solution_description": "Karten, die in Apple & Google Wallet leben - immer bei Ihren Kunden. Keine App-Downloads. Keine verlorenen Karten. Echtzeit-Analysen."
+  },
+  "bento_features": {
+    "label": "Warum uns wählen",
+    "title": "Alles, was Sie brauchen, auf einer Plattform",
+    "subtitle": "Leistungsstarke Funktionen für moderne Unternehmen",
+    "items": {
+      "wallet_integration": {
+        "title": "Apple und Google Wallet",
+        "description": "Die Karten sind dort, wo die Kunden bereits sind - in ihrer digitalen Brieftasche. Keine App erforderlich."
+      },
+      "real_time_updates": {
+        "title": "Aktualisierungen in Echtzeit",
+        "description": "Push-Benachrichtigungen und sofortige Kontostandsaktualisierungen halten die Kunden bei der Stange."
+      },
+      "analytics": {
+        "title": "Leistungsstarke Analysen",
+        "description": "Verstehen Sie das Kundenverhalten mit detaillierten Einblicken und Berichten."
+      },
+      "customization": {
+        "title": "Vollständige Anpassung",
+        "description": "Passen Sie Ihre Marke mit unbegrenzten Designoptionen perfekt an."
+      },
+      "automation": {
+        "title": "Intelligente Automatisierung",
+        "description": "Automatisierte Belohnungen, Geburtstagsangebote und Re-Engagement-Kampagnen."
+      },
+      "integration": {
+        "title": "Einfache Integration",
+        "description": "Funktioniert mit Ihrem POS, E-Commerce und vorhandenen Tools."
+      }
+    }
+  },
+  "video_section": {
+    "label": "Sehen Sie es in Aktion",
+    "title": "Sehen Sie, wie es funktioniert",
+    "subtitle": "Ein 2-minütiger Überblick über unsere Plattform",
+    "cta": "Video abspielen"
+  },
+  "testimonials": {
+    "label": "Kundengeschichten",
+    "title": "Von Unternehmen weltweit geliebt",
+    "subtitle": "Lesen Sie, was unsere Kunden über die Umgestaltung ihrer Kundenbindungsprogramme zu sagen haben"
+  },
+  "faq": {
+    "label": "FAQ",
+    "title": "Häufig gestellte Fragen",
+    "subtitle": "Alles, was Sie über unsere Plattform wissen müssen"
+  },
+  "final_cta": {
+    "title": "Sind Sie bereit, Ihr Kundenbindungsprogramm umzugestalten?",
+    "subtitle": "Starten Sie noch heute kostenlos. Keine Kreditkarte erforderlich. Jederzeit kündbar.",
+    "primary_cta": "Startet kostenlos",
+    "secondary_cta": "Demo buchen",
+    "trust_text": "Schließen Sie sich 500+ Unternehmen an, die unsere Plattform bereits nutzen"
+  },
+  "about": {
+    "page_title": "Über uns - Digitale Loyalität",
+    "page_description": "Erfahren Sie mehr über unsere Mission, Unternehmen beim Aufbau dauerhafter Kundenbeziehungen durch digitale Kundenbindungsprogramme zu unterstützen.",
+    "hero_title": "Unsere Geschichte",
+    "hero_subtitle": "Die Zukunft der Kundenbindung gestalten",
+    "mission_label": "Unser Auftrag",
+    "mission_title": "Loyalität einfach machen",
+    "mission_text": "Wir glauben, dass jedes Unternehmen Zugang zu modernen Kundenbindungsprogrammen verdient. Unsere Mission ist es, Unternehmen jeder Größe dabei zu helfen, dauerhafte Kundenbeziehungen durch einfache, leistungsstarke digitale Kundenbindungsprogramme aufzubauen.",
+    "story_label": "Wie es anfing",
+    "story_title": "Vom Problem zur Lösung",
+    "story_text": "Wir sahen, wie Unternehmen mit veralteten Kundenbindungssystemen zu kämpfen hatten - Papierkarten, die verloren gingen, teure Apps, die niemand herunterlud, und keinerlei Einblick in das Kundenverhalten. Wir wussten, dass es einen besseren Weg geben musste. Also haben wir es gebaut.",
+    "values_label": "Wofür wir stehen",
+    "values_title": "Unsere Werte",
+    "values": {
+      "simplicity": {
+        "title": "Vereinfachung",
+        "description": "Technologie sollte unsichtbar sein. Wir bauen Werkzeuge, die einfach funktionieren, ohne Komplexität."
+      },
+      "fairness": {
+        "title": "Fairness",
+        "description": "Transparente Preisgestaltung ohne versteckte Gebühren. Was Sie sehen, ist das, was Sie bezahlen."
+      },
+      "customer_first": {
+        "title": "Kunde zuerst",
+        "description": "Ihr Erfolg ist unser Erfolg. Wir sind hier, um Ihnen zu helfen, zu wachsen."
+      }
+    },
+    "cta_title": "Sind Sie bereit, Ihr Kundenbindungsprogramm umzugestalten?",
+    "cta_button": "Startet kostenlos"
+  }
+}

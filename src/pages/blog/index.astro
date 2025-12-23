@@ -1,0 +1,281 @@
+---
+/**
+ * Blog Listing Page (English)
+ * Shows all blog posts in grid format
+ */
+
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import { client, getImageUrl, BLOG_POSTS_LIST_QUERY, FEATURED_POSTS_QUERY, CATEGORIES_QUERY } from '../../../sanity/lib/client';
+import i18next from '../../i18next.config';
+
+const { t } = i18next;
+
+// Pagination
+const POSTS_PER_PAGE = 12;
+const page = 1; // Can be made dynamic with [page] route
+
+// Fetch posts (with error handling)
+let posts = [];
+let featuredPosts = [];
+let categories = [];
+
+try {
+  posts = await client.fetch(BLOG_POSTS_LIST_QUERY, {
+    lang: 'en',
+    start: (page - 1) * POSTS_PER_PAGE,
+    end: page * POSTS_PER_PAGE
+  });
+  
+  featuredPosts = await client.fetch(FEATURED_POSTS_QUERY, {
+    lang: 'en'
+  });
+  
+  categories = await client.fetch(CATEGORIES_QUERY);
+} catch (error) {
+  console.error('Error fetching blog data:', error);
+}
+
+// Format dates
+function formatDate(dateString: string): string {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+---
+
+<Layout 
+  title="Blog - Digital Loyalty"
+  description="Insights, tips, and strategies for customer loyalty and retention. Learn how to build successful loyalty programs."
+  keywords="loyalty programs, customer retention, digital loyalty, loyalty strategies"
+>
+  <Navigation />
+  
+  <div class="bg-[var(--bg-primary)] min-h-screen pt-16">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-b from-[var(--bg-secondary)]/30 to-[var(--bg-primary)] py-20">
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="text-center">
+          <div class="inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] backdrop-blur mb-4">
+            <span>📝 Blog</span>
+          </div>
+          <h1 class="text-4xl md:text-5xl font-bold mb-6 text-[var(--text-primary)]">
+            Insights & Strategies
+          </h1>
+          <p class="text-xl text-[var(--text-secondary)] max-w-2xl mx-auto">
+            Learn how to build and optimize customer loyalty programs that drive growth.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Posts -->
+    {featuredPosts.length > 0 && (
+      <section class="py-12 bg-[var(--bg-secondary)]/20">
+        <div class="mx-auto max-w-7xl px-6">
+          <h2 class="text-2xl font-bold mb-8 text-[var(--text-primary)]">Featured Articles</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {featuredPosts.map((post: any) => (
+              <a 
+                href={`/blog/${post.slug.current}`}
+                class="group block rounded-xl border border-[var(--border-color)] overflow-hidden hover:border-[#8b5cf6]/50 transition-all hover:shadow-lg"
+              >
+                <div class="relative h-48 overflow-hidden bg-gradient-to-br from-purple-500 to-pink-500">
+                  {post.thumbnailImage ? (
+                    <img 
+                      src={getImageUrl(post.thumbnailImage, 600, 400)}
+                      alt={post.thumbnailImage.alt || post.title}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div class="w-full h-full flex items-center justify-center text-white text-6xl">
+                      📝
+                    </div>
+                  )}
+                  {post.category && (
+                    <div 
+                      class="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-medium"
+                      style={`background-color: ${post.category.color || '#8b5cf6'}; color: white;`}
+                    >
+                      {post.category.name.en}
+                    </div>
+                  )}
+                </div>
+                <div class="p-6">
+                  <h3 class="text-xl font-semibold text-[var(--text-primary)] group-hover:text-[#8b5cf6] transition-colors mb-3 line-clamp-2">
+                    {post.title}
+                  </h3>
+                  {post.excerpt && (
+                    <p class="text-[var(--text-secondary)] mb-4 line-clamp-2">
+                      {post.excerpt}
+                    </p>
+                  )}
+                  <div class="flex items-center gap-3 text-sm text-[var(--text-secondary)]">
+                    {post.author.image && (
+                      <img 
+                        src={getImageUrl(post.author.image, 32, 32)}
+                        alt={post.author.name}
+                        class="w-8 h-8 rounded-full"
+                      />
+                    )}
+                    <div>
+                      <div>{post.author.name}</div>
+                      <div>{formatDate(post.publishedAt)}</div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Categories Filter -->
+    {categories.length > 0 && (
+      <div class="mx-auto max-w-7xl px-6 py-8">
+        <div class="flex flex-wrap gap-3 items-center">
+          <span class="text-sm font-medium text-[var(--text-secondary)]">Filter by category:</span>
+          <a 
+            href="/blog"
+            class="px-4 py-2 rounded-full text-sm font-medium bg-[#8b5cf6] text-white"
+          >
+            All Posts
+          </a>
+          {categories.map((category: any) => (
+            <a 
+              href={`/blog/category/${category.slug.current}`}
+              class="px-4 py-2 rounded-full text-sm font-medium hover:bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] transition-colors"
+            >
+              {category.name.en}
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- All Posts Grid -->
+    <section class="py-12">
+      <div class="mx-auto max-w-7xl px-6">
+        <h2 class="text-2xl font-bold mb-8 text-[var(--text-primary)]">All Articles</h2>
+        
+        {posts.length === 0 ? (
+          <div class="text-center py-12">
+            <p class="text-[var(--text-secondary)] text-lg">
+              No blog posts yet. Check back soon!
+            </p>
+          </div>
+        ) : (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {posts.map((post: any) => (
+              <article class="group">
+                <a href={`/blog/${post.slug.current}`} class="block">
+                  <div class="relative h-56 rounded-xl overflow-hidden mb-4 bg-gradient-to-br from-purple-500 to-pink-500">
+                    {post.thumbnailImage ? (
+                      <img 
+                        src={getImageUrl(post.thumbnailImage, 600, 400)}
+                        alt={post.thumbnailImage.alt || post.title}
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div class="w-full h-full flex items-center justify-center text-white text-6xl">
+                        📝
+                      </div>
+                    )}
+                    {post.featured && (
+                      <div class="absolute top-3 right-3 bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                        ⭐ Featured
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div class="flex items-center gap-2 mb-3">
+                    {post.category && (
+                      <span 
+                        class="px-3 py-1 rounded-full text-xs font-medium"
+                        style={`background-color: ${post.category.color || '#8b5cf6'}20; color: ${post.category.color || '#8b5cf6'}`}
+                      >
+                        {post.category.name.en}
+                      </span>
+                    )}
+                    <span class="text-xs text-[var(--text-secondary)]">
+                      {formatDate(post.publishedAt)}
+                    </span>
+                  </div>
+                  
+                  <h3 class="text-xl font-semibold text-[var(--text-primary)] group-hover:text-[#8b5cf6] transition-colors mb-3 line-clamp-2">
+                    {post.title}
+                  </h3>
+                  
+                  {post.excerpt && (
+                    <p class="text-[var(--text-secondary)] mb-4 line-clamp-3">
+                      {post.excerpt}
+                    </p>
+                  )}
+                  
+                  {post.tags && post.tags.length > 0 && (
+                    <div class="flex flex-wrap gap-2 mb-4">
+                      {post.tags.slice(0, 3).map((tag: any) => (
+                        <span class="text-xs text-[var(--text-secondary)]">
+                          #{tag.name.en}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  
+                  <div class="flex items-center gap-2 text-sm">
+                    {post.author.image && (
+                      <img 
+                        src={getImageUrl(post.author.image, 32, 32)}
+                        alt={post.author.name}
+                        class="w-8 h-8 rounded-full"
+                      />
+                    )}
+                    <span class="text-[var(--text-secondary)]">{post.author.name}</span>
+                  </div>
+                </a>
+              </article>
+            ))}
+          </div>
+        )}
+
+        <!-- Pagination (placeholder for future) -->
+        <!-- <div class="mt-12 flex justify-center gap-2">
+          <button class="px-4 py-2 rounded-lg border border-[var(--border-color)] text-[var(--text-primary)]">
+            Previous
+          </button>
+          <button class="px-4 py-2 rounded-lg bg-[#8b5cf6] text-white">
+            1
+          </button>
+          <button class="px-4 py-2 rounded-lg border border-[var(--border-color)] text-[var(--text-primary)]">
+            2
+          </button>
+          <button class="px-4 py-2 rounded-lg border border-[var(--border-color)] text-[var(--text-primary)]">
+            Next
+          </button>
+        </div> -->
+      </div>
+    </section>
+  </div>
+
+  <Footer />
+</Layout>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

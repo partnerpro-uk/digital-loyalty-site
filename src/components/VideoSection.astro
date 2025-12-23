@@ -1,0 +1,224 @@
+---
+// Video Sales Letter (VSL) section
+// Fetches content from Sanity CMS with i18n fallback
+import i18next from '../i18next.config';
+import { getPageContentWithFallback } from '../../sanity/lib/pageContent';
+import { getLocaleFromPathname } from '../utils/i18n';
+
+const { t } = i18next;
+
+// Get current language from URL
+const currentLang = getLocaleFromPathname(Astro.url.pathname) || 'en';
+
+// Fetch page content from Sanity
+let pageContent = null;
+try {
+  pageContent = await getPageContentWithFallback('home', currentLang);
+} catch (e) {
+  console.warn('Could not fetch page content from Sanity, using i18n fallback');
+}
+
+// Use Sanity content with i18n fallback
+const video = pageContent?.video;
+const sectionLabel = video?.sectionBadge || t('pages:video_section.label');
+const sectionTitle = video?.title || t('pages:video_section.title');
+const sectionSubtitle = video?.subtitle || t('pages:video_section.subtitle');
+const ctaText = video?.ctaText || t('pages:video_section.cta');
+
+interface Props {
+  videoUrl?: string;
+  thumbnailUrl?: string;
+}
+
+const {
+  videoUrl: propVideoUrl = "https://www.youtube.com/embed/dQw4w9WgXcQ",
+  thumbnailUrl: propThumbnailUrl = ""
+} = Astro.props;
+
+// Use Sanity video URL or prop/default
+const videoUrl = video?.videoUrl || propVideoUrl;
+
+// Extract YouTube video ID for thumbnail if no custom thumbnail provided
+const getYouTubeThumbnail = (url: string) => {
+  const match = url.match(/(?:embed\/|v=|youtu\.be\/)([^&?#]+)/);
+  return match ? `https://img.youtube.com/vi/${match[1]}/maxresdefault.jpg` : '';
+};
+
+const thumbnail = video?.thumbnailImage || propThumbnailUrl || getYouTubeThumbnail(videoUrl);
+---
+
+<section id="video-section" class="py-20 bg-[var(--bg-primary)]">
+  <div class="mx-auto max-w-7xl px-6">
+    <!-- Section Header -->
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] backdrop-blur mb-4">
+        <span>{sectionLabel}</span>
+      </div>
+      <h2 class="text-4xl font-bold tracking-tight sm:text-5xl text-[var(--text-primary)]">
+        {sectionTitle}
+      </h2>
+      <p class="mt-4 text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+        {sectionSubtitle}
+      </p>
+    </div>
+
+    <!-- Video Container -->
+    <div class="max-w-4xl mx-auto">
+      <div
+        id="video-container"
+        class="video-container relative rounded-2xl overflow-hidden shadow-2xl shadow-[#8b5cf6]/10 border border-[var(--border-color)] cursor-pointer group"
+        data-video-url={videoUrl}
+      >
+        <!-- Thumbnail with play button overlay -->
+        <div class="video-thumbnail relative aspect-video bg-[var(--bg-secondary)]">
+          {thumbnail ? (
+            <img
+              src={thumbnail}
+              alt={t('pages:video_section.title')}
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+          ) : (
+            <!-- Placeholder if no thumbnail -->
+            <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#8b5cf6]/20 to-[#a78bfa]/10">
+              <span class="text-[var(--text-secondary)]">Video Preview</span>
+            </div>
+          )}
+
+          <!-- Gradient overlay -->
+          <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
+
+          <!-- Play button -->
+          <div class="absolute inset-0 flex items-center justify-center">
+            <button
+              class="play-button w-20 h-20 bg-white/95 rounded-full flex items-center justify-center shadow-xl transform group-hover:scale-110 transition-transform duration-300"
+              aria-label={t('common:accessibility.play_video')}
+            >
+              <svg class="w-8 h-8 text-[#8b5cf6] ml-1" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- CTA text -->
+          <div class="absolute bottom-6 left-0 right-0 text-center">
+            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/50 text-white text-sm font-medium backdrop-blur-sm">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+              {ctaText}
+            </span>
+          </div>
+        </div>
+
+        <!-- Video iframe (hidden until clicked) -->
+        <div class="video-player hidden aspect-video">
+          <iframe
+            class="w-full h-full"
+            src=""
+            title={t('pages:video_section.title')}
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Video Modal for larger view (optional) -->
+  <div id="video-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/90 backdrop-blur-sm">
+    <div class="relative w-full max-w-5xl mx-4">
+      <button
+        id="close-modal"
+        class="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors"
+        aria-label={t('common:buttons.close')}
+      >
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+      <div class="aspect-video rounded-xl overflow-hidden">
+        <iframe
+          id="modal-iframe"
+          class="w-full h-full"
+          src=""
+          title={t('pages:video_section.title')}
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Video playback functionality
+    const container = document.getElementById('video-container');
+    const thumbnail = container?.querySelector('.video-thumbnail') as HTMLElement;
+    const player = container?.querySelector('.video-player') as HTMLElement;
+    const iframe = player?.querySelector('iframe') as HTMLIFrameElement;
+    const videoUrl = container?.dataset.videoUrl || '';
+
+    // Modal elements
+    const modal = document.getElementById('video-modal');
+    const modalIframe = document.getElementById('modal-iframe') as HTMLIFrameElement;
+    const closeModal = document.getElementById('close-modal');
+
+    // Click to play inline
+    thumbnail?.addEventListener('click', () => {
+      // Open in modal on larger screens, inline on smaller
+      if (window.innerWidth >= 768 && modal && modalIframe) {
+        // Play in modal
+        modalIframe.src = videoUrl + '?autoplay=1';
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+      } else if (iframe) {
+        // Play inline
+        iframe.src = videoUrl + '?autoplay=1';
+        thumbnail.classList.add('hidden');
+        player.classList.remove('hidden');
+      }
+    });
+
+    // Close modal
+    closeModal?.addEventListener('click', () => {
+      if (modal && modalIframe) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        modalIframe.src = '';
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Close modal on backdrop click
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal && modalIframe) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        modalIframe.src = '';
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal && !modal.classList.contains('hidden') && modalIframe) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        modalIframe.src = '';
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
+
+  <!-- Motion animations -->
+  <script type="module">
+    import { animate, inView } from "motion";
+
+    inView("#video-section .video-container", ({ target }) => {
+      animate(target, { opacity: [0, 1], y: [40, 0] }, { duration: 0.8, easing: "ease-out" });
+    });
+  </script>
+</section>

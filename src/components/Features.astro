@@ -1,0 +1,137 @@
+---
+// Features section for Digital Loyalty
+// Fetches content from Sanity CMS with i18n fallback
+import i18next from '../i18next.config';
+import { getPageContentWithFallback } from '../../sanity/lib/pageContent';
+import { getLocaleFromPathname } from '../utils/i18n';
+
+const { t } = i18next;
+
+// Get current language from URL
+const currentLang = getLocaleFromPathname(Astro.url.pathname) || 'en';
+
+// Fetch page content from Sanity
+let pageContent = null;
+try {
+  pageContent = await getPageContentWithFallback('home', currentLang);
+} catch (e) {
+  console.warn('Could not fetch page content from Sanity, using i18n fallback');
+}
+
+// Use Sanity content with i18n fallback
+const features = pageContent?.features;
+const sectionBadge = features?.sectionBadge || t('common:labels.key_features');
+const sectionTitle = features?.title || t('pages:features.section_title');
+const sectionSubtitle = features?.subtitle || t('pages:features.section_subtitle');
+
+// Feature definition with icons and i18n keys
+interface FeatureDefinition {
+  icon: string;
+  i18nKey: string;
+  iconSvg: string;
+  gradientFrom: string;
+  gradientTo: string;
+}
+
+const featureDefinitions: FeatureDefinition[] = [
+  {
+    icon: 'versatile',
+    i18nKey: 'versatile_card_types',
+    iconSvg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>',
+    gradientFrom: '#8b5cf6',
+    gradientTo: '#a78bfa'
+  },
+  {
+    icon: 'scanner',
+    i18nKey: 'scanner_app',
+    iconSvg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>',
+    gradientFrom: '#a78bfa',
+    gradientTo: '#c084fc'
+  },
+  {
+    icon: 'designs',
+    i18nKey: 'unique_designs',
+    iconSvg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>',
+    gradientFrom: '#c084fc',
+    gradientTo: '#8b5cf6'
+  },
+  {
+    icon: 'notifications',
+    i18nKey: 'push_notifications',
+    iconSvg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>',
+    gradientFrom: '#7c3aed',
+    gradientTo: '#8b5cf6'
+  },
+  {
+    icon: 'setup',
+    i18nKey: 'simple_setup',
+    iconSvg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>',
+    gradientFrom: '#8b5cf6',
+    gradientTo: '#7c3aed'
+  },
+  {
+    icon: 'dashboard',
+    i18nKey: 'dashboard',
+    iconSvg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>',
+    gradientFrom: '#a78bfa',
+    gradientTo: '#7c3aed'
+  }
+];
+
+// Map features with Sanity content + i18n fallback
+const featureItems = featureDefinitions.map((def) => {
+  const sanityItem = features?.items?.find((item: any) => item.icon === def.icon);
+  return {
+    ...def,
+    title: sanityItem?.title || t(`pages:features.${def.i18nKey}.title`),
+    description: sanityItem?.description || t(`pages:features.${def.i18nKey}.description`)
+  };
+});
+---
+
+<section id="features" class="py-20 bg-[var(--bg-secondary)]/30">
+  <div class="mx-auto max-w-7xl px-6">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] backdrop-blur mb-4">
+        <span>{sectionBadge}</span>
+      </div>
+      <h2 class="text-4xl font-bold tracking-tight sm:text-5xl text-[var(--text-primary)]">
+        {sectionTitle}
+      </h2>
+      <p class="mt-4 text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+        {sectionSubtitle}
+      </p>
+    </div>
+
+    <!-- Feature Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      {featureItems.map((feature) => (
+        <div class="group relative rounded-2xl border border-[var(--border-color)] bg-[var(--bg-primary)] p-8 backdrop-blur hover:border-[#8b5cf6]/50 transition-all duration-300">
+          <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#8b5cf6]/5 to-[#a78bfa]/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="relative">
+            <div
+              class="w-12 h-12 rounded-lg flex items-center justify-center mb-6"
+              style={`background: linear-gradient(to bottom right, ${feature.gradientFrom}, ${feature.gradientTo})`}
+            >
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" set:html={feature.iconSvg} />
+            </div>
+            <h3 class="text-xl font-semibold mb-4 text-[var(--text-primary)]">{feature.title}</h3>
+            <p class="text-[var(--text-secondary)] leading-relaxed">
+              {feature.description}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Motion animations -->
+  <script type="module">
+    import { animate, inView, stagger } from "motion";
+
+    inView("#features .group", ({ target }) => {
+      animate(target, { opacity: [0, 1], y: [30, 0] }, { duration: 0.6, easing: "ease-out", delay: stagger(0.1) });
+    });
+  </script>
+</section>

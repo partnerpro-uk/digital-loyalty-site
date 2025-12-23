@@ -1,0 +1,42 @@
+{
+  "brand": {
+    "name": "Fidélisation numérique"
+  },
+  "menu": {
+    "features": "Caractéristiques",
+    "how_it_works": "Comment ça marche",
+    "pricing": "Tarification",
+    "blog": "Blog",
+    "contact": "Contact",
+    "about": "A propos de"
+  },
+  "footer": {
+    "product": {
+      "title": "Produit"
+    },
+    "support": {
+      "title": "Soutien",
+      "help_center": "Centre d'aide",
+      "documentation": "Documentation",
+      "api_reference": "Référence API"
+    },
+    "company": {
+      "title": "Entreprise",
+      "about": "A propos de",
+      "blog": "Blog",
+      "contact": "Contact"
+    },
+    "legal": {
+      "title": "Juridique",
+      "privacy": "Politique de confidentialité",
+      "terms": "Conditions d'utilisation",
+      "cookies": "Politique en matière de cookies"
+    },
+    "copyright": "2024 Digital Loyalty. Tous droits réservés."
+  },
+  "social": {
+    "twitter": "Twitter",
+    "instagram": "Instagram",
+    "linkedin": "LinkedIn"
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "buttons": {
+    "get_started": "Commencer",
+    "get_started_today": "Commencez dès aujourd'hui",
+    "see_features": "Voir les caractéristiques",
+    "create_your_card": "Créez votre carte",
+    "choose_plan": "Choisir un plan",
+    "contact_sales": "Contacter les ventes",
+    "close": "Fermer",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "book_demo": "Réserver une démonstration",
+    "talk_to_sales": "S'adresser au service des ventes"
+  },
+  "labels": {
+    "web_app": "Application Web",
+    "fast_lightweight": "Rapide et léger",
+    "no_signup": "Pas d'inscription pour essayer",
+    "features": "Caractéristiques",
+    "key_features": "Caractéristiques principales",
+    "gallery": "Galerie",
+    "how_it_works": "Comment cela fonctionne-t-il ?",
+    "pricing": "Tarification",
+    "most_popular": "Les plus populaires",
+    "blog": "Blog",
+    "about": "A propos de",
+    "social_proof": "Confiance de la part de",
+    "problem_solution": "Le problème",
+    "testimonials": "Commentaires",
+    "faq": "FAQ",
+    "video": "Démonstration",
+    "contact": "Contact",
+    "ready_to_start": "Prêt à commencer ?",
+    "setup_minutes": "Mettez en place votre programme de fidélisation en quelques minutes"
+  },
+  "actions": {
+    "toggle_theme": "Toggle theme",
+    "switch_language": "Changer de langue",
+    "select_country": "Sélectionner un pays"
+  },
+  "country_selector": {
+    "select_country": "Sélectionner un pays",
+    "modal_title": "Choisissez votre pays ou votre région",
+    "modal_subtitle": "Votre sélection mettra à jour la langue et la devise",
+    "regions": {
+      "americas": "Amériques",
+      "europe": "L'Europe",
+      "middle_east_africa": "Moyen-Orient et Afrique",
+      "asia_pacific": "Asie-Pacifique"
+    }
+  },
+  "pricing_page": {
+    "billing": {
+      "monthly": "Mensuel",
+      "yearly": "Annuel",
+      "quarterly": "Trimestrielle",
+      "save_percentage": "Économiser {{pourcentage}}%",
+      "per_month": "/mois",
+      "per_year": "/an",
+      "per_day": "Seulement {{prix}} par jour",
+      "billed_annually": "Facturé annuellement à {{price}}",
+      "save_with_yearly": "Économisez {{pourcentage}}% avec le programme annuel",
+      "annual_savings": "Économiser {{pourcentage}}%"
+    },
+    "no_plans": "Aucun plan tarifaire n'est encore disponible.",
+    "add_in_sanity": "Les ajouter à Sanity Studio",
+    "enterprise": {
+      "lets_talk": "Parlons-en",
+      "contact_for_pricing": "Contactez-nous pour connaître les tarifs",
+      "get_in_touch": "Prenez contact avec nous pour en savoir plus"
+    }
+  },
+  "blog_page": {
+    "title": "Blog",
+    "subtitle": "Perspectives et stratégies",
+    "description": "Apprenez à élaborer et à optimiser des programmes de fidélisation de la clientèle qui stimulent la croissance.",
+    "featured_articles": "Articles en vedette",
+    "all_articles": "Tous les articles",
+    "no_posts": "Aucun article de blog pour l'instant. Revenez bientôt !",
+    "filter_by_category": "Filtrer par catégorie :",
+    "all_posts": "Tous les articles",
+    "read_more": "En savoir plus",
+    "featured": "En vedette"
+  },
+  "time": {
+    "reading_time": "{{minutes}} min lire"
+  },
+  "region_selector": {
+    "select_region": "Sélectionner une région",
+    "modal_title": "Sélectionnez votre région",
+    "detected_title": "Nous avons détecté :",
+    "detected_subtitle": "Langue, pays et monnaie",
+    "keep_settings": "Conserver ces paramètres",
+    "change_region": "Choisir une autre région",
+    "or_choose": "Ou choisissez une autre région :",
+    "regions": {
+      "americas": "Amériques",
+      "europe": "L'Europe",
+      "middle_east_africa": "Moyen-Orient et Afrique",
+      "asia_pacific": "Asie-Pacifique"
+    }
+  },
+  "forms": {
+    "email_label": "Courriel",
+    "email_placeholder": "Saisissez votre adresse électronique",
+    "name_label": "Nom",
+    "name_placeholder": "Votre nom",
+    "company_label": "Entreprise",
+    "company_placeholder": "Nom de l'entreprise",
+    "message_label": "Message",
+    "message_placeholder": "Comment pouvons-nous vous aider ?",
+    "submit": "Soumettre",
+    "submitting": "Soumettre...",
+    "success_title": "Merci de votre attention !",
+    "success_message": "Nous vous contacterons bientôt.",
+    "error_title": "Quelque chose n'a pas fonctionné",
+    "error_message": "Veuillez réessayer plus tard.",
+    "required": "Exigée",
+    "invalid_email": "Veuillez saisir un courriel valide"
+  },
+  "accessibility": {
+    "skip_to_content": "Skip to content",
+    "menu": "Menu",
+    "close_menu": "Fermer le menu",
+    "expand": "Élargir",
+    "collapse": "Effondrement",
+    "play_video": "Lire la vidéo",
+    "pause_video": "Pause vidéo"
+  }
+}

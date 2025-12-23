@@ -1,0 +1,101 @@
+/* Import Fonts - must come before tailwind */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+/* Color Palette Variables */
+:root {
+  /* Light Mode Colors */
+  --color-light-purple: #f7f5ff;
+  --color-saturated-purple: #eae6ff;
+  --color-dark-purple: #280137;
+  --color-text-light: #1a1a2e;
+  --color-text-dark: #fff;
+  --color-black: #000;
+
+  /* Applied Theme Colors */
+  --bg-primary: var(--color-light-purple);
+  --bg-secondary: var(--color-saturated-purple);
+  --bg-accent: var(--color-dark-purple);
+  --text-primary: var(--color-text-light);
+  --text-secondary: #666;
+  --text-on-dark: var(--color-text-dark);
+  --text-on-accent: #fff; /* Text color for accent buttons */
+  --border-color: rgba(26, 26, 46, 0.1);
+}
+
+/* Dark Mode Colors */
+.dark {
+  --bg-primary: #0a0012;
+  --bg-secondary: var(--color-dark-purple);
+  --bg-accent: var(--color-saturated-purple);
+  --text-primary: var(--color-text-dark);
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-on-dark: var(--color-text-dark);
+  --text-on-accent: #1a1a2e; /* Dark text for light accent in dark mode */
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Base Styles */
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Smooth theme transitions for all elements */
+*, *::before, *::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Satoshi', 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL Font for Arabic */
+[dir="rtl"][lang="ar"] {
+  font-family: 'Noto Sans Arabic', 'Plus Jakarta Sans', -apple-system, sans-serif;
+}
+
+/* RTL-specific utility classes */
+[dir="rtl"] .rtl-mirror {
+  transform: scaleX(-1);
+}
+
+[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .space-x-reverse > * + * {
+  margin-left: 0;
+  margin-right: var(--tw-space-x-reverse);
+}
+
+/* RTL adjustments for common patterns */
+[dir="rtl"] .text-left {
+  text-align: right;
+}
+
+[dir="rtl"] .text-right {
+  text-align: left;
+}
+
+/* Ensure proper alignment for navigation */
+[dir="rtl"] nav {
+  direction: rtl;
+}
+
+[dir="rtl"] .language-switcher-menu {
+  left: 0;
+  right: auto;
+}

@@ -1,0 +1,198 @@
+---
+// Gallery section - showcasing card designs
+// Fetches content from Sanity CMS with i18n fallback
+import i18next from '../i18next.config';
+import { getPageContentWithFallback } from '../../sanity/lib/pageContent';
+import { getLocaleFromPathname } from '../utils/i18n';
+
+const { t } = i18next;
+
+// Get current language from URL
+const currentLang = getLocaleFromPathname(Astro.url.pathname) || 'en';
+
+// Fetch page content from Sanity
+let pageContent = null;
+try {
+  pageContent = await getPageContentWithFallback('home', currentLang);
+} catch (e) {
+  console.warn('Could not fetch page content from Sanity, using i18n fallback');
+}
+
+// Use Sanity content with i18n fallback
+const gallery = pageContent?.gallery;
+const sectionBadge = gallery?.sectionBadge || t('common:labels.gallery');
+const sectionTitle = gallery?.title || t('pages:gallery.section_title');
+const sectionSubtitle = gallery?.subtitle || t('pages:gallery.section_subtitle');
+const ctaText = gallery?.ctaText || t('common:buttons.create_your_card');
+const ctaUrl = gallery?.ctaUrl || '#get-started';
+
+// Define gallery item interface
+interface GalleryItem {
+  title: string;
+  image?: string;
+  displayType: 'phone' | 'card' | 'image';
+  gradientFrom?: string;
+  gradientTo?: string;
+}
+
+// Default gallery items with i18n fallback
+const defaultItems: GalleryItem[] = [
+  {
+    title: t('pages:gallery.examples.coffee_shop'),
+    displayType: 'card',
+    gradientFrom: '#8b5cf6',
+    gradientTo: '#7c3aed'
+  },
+  {
+    title: t('pages:gallery.examples.fitness_studio'),
+    displayType: 'card',
+    gradientFrom: '#a78bfa',
+    gradientTo: '#8b5cf6'
+  },
+  {
+    title: t('pages:gallery.examples.restaurant'),
+    displayType: 'card',
+    gradientFrom: '#c084fc',
+    gradientTo: '#a78bfa'
+  },
+  {
+    title: t('pages:gallery.examples.spa_wellness'),
+    displayType: 'card',
+    gradientFrom: '#7c3aed',
+    gradientTo: '#6d28d9'
+  },
+  {
+    title: t('pages:gallery.examples.retail_store'),
+    displayType: 'card',
+    gradientFrom: '#8b5cf6',
+    gradientTo: '#7c3aed'
+  },
+  {
+    title: t('pages:gallery.examples.salon'),
+    displayType: 'card',
+    gradientFrom: '#a78bfa',
+    gradientTo: '#c084fc'
+  }
+];
+
+// Use Sanity items if available, otherwise use defaults
+const items: GalleryItem[] = (gallery?.items?.length ? gallery.items : defaultItems) as GalleryItem[];
+---
+
+<section class="py-20 bg-[var(--bg-primary)]">
+  <div class="mx-auto max-w-7xl px-6">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] backdrop-blur mb-4">
+        <span>{sectionBadge}</span>
+      </div>
+      <h2 class="text-4xl font-bold tracking-tight sm:text-5xl mb-6 text-[var(--text-primary)]">
+        {sectionTitle}
+      </h2>
+      <p class="mx-auto max-w-2xl text-lg text-[var(--text-secondary)]">
+        {sectionSubtitle}
+      </p>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+      {items.map((item) => {
+        const gradientFrom = item.gradientFrom || '#8b5cf6';
+        const gradientTo = item.gradientTo || '#7c3aed';
+        const hasImage = !!item.image;
+
+        return (
+          <div class="group gallery-item relative overflow-hidden rounded-xl aspect-[3/4] shadow-lg">
+            {/* Phone mockup display */}
+            {item.displayType === 'phone' && (
+              <div class="absolute inset-0 flex items-center justify-center p-6" style={`background: linear-gradient(to bottom right, ${gradientFrom}, ${gradientTo})`}>
+                <div class="relative w-48 h-80 bg-gradient-to-br from-[#1f1f1f] to-[#0a0a0a] rounded-[2.5rem] p-2 shadow-2xl">
+                  <div class="w-full h-full bg-[#0a0a0a] rounded-[2rem] overflow-hidden relative">
+                    {/* Phone notch */}
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-6 bg-[#0a0a0a] rounded-b-xl z-10"></div>
+                    {hasImage ? (
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        class="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div class="w-full h-full flex flex-col items-center justify-center p-4" style={`background: linear-gradient(to bottom right, ${gradientFrom}, ${gradientTo})`}>
+                        <div class="w-12 h-12 bg-white/20 rounded-full mb-3"></div>
+                        <span class="text-white font-semibold text-sm text-center">{item.title}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Card style display */}
+            {item.displayType === 'card' && (
+              <div style={`background: linear-gradient(to bottom right, ${gradientFrom}, ${gradientTo})`} class="absolute inset-0">
+                <div class="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition-colors"></div>
+                {hasImage ? (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-90"
+                  />
+                ) : null}
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-6">
+                  <div class="w-16 h-16 bg-white/20 rounded-full mb-4"></div>
+                  <span class="text-white font-semibold text-lg">{item.title}</span>
+                  <div class="mt-8 flex gap-2">
+                    <div class="w-8 h-8 bg-white/30 rounded-full"></div>
+                    <div class="w-8 h-8 bg-white/30 rounded-full"></div>
+                    <div class="w-8 h-8 bg-white/30 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Raw image display */}
+            {item.displayType === 'image' && (
+              <div class="absolute inset-0">
+                {hasImage ? (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    class="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div style={`background: linear-gradient(to bottom right, ${gradientFrom}, ${gradientTo})`} class="w-full h-full flex flex-col items-center justify-center p-6">
+                    <div class="w-16 h-16 bg-white/20 rounded-full mb-4"></div>
+                    <span class="text-white font-semibold text-lg">{item.title}</span>
+                  </div>
+                )}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                  <span class="text-white font-semibold text-lg">{item.title}</span>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+
+    <!-- CTA Button -->
+    <div class="text-center">
+      <a
+        href={ctaUrl}
+        class="inline-flex items-center justify-center rounded-full bg-[var(--bg-accent)] px-8 py-4 text-lg font-semibold text-[var(--text-on-accent)] shadow-lg hover:opacity-90 transition-all"
+      >
+        {ctaText}
+      </a>
+    </div>
+  </div>
+
+  <!-- Motion animations -->
+  <script type="module">
+    import { animate, inView, stagger } from "motion";
+
+    inView(".gallery-item", ({ target }) => {
+      animate(target, { opacity: [0, 1], scale: [0.9, 1] }, { duration: 0.6, easing: "ease-out", delay: stagger(0.1) });
+    });
+  </script>
+</section>

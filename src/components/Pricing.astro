@@ -1,0 +1,151 @@
+---
+// Pricing section for Digital Loyalty
+import i18next from '../i18next.config';
+const { t } = i18next;
+---
+
+<section id="pricing" class="py-20 bg-[var(--bg-primary)]">
+  <div class="mx-auto max-w-7xl px-6">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] backdrop-blur mb-4">
+        <span>{t('common:labels.pricing')}</span>
+      </div>
+      <h2 class="text-4xl font-bold tracking-tight sm:text-5xl text-[var(--text-primary)]">
+        {t('pages:pricing.section_title')}
+      </h2>
+      <p class="mt-4 text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+        {t('pages:pricing.section_subtitle')}
+      </p>
+    </div>
+
+    <!-- Pricing Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+      <!-- Starter Plan -->
+      <div class="group relative rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/30 p-8 backdrop-blur hover:border-[#8b5cf6]/50 transition-all duration-300">
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-[var(--text-primary)]">{t('pages:pricing.starter.name')}</h3>
+          <div class="text-4xl font-bold mb-6 text-[var(--text-primary)]">
+            {t('pages:pricing.starter.price')}
+            <span class="text-lg font-normal text-[var(--text-secondary)]">{t('pages:pricing.starter.period')}</span>
+          </div>
+          <ul class="space-y-4 mb-8 text-left">
+            <li class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-[#8b5cf6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-[var(--text-secondary)]">{t('pages:pricing.starter.features.active_cards')}</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-[#8b5cf6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-[var(--text-secondary)]">{t('pages:pricing.starter.features.designs')}</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-[#8b5cf6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-[var(--text-secondary)]">{t('pages:pricing.starter.features.support')}</span>
+            </li>
+          </ul>
+          <button class="w-full bg-[var(--bg-accent)] hover:opacity-90 text-[var(--text-on-accent)] font-semibold py-3 px-6 rounded-full transition-all">
+            {t('common:buttons.get_started')}
+          </button>
+        </div>
+      </div>
+
+      <!-- Professional Plan -->
+      <div class="group relative rounded-2xl border border-[#8b5cf6]/50 bg-gradient-to-br from-[#8b5cf6]/10 to-[#a78bfa]/10 p-8 backdrop-blur hover:border-[#8b5cf6] transition-all duration-300 scale-105">
+        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+          <span class="bg-gradient-to-r from-[#8b5cf6] to-[#a78bfa] text-white px-4 py-1 rounded-full text-sm font-medium">{t('common:labels.most_popular')}</span>
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-[var(--text-primary)]">{t('pages:pricing.professional.name')}</h3>
+          <div class="text-4xl font-bold mb-6 text-[var(--text-primary)]">
+            {t('pages:pricing.professional.price')}
+            <span class="text-lg font-normal text-[var(--text-secondary)]">{t('pages:pricing.professional.period')}</span>
+          </div>
+          <ul class="space-y-4 mb-8 text-left">
+            <li class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-[#8b5cf6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-[var(--text-secondary)]">{t('pages:pricing.professional.features.active_cards')}</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-[#8b5cf6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-[var(--text-secondary)]">{t('pages:pricing.professional.features.designs')}</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-[#8b5cf6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-[var(--text-secondary)]">{t('pages:pricing.professional.features.notifications')}</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-[#8b5cf6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-[var(--text-secondary)]">{t('pages:pricing.professional.features.support')}</span>
+            </li>
+          </ul>
+          <button class="w-full bg-gradient-to-r from-[#8b5cf6] to-[#a78bfa] hover:opacity-90 text-white font-semibold py-3 px-6 rounded-full transition-all shadow-lg">
+            {t('common:buttons.get_started')}
+          </button>
+        </div>
+      </div>
+
+      <!-- Enterprise Plan -->
+      <div class="group relative rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/30 p-8 backdrop-blur hover:border-[#8b5cf6]/50 transition-all duration-300">
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-[var(--text-primary)]">{t('pages:pricing.enterprise.name')}</h3>
+          <div class="text-4xl font-bold mb-6 text-[var(--text-primary)]">
+            {t('pages:pricing.enterprise.price')}
+            <span class="text-lg font-normal text-[var(--text-secondary)]">{t('pages:pricing.enterprise.period')}</span>
+          </div>
+          <ul class="space-y-4 mb-8 text-left">
+            <li class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-[#8b5cf6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-[var(--text-secondary)]">{t('pages:pricing.enterprise.features.active_cards')}</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-[#8b5cf6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-[var(--text-secondary)]">{t('pages:pricing.enterprise.features.white_label')}</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-[#8b5cf6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-[var(--text-secondary)]">{t('pages:pricing.enterprise.features.api')}</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-[#8b5cf6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-[var(--text-secondary)]">{t('pages:pricing.enterprise.features.support')}</span>
+            </li>
+          </ul>
+          <button class="w-full bg-[var(--bg-accent)] hover:opacity-90 text-[var(--text-on-accent)] font-semibold py-3 px-6 rounded-full transition-all">
+            {t('common:buttons.contact_sales')}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Motion animations -->
+  <script type="module">
+    import { animate, inView, stagger } from "motion";
+
+    inView(".group", ({ target }) => {
+      animate(target, { opacity: [0, 1], y: [30, 0] }, { duration: 0.6, easing: "ease-out", delay: stagger(0.1) });
+    });
+  </script>
+</section>

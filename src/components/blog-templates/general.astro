@@ -1,0 +1,280 @@
+---
+/**
+ * General Template
+ * Default template for standard blog posts
+ */
+
+import TableOfContents from '../TableOfContents.astro';
+
+const { post } = Astro.props;
+---
+
+<article class="general-layout mx-auto" itemscope itemtype="https://schema.org/BlogPosting">
+  <!-- Header removed - all info now in banner (Semrush style) -->
+  
+  <!-- Semrush-style layout with TOC sidebar -->
+  <div class="flex gap-8 mx-auto max-w-7xl px-6">
+    <!-- Main Content - Aligned with banner -->
+    <div class="flex-1 general-content prose prose-lg dark:prose-invert max-w-none">
+      <!-- Content starts directly (Semrush style) -->
+      <div class="content-start mb-8">
+        <slot />
+      </div>
+    </div>
+    
+    <!-- Table of Contents Sidebar - Compact -->
+    <div class="hidden lg:block w-72 flex-shrink-0">
+      <TableOfContents content={post.content} post={post} />
+    </div>
+  </div>
+  
+  {post.tags && post.tags.length > 0 && (
+    <footer class="mt-16 pt-8 border-t border-[var(--border-color)]">
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="text-sm font-semibold text-[var(--text-primary)]">Tags:</span>
+        {post.tags.map((tag: any) => (
+          <a 
+            href={`/${post.language === 'en' ? '' : post.language + '/'}blog/tag/${tag.slug.current}`}
+            class="px-3 py-1 text-sm rounded-full bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 border border-purple-200 hover:from-purple-200 hover:to-pink-200 hover:border-purple-300 transition-all duration-200 hover:scale-105"
+          >
+            #{tag.name[post.language] || tag.name.en}
+          </a>
+        ))}
+      </div>
+    </footer>
+  )}
+  
+  {post.author && post.author.bio && (
+    <aside class="mt-16 p-6 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-color)]">
+      <div class="flex gap-4">
+        {post.author.image && (
+          <img 
+            src={post.author.image.asset.url + '?w=80&h=80&fit=crop'} 
+            alt={post.author.name}
+            class="w-16 h-16 rounded-full flex-shrink-0"
+          />
+        )}
+        <div>
+          <h3 class="text-lg font-bold text-[var(--text-primary)] mb-2">
+            About {post.author.name}
+          </h3>
+          <p class="text-[var(--text-secondary)]">
+            {post.author.bio[post.language] || post.author.bio.en}
+          </p>
+          {post.author.social && (
+            <div class="flex gap-3 mt-4">
+              {post.author.social.twitter && (
+                <a 
+                  href={post.author.social.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-[var(--text-secondary)] hover:text-[#1DA1F2] transition-colors"
+                >
+                  Twitter
+                </a>
+              )}
+              {post.author.social.linkedin && (
+                <a 
+                  href={post.author.social.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-[var(--text-secondary)] hover:text-[#0077B5] transition-colors"
+                >
+                  LinkedIn
+                </a>
+              )}
+              {post.author.social.website && (
+                <a 
+                  href={post.author.social.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-[var(--text-secondary)] hover:text-[#8b5cf6] transition-colors"
+                >
+                  Website
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </aside>
+  )}
+  
+  {post.relatedPosts && post.relatedPosts.length > 0 && (
+    <section class="mt-16 pt-8 border-t border-[var(--border-color)]">
+      <h3 class="text-2xl font-bold mb-6 text-[var(--text-primary)]">Related Articles</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {post.relatedPosts.map((related: any) => (
+          <a 
+            href={`/${post.language === 'en' ? '' : post.language + '/'}blog/${related.slug.current}`}
+            class="group block rounded-lg overflow-hidden border border-[var(--border-color)] hover:border-[#8b5cf6] transition-all"
+          >
+            {related.thumbnailImage && (
+              <img 
+                src={related.thumbnailImage.asset.url + '?w=400&h=250&fit=crop'} 
+                alt={related.thumbnailImage.alt || related.title}
+                class="w-full h-48 object-cover"
+              />
+            )}
+            <div class="p-4">
+              <h4 class="font-semibold text-[var(--text-primary)] group-hover:text-[#8b5cf6] transition-colors mb-2 line-clamp-2">
+                {related.title}
+              </h4>
+              {related.excerpt && (
+                <p class="text-sm text-[var(--text-secondary)] line-clamp-2">
+                  {related.excerpt}
+                </p>
+              )}
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+</article>
+
+<style>
+  .general-layout {
+    padding: 2rem 0 4rem;
+    max-width: none;
+    margin: 0;
+  }
+  
+  .general-header {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto 3rem;
+  }
+  
+  .general-header h1 {
+    font-size: 2.75rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+  }
+  
+  .featured-image {
+    box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.25);
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+  /* Prose styling */
+  .general-content :global(h2) {
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 1.875rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .general-content :global(h3) {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .general-content :global(p) {
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: 1.25rem;
+  }
+  
+  .general-content :global(a) {
+    color: #8b5cf6;
+    text-decoration: underline;
+    transition: color 0.2s;
+  }
+  
+  .general-content :global(a:hover) {
+    color: #a78bfa;
+  }
+  
+  .general-content :global(ul),
+  .general-content :global(ol) {
+    margin: 1.5rem 0;
+    padding-left: 1.5rem;
+  }
+  
+  .general-content :global(li) {
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+  }
+  
+  .general-content :global(blockquote) {
+    border-left: 4px solid #8b5cf6;
+    padding-left: 1.5rem;
+    font-style: italic;
+    color: var(--text-secondary);
+    margin: 2rem 0;
+  }
+  
+  .general-content :global(img) {
+    border-radius: 12px;
+    margin: 2rem 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+  
+  .general-content :global(pre) {
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+  
+  .general-content :global(code) {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #8b5cf6;
+  }
+  
+  .general-content :global(pre code) {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: inherit;
+  }
+  
+  .general-content :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+  }
+  
+  .general-content :global(th),
+  .general-content :global(td) {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    text-align: left;
+  }
+  
+  .general-content :global(th) {
+    background: var(--bg-secondary);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  
+  @media (max-width: 768px) {
+    .general-header h1 {
+      font-size: 2rem;
+    }
+    
+    .general-content :global(h2) {
+      font-size: 1.5rem;
+    }
+    
+    .general-content :global(h3) {
+      font-size: 1.25rem;
+    }
+  }
+</style>
+
+

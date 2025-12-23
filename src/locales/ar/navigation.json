@@ -1,0 +1,42 @@
+{
+  "brand": {
+    "name": "الولاء الرقمي"
+  },
+  "menu": {
+    "features": "الميزات",
+    "how_it_works": "كيف تعمل",
+    "pricing": "التسعير",
+    "blog": "المدونة",
+    "contact": "اتصل بنا",
+    "about": "نبذة عن"
+  },
+  "footer": {
+    "product": {
+      "title": "المنتج"
+    },
+    "support": {
+      "title": "الدعم",
+      "help_center": "مركز المساعدة",
+      "documentation": "التوثيق",
+      "api_reference": "مرجع واجهة برمجة التطبيقات"
+    },
+    "company": {
+      "title": "الشركة",
+      "about": "نبذة عن",
+      "blog": "المدونة",
+      "contact": "اتصل بنا"
+    },
+    "legal": {
+      "title": "قانوني",
+      "privacy": "سياسة الخصوصية",
+      "terms": "شروط الخدمة",
+      "cookies": "سياسة ملفات تعريف الارتباط"
+    },
+    "copyright": "© 2024 الولاء الرقمي. جميع الحقوق محفوظة."
+  },
+  "social": {
+    "twitter": "تويتر",
+    "instagram": "انستقرام",
+    "linkedin": "لينكد إن"
+  }
+}

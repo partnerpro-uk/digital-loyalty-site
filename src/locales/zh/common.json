@@ -1,0 +1,130 @@
+{
+  "buttons": {
+    "get_started": "开始",
+    "get_started_today": "立即开始",
+    "see_features": "查看功能",
+    "create_your_card": "创建您的贺卡",
+    "choose_plan": "选择计划",
+    "contact_sales": "联系销售",
+    "close": "关闭",
+    "previous": "上一页",
+    "next": "下一页",
+    "book_demo": "预约演示",
+    "talk_to_sales": "与销售人员交谈"
+  },
+  "labels": {
+    "web_app": "网络应用程序",
+    "fast_lightweight": "快速、轻便",
+    "no_signup": "无需注册即可试用",
+    "features": "特点",
+    "key_features": "主要功能",
+    "gallery": "画廊",
+    "how_it_works": "工作原理",
+    "pricing": "定价",
+    "most_popular": "最受欢迎",
+    "blog": "博客",
+    "about": "关于",
+    "social_proof": "值得信赖",
+    "problem_solution": "问题所在",
+    "testimonials": "评论",
+    "faq": "常见问题",
+    "video": "演示",
+    "contact": "联系方式",
+    "ready_to_start": "准备好开始了吗？",
+    "setup_minutes": "Set up your loyalty program in minutes"
+  },
+  "actions": {
+    "toggle_theme": "切换主题",
+    "switch_language": "切换语言",
+    "select_country": "选择国家"
+  },
+  "country_selector": {
+    "select_country": "选择国家",
+    "modal_title": "选择国家或地区",
+    "modal_subtitle": "您的选择将更新语言和货币",
+    "regions": {
+      "americas": "美洲",
+      "europe": "欧洲",
+      "middle_east_africa": "中东和非洲",
+      "asia_pacific": "亚太地区"
+    }
+  },
+  "pricing_page": {
+    "billing": {
+      "monthly": "每月",
+      "yearly": "每年",
+      "quarterly": "季刊",
+      "save_percentage": "节省 {{ 百分比}}%。",
+      "per_month": "/每月",
+      "per_year": "/年",
+      "per_day": "每天只需 {{ 价格",
+      "billed_annually": "年付 {{price}}",
+      "save_with_yearly": "每年节省 {{ 百分比}}%。",
+      "annual_savings": "节省 {{ 百分比}}%。"
+    },
+    "no_plans": "暂无定价计划。",
+    "add_in_sanity": "在 Sanity Studio 添加它们",
+    "enterprise": {
+      "lets_talk": "我们来谈谈",
+      "contact_for_pricing": "联系我们了解价格",
+      "get_in_touch": "联系我们了解更多"
+    }
+  },
+  "blog_page": {
+    "title": "博客",
+    "subtitle": "见解与策略",
+    "description": "了解如何建立和优化能推动增长的客户忠诚度计划。",
+    "featured_articles": "特色文章",
+    "all_articles": "所有文章",
+    "no_posts": "暂无博文。请尽快回来查看！",
+    "filter_by_category": "按类别筛选：",
+    "all_posts": "所有帖子",
+    "read_more": "更多信息",
+    "featured": "特色"
+  },
+  "time": {
+    "reading_time": "{{分钟}}分钟阅读"
+  },
+  "region_selector": {
+    "select_region": "选择地区",
+    "modal_title": "选择您所在的地区",
+    "detected_title": "我们检测到",
+    "detected_subtitle": "语言、国家和货币",
+    "keep_settings": "保留这些设置",
+    "change_region": "选择不同的地区",
+    "or_choose": "或者选择其他地区：",
+    "regions": {
+      "americas": "美洲",
+      "europe": "欧洲",
+      "middle_east_africa": "中东和非洲",
+      "asia_pacific": "亚太地区"
+    }
+  },
+  "forms": {
+    "email_label": "电子邮件",
+    "email_placeholder": "输入您的电子邮件",
+    "name_label": "名称",
+    "name_placeholder": "您的姓名",
+    "company_label": "公司名称",
+    "company_placeholder": "公司名称",
+    "message_label": "留言",
+    "message_placeholder": "我们能提供什么帮助？",
+    "submit": "提交",
+    "submitting": "提交...",
+    "success_title": "谢谢！",
+    "success_message": "我们会尽快与您联系。",
+    "error_title": "出了问题",
+    "error_message": "请稍后再试。",
+    "required": "需要",
+    "invalid_email": "请输入有效的电子邮件"
+  },
+  "accessibility": {
+    "skip_to_content": "跳至内容",
+    "menu": "菜单",
+    "close_menu": "关闭菜单",
+    "expand": "展开",
+    "collapse": "崩溃",
+    "play_video": "播放视频",
+    "pause_video": "暂停视频"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "brand": {
+    "name": "Fidelización digital"
+  },
+  "menu": {
+    "features": "Características",
+    "how_it_works": "Cómo funciona",
+    "pricing": "Precios",
+    "blog": "Blog",
+    "contact": "Póngase en contacto con",
+    "about": "Acerca de"
+  },
+  "footer": {
+    "product": {
+      "title": "Producto"
+    },
+    "support": {
+      "title": "Ayuda",
+      "help_center": "Centro de ayuda",
+      "documentation": "Documentación",
+      "api_reference": "Referencia API"
+    },
+    "company": {
+      "title": "Empresa",
+      "about": "Acerca de",
+      "blog": "Blog",
+      "contact": "Póngase en contacto con"
+    },
+    "legal": {
+      "title": "Legal",
+      "privacy": "Política de privacidad",
+      "terms": "Condiciones de uso",
+      "cookies": "Política de cookies"
+    },
+    "copyright": "2024 Fidelización Digital. Todos los derechos reservados."
+  },
+  "social": {
+    "twitter": "Twitter",
+    "instagram": "Instagram",
+    "linkedin": "LinkedIn"
+  }
+}

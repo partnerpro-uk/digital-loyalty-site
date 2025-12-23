@@ -1,0 +1,122 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import Navigation from '../../../components/Navigation.astro';
+import Footer from '../../../components/Footer.astro';
+import { locales, defaultLocale } from '../../../../astro-i18next.config';
+import i18next from '../../../i18next.config';
+
+const { t, changeLanguage } = i18next;
+
+export async function getStaticPaths() {
+  return locales
+    .filter((lang) => lang !== defaultLocale) // Exclude English
+    .map((lang) => ({
+      params: { lang },
+    }));
+}
+
+const { lang } = Astro.params;
+
+// Change language for translations
+await changeLanguage(lang);
+
+// Get all blog posts for this language, sorted by date (newest first)
+const posts = (await getCollection('blog', ({ data }) => {
+  return data.lang === lang;
+})).sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+
+// Get translated page title and description
+const pageTitle = t('navigation:footer.company.blog');
+---
+
+<Layout 
+  title={`${pageTitle} - ${t('navigation:brand.name')}`}
+  description={t('pages:hero.subtitle')}
+>
+  <Navigation />
+  
+  <!-- Blog Listing -->
+  <section class="pt-28 pb-20 bg-[var(--bg-primary)]">
+    <div class="mx-auto max-w-7xl px-6">
+      <!-- Header -->
+      <div class="text-center mb-16">
+        <h1 class="text-5xl font-bold text-[var(--text-primary)] mb-4">
+          {pageTitle}
+        </h1>
+        <p class="text-xl text-[var(--text-secondary)] max-w-2xl mx-auto">
+          {t('pages:hero.subtitle')}
+        </p>
+      </div>
+
+      <!-- Posts Grid -->
+      {posts.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {posts.map((post) => {
+            const slug = post.slug.replace(`.${lang}`, ''); // Remove language suffix
+            return (
+              <article class="group relative rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/30 overflow-hidden hover:border-[#8b5cf6]/50 transition-all duration-300">
+                {post.data.image && (
+                  <div class="aspect-video overflow-hidden">
+                    <img
+                      src={post.data.image}
+                      alt={post.data.title}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                )}
+                
+                <div class="p-6">
+                  <div class="flex items-center gap-3 text-sm text-[var(--text-secondary)] mb-3">
+                    <time datetime={post.data.publishDate.toISOString()}>
+                      {post.data.publishDate.toLocaleDateString(lang, {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      })}
+                    </time>
+                    {post.data.author && (
+                      <>
+                        <span>•</span>
+                        <span>{post.data.author}</span>
+                      </>
+                    )}
+                  </div>
+                  
+                  <h2 class="text-2xl font-bold text-[var(--text-primary)] mb-3 group-hover:text-[#8b5cf6] transition-colors">
+                    {post.data.title}
+                  </h2>
+                  
+                  {post.data.description && (
+                    <p class="text-[var(--text-secondary)] mb-4 line-clamp-3">
+                      {post.data.description}
+                    </p>
+                  )}
+                  
+                  <a
+                    href={`/${lang}/blog/${slug}`}
+                    class="inline-flex items-center gap-2 text-[#8b5cf6] hover:opacity-80 transition-opacity font-medium"
+                  >
+                    {t('common:buttons.see_features')}
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      ) : (
+        <div class="text-center py-20">
+          <p class="text-xl text-[var(--text-secondary)]">
+            {t('common:labels.no_signup')}
+          </p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+

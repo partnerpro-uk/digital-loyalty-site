@@ -1,0 +1,90 @@
+---
+// Social Proof section - Logo strip showing trusted clients
+// Fetches content from Sanity CMS with i18n fallback
+import i18next from '../i18next.config';
+import { getClientLogos, getLogoUrl } from '../../sanity/lib/testimonials';
+import { getPageContentWithFallback } from '../../sanity/lib/pageContent';
+import { getLocaleFromPathname } from '../utils/i18n';
+
+const { t } = i18next;
+
+// Get current language from URL
+const currentLang = getLocaleFromPathname(Astro.url.pathname) || 'en';
+
+// Fetch page content from Sanity
+let pageContent = null;
+try {
+  pageContent = await getPageContentWithFallback('home', currentLang);
+} catch (e) {
+  console.warn('Could not fetch page content from Sanity, using i18n fallback');
+}
+
+// Use Sanity content with i18n fallback
+const socialProof = pageContent?.socialProof;
+const trustStatement = socialProof?.trustStatement || t('pages:social_proof.trust_statement');
+
+const logos = await getClientLogos();
+---
+
+<section id="social-proof" class="py-12 bg-[var(--bg-secondary)]/20">
+  <div class="mx-auto max-w-7xl px-6">
+    <!-- Trust statement -->
+    <p class="text-center text-[var(--text-secondary)] text-sm mb-8 tracking-wide uppercase">
+      {trustStatement}
+    </p>
+
+    <!-- Logo strip -->
+    {logos.length > 0 ? (
+      <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12 lg:gap-16">
+        {logos.map((logo) => (
+          <div class="logo-item">
+            {logo.url ? (
+              <a
+                href={logo.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="block"
+              >
+                <img
+                  src={getLogoUrl(logo.logo, 150)}
+                  alt={logo.name}
+                  class="h-8 md:h-10 w-auto opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                  loading="lazy"
+                />
+              </a>
+            ) : (
+              <img
+                src={getLogoUrl(logo.logo, 150)}
+                alt={logo.name}
+                class="h-8 md:h-10 w-auto opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                loading="lazy"
+              />
+            )}
+          </div>
+        ))}
+      </div>
+    ) : (
+      <!-- Placeholder logos when no Sanity data -->
+      <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12 lg:gap-16">
+        {['Company A', 'Company B', 'Company C', 'Company D', 'Company E', 'Company F'].map((name, i) => (
+          <div class="logo-item h-8 md:h-10 w-24 md:w-32 bg-[var(--text-secondary)]/10 rounded flex items-center justify-center">
+            <span class="text-xs text-[var(--text-secondary)]/50 font-medium">{name}</span>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+
+  <!-- Motion animations -->
+  <script type="module">
+    import { animate, inView, stagger } from "motion";
+
+    inView("#social-proof", () => {
+      animate(
+        "#social-proof .logo-item",
+        { opacity: [0, 1], y: [10, 0] },
+        { duration: 0.4, easing: "ease-out", delay: stagger(0.05) }
+      );
+    });
+  </script>
+</section>

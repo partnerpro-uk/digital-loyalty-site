@@ -1,0 +1,174 @@
+---
+/**
+ * Blog Post Page (Non-English Languages)
+ * Fetches translated content from Sanity CMS
+ */
+
+import Layout from '../../../layouts/Layout.astro';
+import Navigation from '../../../components/Navigation.astro';
+import Footer from '../../../components/Footer.astro';
+import PortableText from '../../../components/PortableText.astro';
+import { client, getImageUrl, BLOG_POST_QUERY, type BlogPost } from '../../../../sanity/lib/client';
+import { locales, defaultLocale } from '../../../../astro-i18next.config';
+import i18next from '../../../i18next.config';
+
+// Import blog templates
+import ComparisonTemplate from '../../../components/blog-templates/comparison.astro';
+import TutorialTemplate from '../../../components/blog-templates/tutorial.astro';
+import NewsTemplate from '../../../components/blog-templates/news.astro';
+import GuideTemplate from '../../../components/blog-templates/guide.astro';
+import GeneralTemplate from '../../../components/blog-templates/general.astro';
+
+const { changeLanguage } = i18next;
+
+export async function getStaticPaths() {
+  const paths = [];
+  
+  // For each non-default language
+  for (const lang of locales.filter(l => l !== defaultLocale)) {
+    // Fetch all published posts in this language
+    const posts = await client.fetch(`
+      *[_type == "blogPost" && language == $lang && status == "published"] {
+        slug
+      }
+    `, { lang });
+    
+    posts.forEach((post: any) => {
+      paths.push({
+        params: {
+          lang,
+          slug: post.slug.current
+        }
+      });
+    });
+  }
+  
+  return paths;
+}
+
+const { lang, slug } = Astro.params;
+await changeLanguage(lang);
+
+// Fetch the blog post
+const post: BlogPost | null = await client.fetch(BLOG_POST_QUERY, {
+  slug,
+  lang
+});
+
+if (!post) {
+  return Astro.redirect('/404');
+}
+
+// Translations are now included in the post.translations field from the query
+const translations = post.translations || [];
+
+// Get image URLs
+const thumbnailImageUrl = getImageUrl(post.thumbnailImage, 1200, 630);
+const ogImageUrl = post.socialShareImage ? getImageUrl(post.socialShareImage, 1200, 630) : thumbnailImageUrl;
+
+// Format date based on language
+const dateFormats: Record<string, string> = {
+  es: 'es-ES',
+  fr: 'fr-FR',
+  pt: 'pt-PT',
+  de: 'de-DE',
+  ar: 'ar-SA',
+  zh: 'zh-CN'
+};
+
+const publishedDate = new Date(post.publishedAt).toLocaleDateString(dateFormats[lang] || 'en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+
+// SEO meta
+const pageTitle = post.seoTitle || post.title;
+const pageDescription = post.seoDescription || post.excerpt || post.title;
+const keywords = post.seoKeywords?.join(', ') || '';
+
+// Use a single universal template for all posts
+const TemplateComponent = GeneralTemplate;
+---
+
+<Layout 
+  title={pageTitle}
+  description={pageDescription}
+  keywords={keywords}
+>
+  <Navigation />
+  
+  <main class="bg-[var(--bg-primary)] min-h-screen pt-16">
+    <!-- Breadcrumb -->
+    <nav class="mx-auto max-w-7xl px-6 py-8 text-sm">
+      <a href={`/${lang}`} class="text-[var(--text-secondary)] hover:text-[#8b5cf6]">Home</a>
+      <span class="mx-2 text-[var(--text-secondary)]">/</span>
+      <a href={`/${lang}/blog`} class="text-[var(--text-secondary)] hover:text-[#8b5cf6]">Blog</a>
+      <span class="mx-2 text-[var(--text-secondary)]">/</span>
+      <span class="text-[var(--text-primary)]">{post.title}</span>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="mx-auto max-w-7xl px-6 mb-12 text-center">
+      <!-- Category Badge -->
+      {post.category && (
+        <div class="mb-4">
+          <a 
+            href={`/${lang}/blog/category/${post.category.slug.current}`}
+            class="inline-block px-3 py-1 rounded-full text-sm font-medium"
+            style={`background-color: ${post.category.color || '#8b5cf6'}20; color: ${post.category.color || '#8b5cf6'}`}
+          >
+            {post.category.name[lang] || post.category.name.en}
+          </a>
+        </div>
+      )}
+
+      <!-- Title -->
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[var(--text-primary)] leading-tight max-w-4xl mx-auto">
+        {post.title}
+      </h1>
+
+      <!-- Language Selector for Translations -->
+      {translations && translations.length > 0 && (
+        <div class="flex justify-center mb-6">
+          <select 
+            class="px-3 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-primary)]"
+            onchange="window.location.href = this.value"
+          >
+            <option value={`/blog/${post.slug.current}`} selected={post.language === 'en'}>
+              EN {post.language === 'en' ? '(Current)' : ''}
+            </option>
+            <option value={`/${lang}/blog/${post.slug.current}`} selected={post.language === lang}>
+              {lang.toUpperCase()} {post.language === lang ? '(Current)' : ''}
+            </option>
+            {translations.map((trans: any) => (
+              trans.language !== lang && trans.language !== 'en' && (
+                <option 
+                  value={trans.language === 'en' ? `/blog/${trans.slug.current}` : `/${trans.language}/blog/${trans.slug.current}`}
+                >
+                  {trans.language.toUpperCase()} {trans.translationStatus === 'needs_review' ? '(Draft)' : ''}
+                </option>
+              )
+            ))}
+          </select>
+        </div>
+      )}
+    </header>
+
+    <!-- Render Template with Content -->
+    <TemplateComponent post={post}>
+      <PortableText content={post.content} />
+    </TemplateComponent>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

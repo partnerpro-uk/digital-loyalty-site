@@ -1,0 +1,120 @@
+{
+  "buttons": {
+    "get_started": "Get Started",
+    "get_started_today": "Get Started Today",
+    "see_features": "See features",
+    "create_your_card": "Create Your Card",
+    "choose_plan": "Choose Plan",
+    "contact_sales": "Contact Sales",
+    "book_demo": "Book a demo",
+    "talk_to_sales": "Talk to sales",
+    "close": "Close",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "labels": {
+    "web_app": "Web App",
+    "fast_lightweight": "Fast & Lightweight",
+    "no_signup": "No signup to try",
+    "features": "Features",
+    "key_features": "Key Features",
+    "gallery": "Gallery",
+    "how_it_works": "How it works",
+    "pricing": "Pricing",
+    "most_popular": "Most Popular",
+    "blog": "Blog",
+    "about": "About",
+    "social_proof": "Trusted By",
+    "problem_solution": "The Problem",
+    "testimonials": "Reviews",
+    "faq": "FAQ",
+    "video": "Demo",
+    "contact": "Contact",
+    "ready_to_start": "Ready to get started?",
+    "setup_minutes": "Set up your loyalty program in minutes"
+  },
+  "actions": {
+    "toggle_theme": "Toggle theme",
+    "switch_language": "Switch language",
+    "select_country": "Select country"
+  },
+  "region_selector": {
+    "select_region": "Select Region",
+    "modal_title": "Select Your Region",
+    "detected_title": "We detected:",
+    "detected_subtitle": "Language, country, and currency",
+    "keep_settings": "Keep these settings",
+    "change_region": "Choose a different region",
+    "or_choose": "Or choose a different region:",
+    "regions": {
+      "americas": "Americas",
+      "europe": "Europe",
+      "middle_east_africa": "Middle East & Africa",
+      "asia_pacific": "Asia Pacific"
+    }
+  },
+  "pricing_page": {
+    "billing": {
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "quarterly": "Quarterly",
+      "save_percentage": "Save {{percentage}}%",
+      "save_with_yearly": "Save {{percentage}}% with yearly",
+      "annual_savings": "Save {{percentage}}%",
+      "per_month": "/month",
+      "per_year": "/year",
+      "per_day": "Just {{price}} per day",
+      "billed_annually": "Billed annually at {{price}}"
+    },
+    "enterprise": {
+      "lets_talk": "Let's talk",
+      "contact_for_pricing": "Contact us for pricing",
+      "get_in_touch": "Get in touch to learn more"
+    },
+    "no_plans": "No pricing plans available yet.",
+    "add_in_sanity": "Add them in Sanity Studio"
+  },
+  "blog_page": {
+    "title": "Blog",
+    "subtitle": "Insights & Strategies",
+    "description": "Learn how to build and optimize customer loyalty programs that drive growth.",
+    "featured_articles": "Featured Articles",
+    "all_articles": "All Articles",
+    "no_posts": "No blog posts yet. Check back soon!",
+    "filter_by_category": "Filter by category:",
+    "all_posts": "All Posts",
+    "read_more": "Read more",
+    "featured": "Featured"
+  },
+  "time": {
+    "reading_time": "{{minutes}} min read"
+  },
+  "forms": {
+    "email_label": "Email",
+    "email_placeholder": "Enter your email",
+    "name_label": "Name",
+    "name_placeholder": "Your name",
+    "company_label": "Company",
+    "company_placeholder": "Company name",
+    "message_label": "Message",
+    "message_placeholder": "How can we help?",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "success_title": "Thank you!",
+    "success_message": "We'll be in touch soon.",
+    "error_title": "Something went wrong",
+    "error_message": "Please try again later.",
+    "required": "Required",
+    "invalid_email": "Please enter a valid email"
+  },
+  "accessibility": {
+    "skip_to_content": "Skip to content",
+    "menu": "Menu",
+    "close_menu": "Close menu",
+    "expand": "Expand",
+    "collapse": "Collapse",
+    "play_video": "Play video",
+    "pause_video": "Pause video"
+  }
+}
+

@@ -1,0 +1,94 @@
+---
+/**
+ * SEO Head Component
+ * Generates all SEO meta tags, hreflang links, and structured data
+ */
+
+import type { Locale } from '../utils/i18n';
+import { 
+  generateHreflangLinks,
+  generateCanonicalUrl,
+  generateOrganizationSchema,
+  generateWebPageSchema,
+  getOgLocale,
+  getOgAlternateLocales,
+  sanitizeMetaText,
+  type SEOMetadata
+} from '../utils/seo';
+import { getPathnameWithoutLocale } from '../utils/i18n';
+import i18next from '../i18next.config';
+const { t } = i18next;
+
+interface Props extends SEOMetadata {
+  locale: Locale;
+  siteUrl?: string;
+}
+
+const {
+  locale,
+  title,
+  description,
+  keywords,
+  ogTitle,
+  ogDescription,
+  ogImage,
+  ogType = 'website',
+  canonical,
+  robots = 'index, follow',
+  siteUrl = 'https://digitalloyalty.com',
+} = Astro.props;
+
+const pathname = getPathnameWithoutLocale(Astro.url.pathname);
+const hreflangLinks = generateHreflangLinks(pathname, siteUrl);
+const canonicalUrl = canonical || generateCanonicalUrl(pathname, locale, siteUrl);
+const sanitizedDescription = sanitizeMetaText(description);
+
+// Open Graph defaults
+const finalOgTitle = ogTitle || title;
+const finalOgDescription = ogDescription || sanitizedDescription;
+const finalOgImage = ogImage || `${siteUrl}/og-image.png`;
+
+// Structured data
+const orgSchema = generateOrganizationSchema(siteUrl);
+const pageSchema = generateWebPageSchema(title, sanitizedDescription, canonicalUrl, locale);
+---
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={sanitizedDescription} />
+{keywords && <meta name="keywords" content={keywords} />}
+<meta name="robots" content={robots} />
+<link rel="canonical" href={canonicalUrl} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:title" content={finalOgTitle} />
+<meta property="og:description" content={finalOgDescription} />
+<meta property="og:image" content={finalOgImage} />
+<meta property="og:locale" content={getOgLocale(locale)} />
+{getOgAlternateLocales(locale).map((altLocale) => (
+  <meta property="og:locale:alternate" content={altLocale} />
+))}
+<meta property="og:site_name" content={t('navigation:brand.name')} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonicalUrl} />
+<meta property="twitter:title" content={finalOgTitle} />
+<meta property="twitter:description" content={finalOgDescription} />
+<meta property="twitter:image" content={finalOgImage} />
+
+<!-- Hreflang Links -->
+{hreflangLinks.map(({ hreflang, href }) => (
+  <link rel="alternate" hreflang={hreflang} href={href} />
+))}
+
+<!-- Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(pageSchema)} />
+
+<!-- Language and Direction -->
+<html lang={locale} />
+

@@ -1,0 +1,152 @@
+---
+/**
+ * Language Switcher Component
+ * Dropdown menu for switching between languages
+ */
+
+import { locales, getLanguageName, getLocaleFromPathname, localizeUrl, type Locale } from '../utils/i18n';
+import i18next from '../i18next.config';
+const { t } = i18next;
+
+const currentLocale = getLocaleFromPathname(Astro.url.pathname);
+const currentPath = Astro.url.pathname;
+---
+
+<div class="relative language-switcher">
+  <!-- Current Language Button -->
+  <button
+    type="button"
+    class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors"
+    aria-label={t('common:actions.switch_language')}
+    aria-haspopup="true"
+    aria-expanded="false"
+    id="language-switcher-button"
+  >
+    <svg class="w-5 h-5 text-[var(--text-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+    </svg>
+    <span class="text-sm font-medium text-[var(--text-primary)]">
+      {getLanguageName(currentLocale)}
+    </span>
+    <svg class="w-4 h-4 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+    </svg>
+  </button>
+
+  <!-- Dropdown Menu -->
+  <div
+    class="language-switcher-menu absolute right-0 mt-2 w-48 rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] shadow-lg opacity-0 invisible transition-all duration-200 z-50"
+    id="language-switcher-menu"
+    role="menu"
+    aria-labelledby="language-switcher-button"
+  >
+    <div class="py-2">
+      {locales.map((locale) => {
+        const localizedUrl = localizeUrl(currentPath, locale);
+        const isActive = locale === currentLocale;
+        
+        return (
+          <a
+            href={localizedUrl}
+            class={`block px-4 py-2 text-sm transition-colors ${
+              isActive
+                ? 'bg-[#8b5cf6]/10 text-[#8b5cf6] font-semibold'
+                : 'text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]'
+            }`}
+            role="menuitem"
+            aria-current={isActive ? 'page' : undefined}
+          >
+            <span class="flex items-center justify-between">
+              <span>{getLanguageName(locale)}</span>
+              {isActive && (
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              )}
+            </span>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</div>
+
+<script>
+  // Toggle dropdown
+  function initLanguageSwitcher() {
+    const button = document.getElementById('language-switcher-button');
+    const menu = document.getElementById('language-switcher-menu');
+    
+    if (!button || !menu) return;
+    
+    function toggleMenu() {
+      const isOpen = button.getAttribute('aria-expanded') === 'true';
+      
+      if (isOpen) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    }
+    
+    function openMenu() {
+      button.setAttribute('aria-expanded', 'true');
+      menu.classList.remove('opacity-0', 'invisible');
+      menu.classList.add('opacity-100', 'visible');
+    }
+    
+    function closeMenu() {
+      button.setAttribute('aria-expanded', 'false');
+      menu.classList.add('opacity-0', 'invisible');
+      menu.classList.remove('opacity-100', 'visible');
+    }
+    
+    // Toggle on button click
+    button.addEventListener('click', toggleMenu);
+    
+    // Close on click outside
+    document.addEventListener('click', (e) => {
+      const switcher = document.querySelector('.language-switcher');
+      if (switcher && !switcher.contains(e.target as Node)) {
+        closeMenu();
+      }
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeMenu();
+        button.focus();
+      }
+    });
+    
+    // Keyboard navigation
+    menu.addEventListener('keydown', (e) => {
+      const menuItems = Array.from(menu.querySelectorAll('a'));
+      const currentIndex = menuItems.indexOf(document.activeElement as HTMLElement);
+      
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        const nextIndex = (currentIndex + 1) % menuItems.length;
+        (menuItems[nextIndex] as HTMLElement).focus();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        const prevIndex = currentIndex <= 0 ? menuItems.length - 1 : currentIndex - 1;
+        (menuItems[prevIndex] as HTMLElement).focus();
+      }
+    });
+  }
+  
+  // Initialize on page load
+  initLanguageSwitcher();
+  
+  // Re-initialize after navigation (for SPA-like behavior)
+  document.addEventListener('astro:after-swap', initLanguageSwitcher);
+</script>
+
+<style>
+  .language-switcher-menu {
+    min-width: 200px;
+  }
+</style>
+

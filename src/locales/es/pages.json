@@ -1,0 +1,224 @@
+{
+  "hero": {
+    "title": "Tarjetas de fidelización",
+    "title_highlight": "usar realmente.",
+    "subtitle": "Cree atractivos programas digitales de fidelización que hagan que sus clientes vuelvan a por más.",
+    "badge_items": [
+      "Web App",
+      "Fast & Lightweight",
+      "No signup to try"
+    ],
+    "marquee": {
+      "rewards_program": "Programa de recompensas",
+      "points_system": "Sistema de puntos",
+      "tier_benefits": "Beneficios por niveles",
+      "gamification": "Gamificación"
+    }
+  },
+  "features": {
+    "section_title": "Todo lo que necesita",
+    "section_subtitle": "Potentes funciones para crear, gestionar y hacer crecer su programa de fidelización",
+    "versatile_card_types": {
+      "title": "Tipos de tarjetas versátiles",
+      "description": "Sellos, puntos, afiliaciones y cupones: todos personalizables para que se adapten perfectamente a su marca."
+    },
+    "scanner_app": {
+      "title": "Aplicación de escáner",
+      "description": "No necesita hardware adicional: utilice nuestra aplicación web multiplataforma para escanear y validar tarjetas."
+    },
+    "unique_designs": {
+      "title": "Diseños únicos",
+      "description": "Tarjetas totalmente personalizables para adaptarse a la identidad de su marca y destacar entre la competencia."
+    },
+    "push_notifications": {
+      "title": "Notificaciones Push",
+      "description": "Envíe notificaciones de marketing instantáneas para mantener a los clientes interesados e informados sobre las ofertas."
+    },
+    "simple_setup": {
+      "title": "Configuración sencilla",
+      "description": "Escanee el código QR e instálelo en sólo 3 toques. Ponga en marcha su programa de fidelización en cuestión de minutos."
+    },
+    "dashboard": {
+      "title": "Cuadro de mandos",
+      "description": "Realice un seguimiento de todo desde su panel de administración con análisis e información detallados."
+    }
+  },
+  "gallery": {
+    "section_title": "Diseños únicos",
+    "section_subtitle": "Tarjetas totalmente personalizables para adaptarlas a su marca. Cada diseño es único y se adapta a su negocio.",
+    "examples": {
+      "coffee_shop": "Cafetería",
+      "fitness_studio": "Estudio de fitness",
+      "restaurant": "Restaurante",
+      "spa_wellness": "Spa y bienestar",
+      "retail_store": "Tienda",
+      "salon": "Salón"
+    }
+  },
+  "how_it_works": {
+    "section_title": "Proceso de configuración sencillo",
+    "section_subtitle": "Ponga en marcha su programa de fidelización en sólo 3 sencillos pasos",
+    "step_1": {
+      "title": "Escanear código QR",
+      "description": "Los clientes escanean el código QR con la cámara de su teléfono para añadir tu tarjeta de fidelización directamente a su Apple o Google Wallet."
+    },
+    "step_2": {
+      "title": "Añadir a la cartera",
+      "description": "Con sólo 3 toques, la tarjeta de fidelización se instala en su monedero digital. No es necesario descargar ninguna aplicación."
+    },
+    "step_3": {
+      "title": "Gana premios",
+      "description": "Los clientes acumulan sellos o puntos con cada visita. Haz un seguimiento de su progreso y observa cómo crece su compromiso."
+    }
+  },
+  "pricing": {
+    "section_title": "Precios sencillos y transparentes",
+    "section_subtitle": "[AUTO-ERROR] Choose the plan that fits your business needs",
+    "starter": {
+      "name": "Inicio",
+      "price": "$29",
+      "period": "/mes",
+      "features": {
+        "active_cards": "Hasta 500 tarjetas activas",
+        "designs": "Diseños básicos de tarjetas",
+        "support": "Asistencia por correo electrónico"
+      }
+    },
+    "professional": {
+      "name": "Profesional",
+      "price": "$79",
+      "period": "/mes",
+      "features": {
+        "active_cards": "Hasta 5.000 tarjetas activas",
+        "designs": "Diseños de tarjetas personalizados",
+        "notifications": "Notificaciones push",
+        "support": "Asistencia prioritaria"
+      }
+    },
+    "enterprise": {
+      "name": "Empresa",
+      "price": "A medida",
+      "period": "",
+      "features": {
+        "active_cards": "Tarjetas activas ilimitadas",
+        "white_label": "Solución de marca blanca",
+        "api": "Acceso API",
+        "support": "Apoyo específico"
+      }
+    },
+    "page_title": "Planes de precios - Fidelización digital",
+    "page_description": "Elija el plan perfecto para su empresa. Precios flexibles sin cargos ocultos."
+  },
+  "footer": {
+    "tagline": "Cree atractivos programas digitales de fidelización que hagan que sus clientes vuelvan a por más. Sencillo, potente y eficaz."
+  },
+  "social_proof": {
+    "trust_statement": "Más de 500 empresas de todo el mundo confían en nosotros"
+  },
+  "problem_solution": {
+    "label": "El problema",
+    "title": "Deje de perder clientes por tarjetas de fidelización olvidadas",
+    "subtitle": "Los programas de fidelización tradicionales fracasan por tres razones fundamentales",
+    "problems": {
+      "paper_cards": {
+        "title": "Las tarjetas de papel se pierden",
+        "description": "El 85% de las tarjetas de fidelización de papel se tiran en una semana. Su inversión en impresión y distribución va directamente a la basura."
+      },
+      "app_fatigue": {
+        "title": "La fatiga de las aplicaciones es real",
+        "description": "Los clientes no se descargarán otra aplicación sólo por sus recompensas. El teléfono medio ya tiene más de 80 aplicaciones compitiendo por su atención."
+      },
+      "no_data": {
+        "title": "No hay datos de compromiso",
+        "description": "Sin información sobre el comportamiento de los clientes, va a ciegas. No hay forma de saber quiénes son sus mejores clientes ni qué les motiva."
+      }
+    },
+    "solution_label": "La solución",
+    "solution_title": "Tarjetas monedero digitales",
+    "solution_description": "Tarjetas que viven en Apple y Google Wallet - siempre con sus clientes. Sin descargas de aplicaciones. Sin tarjetas perdidas. Análisis en tiempo real."
+  },
+  "bento_features": {
+    "label": "Por qué elegirnos",
+    "title": "Todo lo que necesita en una sola plataforma",
+    "subtitle": "Potentes funciones diseñadas para las empresas modernas",
+    "items": {
+      "wallet_integration": {
+        "title": "Apple y Google Wallet",
+        "description": "Las tarjetas están donde ya están los clientes: en su monedero digital. No necesitan aplicación."
+      },
+      "real_time_updates": {
+        "title": "Actualizaciones en tiempo real",
+        "description": "Las notificaciones push y la actualización instantánea del saldo mantienen a los clientes interesados."
+      },
+      "analytics": {
+        "title": "Potentes análisis",
+        "description": "Comprenda el comportamiento de los clientes con información e informes detallados."
+      },
+      "customization": {
+        "title": "Personalización total",
+        "description": "Adapte su marca a la perfección con opciones de diseño ilimitadas."
+      },
+      "automation": {
+        "title": "Automatización inteligente",
+        "description": "Recompensas automatizadas, ofertas de cumpleaños y campañas de reenganche."
+      },
+      "integration": {
+        "title": "Fácil integración",
+        "description": "Funciona con su TPV, comercio electrónico y herramientas existentes."
+      }
+    }
+  },
+  "video_section": {
+    "label": "Véalo en acción",
+    "title": "Vea cómo funciona",
+    "subtitle": "Nuestra plataforma en 2 minutos",
+    "cta": "Reproducir vídeo"
+  },
+  "testimonials": {
+    "label": "Historias de clientes",
+    "title": "Amado por empresas de todo el mundo",
+    "subtitle": "Vea lo que dicen nuestros clientes sobre la transformación de sus programas de fidelización"
+  },
+  "faq": {
+    "label": "PREGUNTAS FRECUENTES",
+    "title": "Preguntas frecuentes",
+    "subtitle": "Todo lo que debe saber sobre nuestra plataforma"
+  },
+  "final_cta": {
+    "title": "¿Está listo para transformar su programa de fidelización?",
+    "subtitle": "Empiece gratis hoy mismo. No necesita tarjeta de crédito. Cancele cuando quiera.",
+    "primary_cta": "Empezar gratis",
+    "secondary_cta": "Reserve una demostración",
+    "trust_text": "Únase a las más de 500 empresas que ya utilizan nuestra plataforma"
+  },
+  "about": {
+    "page_title": "Quiénes somos - Fidelización digital",
+    "page_description": "Conozca nuestra misión de ayudar a las empresas a crear relaciones duraderas con sus clientes a través de programas digitales de fidelización.",
+    "hero_title": "Nuestra historia",
+    "hero_subtitle": "El futuro de la fidelización de clientes",
+    "mission_label": "Nuestra misión",
+    "mission_title": "Simplificar la fidelización",
+    "mission_text": "Creemos que todas las empresas merecen tener acceso a herramientas de fidelización modernas. Nuestra misión es ayudar a empresas de todos los tamaños a construir relaciones duraderas con sus clientes a través de programas de fidelización digitales sencillos y potentes.",
+    "story_label": "Cómo empezó",
+    "story_title": "Del problema a la solución",
+    "story_text": "Vimos cómo las empresas se enfrentaban a sistemas de fidelización obsoletos: tarjetas de papel que se perdían, aplicaciones caras que nadie se descargaba y ninguna información sobre el comportamiento de los clientes. Sabíamos que tenía que haber una forma mejor. Así que la creamos.",
+    "values_label": "Lo que defendemos",
+    "values_title": "Nuestros valores",
+    "values": {
+      "simplicity": {
+        "title": "Simplicidad",
+        "description": "La tecnología debería ser invisible. Construimos herramientas que simplemente funcionan, sin complejidades."
+      },
+      "fairness": {
+        "title": "Equidad",
+        "description": "Precios transparentes sin cargos ocultos. Lo que ve es lo que paga."
+      },
+      "customer_first": {
+        "title": "El cliente es lo primero",
+        "description": "Su éxito es nuestro éxito. Estamos aquí para ayudarle a crecer."
+      }
+    },
+    "cta_title": "¿Está listo para transformar su programa de fidelización?",
+    "cta_button": "Empezar gratis"
+  }
+}

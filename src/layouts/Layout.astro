@@ -1,0 +1,133 @@
+---
+import '../styles/global.css';
+import SEOHead from '../components/SEOHead.astro';
+import RegionSelector from '../components/RegionSelector.astro';
+import { getLocaleFromPathname, getTextDirection, type Locale } from '../utils/i18n';
+import i18next from '../i18next.config';
+import { getSiteSettings, getThemeCSSVariables, defaultSettings } from '../../sanity/lib/settings';
+
+const { t, changeLanguage } = i18next;
+
+interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string;
+}
+
+// Detect current locale from URL
+const currentLocale = getLocaleFromPathname(Astro.url.pathname) as Locale;
+const textDirection = getTextDirection(currentLocale);
+
+// Load translations for current locale
+await changeLanguage(currentLocale);
+
+// Get SEO content from props or translations
+const {
+  title = t('seo:home.title'),
+  description = t('seo:home.description'),
+  keywords = t('seo:home.keywords')
+} = Astro.props;
+
+// Get site settings from Sanity (with defaults as fallback)
+let siteSettings = defaultSettings;
+try {
+  siteSettings = await getSiteSettings();
+} catch (e) {
+  console.warn('Could not fetch site settings from Sanity, using defaults');
+}
+
+// Get theme CSS variables
+const themeVars = getThemeCSSVariables(siteSettings);
+
+// PostHog key from Sanity or placeholder
+const posthogKey = siteSettings.posthogKey || 'YOUR_POSTHOG_PROJECT_API_KEY';
+---
+
+<!doctype html>
+<html lang={currentLocale} dir={textDirection} style={`--color-primary: ${themeVars['--color-primary']}; --color-primary-dark: ${themeVars['--color-primary-dark']}; --color-accent: ${themeVars['--color-accent']}; --color-bg-light: ${themeVars['--color-bg-light']}; --color-bg-dark: ${themeVars['--color-bg-dark']}; --color-surface-light: ${themeVars['--color-surface-light']}; --color-surface-dark: ${themeVars['--color-surface-dark']}; --color-text-light: ${themeVars['--color-text-light']}; --color-text-dark: ${themeVars['--color-text-dark']}; --font-heading: ${themeVars['--font-heading']}; --font-body: ${themeVars['--font-body']};`}>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href={siteSettings.favicon || "/favicon.svg"} />
+		<meta name="generator" content={Astro.generator} />
+
+		<!-- SEO Meta Tags, hreflang, and Structured Data -->
+		<SEOHead
+			locale={currentLocale}
+			title={title}
+			description={description}
+			keywords={keywords}
+		/>
+
+		<!-- PostHog Analytics -->
+		<script is:inline define:vars={{ posthogKey }}>
+			!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+
+			// Initialize PostHog with key from Sanity Site Settings
+			(function() {
+				var POSTHOG_HOST = 'https://us.i.posthog.com';
+
+				if (posthogKey && posthogKey !== 'YOUR_POSTHOG_PROJECT_API_KEY') {
+					posthog.init(posthogKey, {
+						api_host: POSTHOG_HOST,
+						person_profiles: 'identified_only',
+						capture_pageview: true,
+						capture_pageleave: true,
+						autocapture: true
+					});
+				}
+			})();
+		</script>
+	</head>
+	<body>
+		<slot />
+		
+		<!-- Region Selector (appears on all pages) -->
+		<RegionSelector />
+	</body>
+</html>
+
+<script>
+	// Dark mode toggle functionality
+	const initTheme = () => {
+		const stored = localStorage.getItem('theme');
+		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		
+		if (stored === 'dark' || (!stored && prefersDark)) {
+			document.documentElement.classList.add('dark');
+		} else {
+			document.documentElement.classList.remove('dark');
+		}
+	};
+
+	// Initialize on load
+	initTheme();
+
+	// Listen for storage changes (if multiple tabs)
+	window.addEventListener('storage', (e) => {
+		if (e.key === 'theme') {
+			initTheme();
+		}
+	});
+
+	// Export toggle function globally
+	(window as any).toggleTheme = () => {
+		const isDark = document.documentElement.classList.contains('dark');
+		if (isDark) {
+			document.documentElement.classList.remove('dark');
+			localStorage.setItem('theme', 'light');
+		} else {
+			document.documentElement.classList.add('dark');
+			localStorage.setItem('theme', 'dark');
+		}
+	};
+</script>
+
+<style>
+	html,
+	body {
+		margin: 0;
+		width: 100%;
+		height: 100%;
+	}
+</style>

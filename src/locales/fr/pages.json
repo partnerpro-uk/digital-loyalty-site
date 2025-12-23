@@ -1,0 +1,224 @@
+{
+  "hero": {
+    "title": "Cartes de fidélité personnes",
+    "title_highlight": "utiliser.",
+    "subtitle": "Créez des programmes de fidélisation numériques attrayants qui incitent vos clients à revenir.",
+    "badge_items": [
+      "Web App",
+      "Fast & Lightweight",
+      "No signup to try"
+    ],
+    "marquee": {
+      "rewards_program": "Programme de récompenses",
+      "points_system": "Système de points",
+      "tier_benefits": "Prestations par palier",
+      "gamification": "Gamification"
+    }
+  },
+  "features": {
+    "section_title": "Tout ce dont vous avez besoin",
+    "section_subtitle": "Des fonctions puissantes pour créer, gérer et développer votre programme de fidélisation",
+    "versatile_card_types": {
+      "title": "Types de cartes polyvalentes",
+      "description": "Timbres, points, adhésions et coupons - tous personnalisables pour s'adapter parfaitement à votre marque."
+    },
+    "scanner_app": {
+      "title": "Application Scanner",
+      "description": "Aucun matériel supplémentaire n'est nécessaire - utilisez notre application web multiplateforme pour scanner et valider les cartes."
+    },
+    "unique_designs": {
+      "title": "Modèles uniques",
+      "description": "Des cartes entièrement personnalisables pour s'adapter à l'identité de votre marque et se démarquer de la concurrence."
+    },
+    "push_notifications": {
+      "title": "Notifications push",
+      "description": "Envoyez des notifications marketing instantanées pour que les clients restent engagés et informés des offres."
+    },
+    "simple_setup": {
+      "title": "Installation simple",
+      "description": "Scannez le code QR et installez-le en 3 clics. Lancez votre programme de fidélisation en quelques minutes."
+    },
+    "dashboard": {
+      "title": "Tableau de bord",
+      "description": "Suivez tout dans votre panneau d'administration avec des analyses et des informations détaillées."
+    }
+  },
+  "gallery": {
+    "section_title": "Modèles uniques",
+    "section_subtitle": "Des cartes entièrement personnalisables pour s'adapter à votre marque. Chaque design est unique et adapté à votre entreprise.",
+    "examples": {
+      "coffee_shop": "Café",
+      "fitness_studio": "Studio de remise en forme",
+      "restaurant": "Restaurant",
+      "spa_wellness": "Spa et bien-être",
+      "retail_store": "Magasin de détail",
+      "salon": "Salon"
+    }
+  },
+  "how_it_works": {
+    "section_title": "Processus d'installation simple",
+    "section_subtitle": "Lancez votre programme de fidélisation en 3 étapes simples",
+    "step_1": {
+      "title": "Scanner le code QR",
+      "description": "Les clients scannent le code QR avec l'appareil photo de leur téléphone pour ajouter votre carte de fidélité directement à leur portefeuille Apple ou Google."
+    },
+    "step_2": {
+      "title": "Ajouter au portefeuille",
+      "description": "Il suffit de trois pressions pour que la carte de fidélité soit installée dans leur portefeuille numérique. Aucun téléchargement d'application n'est nécessaire."
+    },
+    "step_3": {
+      "title": "Gagnez des récompenses",
+      "description": "Les clients collectent des timbres ou des points à chaque visite. Suivez leurs progrès et observez l'augmentation de l'engagement."
+    }
+  },
+  "pricing": {
+    "section_title": "Une tarification simple et transparente",
+    "section_subtitle": "Choisissez le plan qui correspond aux besoins de votre entreprise",
+    "starter": {
+      "name": "Démarrage",
+      "price": "$29",
+      "period": "/mois",
+      "features": {
+        "active_cards": "Jusqu'à 500 cartes actives",
+        "designs": "Modèles de cartes de base",
+        "support": "Soutien par courrier électronique"
+      }
+    },
+    "professional": {
+      "name": "Professionnel",
+      "price": "$79",
+      "period": "/mois",
+      "features": {
+        "active_cards": "Jusqu'à 5 000 cartes actives",
+        "designs": "Cartes personnalisées",
+        "notifications": "Notifications push",
+        "support": "Soutien prioritaire"
+      }
+    },
+    "enterprise": {
+      "name": "Entreprise",
+      "price": "Sur mesure",
+      "period": "",
+      "features": {
+        "active_cards": "Nombre illimité de cartes actives",
+        "white_label": "Solution en marque blanche",
+        "api": "Accès à l'API",
+        "support": "Soutien dédié"
+      }
+    },
+    "page_title": "Plans tarifaires - Fidélisation numérique",
+    "page_description": "Choisissez le plan idéal pour votre entreprise. Une tarification flexible sans frais cachés."
+  },
+  "footer": {
+    "tagline": "Créez des programmes de fidélisation numériques attrayants qui incitent vos clients à revenir. Simple, puissant et efficace."
+  },
+  "social_proof": {
+    "trust_statement": "Plus de 500 entreprises dans le monde entier lui font confiance"
+  },
+  "problem_solution": {
+    "label": "Le problème",
+    "title": "Ne plus perdre de clients à cause de cartes de fidélité oubliées",
+    "subtitle": "Les programmes de fidélisation traditionnels échouent pour trois raisons essentielles",
+    "problems": {
+      "paper_cards": {
+        "title": "Les cartes papier se perdent",
+        "description": "85% des cartes de fidélité en papier sont jetées au bout d'une semaine. Votre investissement dans l'impression et la distribution va directement à la poubelle."
+      },
+      "app_fatigue": {
+        "title": "La fatigue des applications est bien réelle",
+        "description": "Les clients ne téléchargeront pas une autre application uniquement pour obtenir des récompenses. Le téléphone moyen contient déjà plus de 80 applications qui se disputent l'attention."
+      },
+      "no_data": {
+        "title": "Pas de données sur l'engagement",
+        "description": "Vous volez à l'aveuglette si vous n'avez pas d'informations sur le comportement de vos clients. Vous n'avez aucun moyen de savoir qui sont vos meilleurs clients et ce qui les motive."
+      }
+    },
+    "solution_label": "La solution",
+    "solution_title": "Cartes de portefeuille numériques",
+    "solution_description": "Des cartes qui vivent dans Apple et Google Wallet - toujours avec vos clients. Pas de téléchargement d'application. Pas de cartes perdues. Analyse en temps réel."
+  },
+  "bento_features": {
+    "label": "Pourquoi nous choisir ?",
+    "title": "Tout ce dont vous avez besoin sur une seule plateforme",
+    "subtitle": "Des fonctionnalités puissantes conçues pour les entreprises modernes",
+    "items": {
+      "wallet_integration": {
+        "title": "Apple et Google Wallet",
+        "description": "Les cartes se trouvent là où les clients se trouvent déjà - dans leur portefeuille numérique. Aucune application n'est nécessaire."
+      },
+      "real_time_updates": {
+        "title": "Mises à jour en temps réel",
+        "description": "Les notifications push et les mises à jour instantanées du solde maintiennent l'engagement des clients."
+      },
+      "analytics": {
+        "title": "Des analyses puissantes",
+        "description": "Comprendre le comportement des clients grâce à des informations et des rapports détaillés."
+      },
+      "customization": {
+        "title": "Personnalisation complète",
+        "description": "Assortissez parfaitement votre marque grâce à un nombre illimité d'options de conception."
+      },
+      "automation": {
+        "title": "Automatisation intelligente",
+        "description": "Récompenses automatisées, offres d'anniversaire et campagnes de réengagement."
+      },
+      "integration": {
+        "title": "Intégration facile",
+        "description": "Fonctionne avec votre point de vente, votre commerce électronique et vos outils existants."
+      }
+    }
+  },
+  "video_section": {
+    "label": "Voir en action",
+    "title": "Voir comment ça marche",
+    "subtitle": "Un aperçu de notre plateforme en 2 minutes",
+    "cta": "Lire la vidéo"
+  },
+  "testimonials": {
+    "label": "Témoignages de clients",
+    "title": "Apprécié par les entreprises du monde entier",
+    "subtitle": "Découvrez ce que nos clients disent de la transformation de leurs programmes de fidélisation"
+  },
+  "faq": {
+    "label": "FAQ",
+    "title": "Questions fréquemment posées",
+    "subtitle": "Tout ce que vous devez savoir sur notre plateforme"
+  },
+  "final_cta": {
+    "title": "Prêt à transformer votre programme de fidélisation ?",
+    "subtitle": "Commencez gratuitement dès aujourd'hui. Aucune carte de crédit n'est nécessaire. Annulez à tout moment.",
+    "primary_cta": "Commencer gratuitement",
+    "secondary_cta": "Réserver une démonstration",
+    "trust_text": "Rejoignez les plus de 500 entreprises qui utilisent déjà notre plateforme"
+  },
+  "about": {
+    "page_title": "À propos de nous - Digital Loyalty",
+    "page_description": "Découvrez notre mission : aider les entreprises à établir des relations durables avec leurs clients grâce à des programmes de fidélisation numériques.",
+    "hero_title": "Notre histoire",
+    "hero_subtitle": "Construire l'avenir de la fidélisation de la clientèle",
+    "mission_label": "Notre mission",
+    "mission_title": "Simplifier la fidélisation",
+    "mission_text": "Nous pensons que chaque entreprise mérite d'avoir accès à des outils de fidélisation modernes. Notre mission est d'aider les entreprises de toutes tailles à construire des relations durables avec leurs clients grâce à des programmes de fidélisation numériques simples et puissants.",
+    "story_label": "Comment cela a commencé",
+    "story_title": "Du problème à la solution",
+    "story_text": "Nous avons vu des entreprises se débattre avec des systèmes de fidélisation dépassés - des cartes papier qui se perdent, des applications coûteuses que personne ne télécharge, et aucune connaissance du comportement des clients. Nous savions qu'il devait y avoir une meilleure solution. Nous l'avons donc créée.",
+    "values_label": "Ce que nous défendons",
+    "values_title": "Nos valeurs",
+    "values": {
+      "simplicity": {
+        "title": "Simplicité",
+        "description": "La technologie devrait être invisible. Nous construisons des outils qui fonctionnent simplement, sans complexité."
+      },
+      "fairness": {
+        "title": "L'équité",
+        "description": "Des prix transparents sans frais cachés. Ce que vous voyez est ce que vous payez."
+      },
+      "customer_first": {
+        "title": "Le client d'abord",
+        "description": "Votre réussite est la nôtre. Nous sommes là pour vous aider à vous développer."
+      }
+    },
+    "cta_title": "Prêt à transformer votre programme de fidélisation ?",
+    "cta_button": "Commencer gratuitement"
+  }
+}

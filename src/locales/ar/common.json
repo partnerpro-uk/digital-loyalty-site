@@ -1,0 +1,130 @@
+{
+  "buttons": {
+    "get_started": "ابدأ الآن",
+    "get_started_today": "ابدأ اليوم",
+    "see_features": "انظر الميزات",
+    "create_your_card": "أنشئ بطاقتك",
+    "choose_plan": "اختر الخطة",
+    "contact_sales": "اتصل بالمبيعات",
+    "close": "إغلاق",
+    "previous": "السابق",
+    "next": "التالي",
+    "book_demo": "احجز عرضاً تجريبياً",
+    "talk_to_sales": "تحدث إلى المبيعات"
+  },
+  "labels": {
+    "web_app": "تطبيق الويب",
+    "fast_lightweight": "سريع وخفيف الوزن",
+    "no_signup": "لا يوجد اشتراك للتجربة",
+    "features": "الميزات",
+    "key_features": "الميزات الرئيسية",
+    "gallery": "معرض الصور",
+    "how_it_works": "كيف تعمل",
+    "pricing": "التسعير",
+    "most_popular": "الأكثر شهرة",
+    "blog": "المدونة",
+    "about": "نبذة عن",
+    "social_proof": "موثوق به من قبل",
+    "problem_solution": "المشكلة",
+    "testimonials": "المراجعات",
+    "faq": "الأسئلة الشائعة",
+    "video": "عرض توضيحي",
+    "contact": "اتصل بنا",
+    "ready_to_start": "هل أنت جاهز للبدء؟",
+    "setup_minutes": "قم بإعداد برنامج الولاء الخاص بك في دقائق"
+  },
+  "actions": {
+    "toggle_theme": "تبديل السمة",
+    "switch_language": "تبديل اللغة",
+    "select_country": "اختر البلد"
+  },
+  "country_selector": {
+    "select_country": "اختر البلد",
+    "modal_title": "اختر بلدك أو منطقتك",
+    "modal_subtitle": "سيؤدي اختيارك إلى تحديث اللغة والعملة",
+    "regions": {
+      "americas": "الأمريكتان",
+      "europe": "أوروبا",
+      "middle_east_africa": "الشرق الأوسط وأفريقيا",
+      "asia_pacific": "آسيا والمحيط الهادئ"
+    }
+  },
+  "pricing_page": {
+    "billing": {
+      "monthly": "شهرياً",
+      "yearly": "سنويًا",
+      "quarterly": "ربع سنوي",
+      "save_percentage": "حفظ {{النسبة المئوية}}٪",
+      "per_month": "/شهرياً",
+      "per_year": "/السنة",
+      "per_day": "فقط {{السعر}} في اليوم الواحد",
+      "billed_annually": "يُدفع سنوياً بمبلغ {{price}}",
+      "save_with_yearly": "وفّر {{النسبة المئوية}}% مع الحصة السنوية",
+      "annual_savings": "حفظ {{النسبة المئوية}}٪"
+    },
+    "no_plans": "لا توجد خطط تسعير متاحة حتى الآن.",
+    "add_in_sanity": "إضافتها في Sanity Studio",
+    "enterprise": {
+      "lets_talk": "دعنا نتحدث",
+      "contact_for_pricing": "اتصل بنا لمعرفة الأسعار",
+      "get_in_touch": "تواصل معنا لمعرفة المزيد"
+    }
+  },
+  "blog_page": {
+    "title": "المدونة",
+    "subtitle": "الرؤى والاستراتيجيات",
+    "description": "تعرّف على كيفية بناء برامج ولاء العملاء وتحسينها بما يحقق النمو.",
+    "featured_articles": "مقالات مميزة",
+    "all_articles": "جميع المقالات",
+    "no_posts": "لا توجد منشورات على المدونة حتى الآن. تحقق مرة أخرى قريبًا!",
+    "filter_by_category": "تصفية حسب الفئة:",
+    "all_posts": "جميع المنشورات",
+    "read_more": "اقرأ المزيد",
+    "featured": "مميز"
+  },
+  "time": {
+    "reading_time": "{{دقائق}} دقيقة للقراءة"
+  },
+  "region_selector": {
+    "select_region": "اختر المنطقة",
+    "modal_title": "اختر منطقتك",
+    "detected_title": "اكتشفنا:",
+    "detected_subtitle": "اللغة والبلد والعملة",
+    "keep_settings": "احتفظ بهذه الإعدادات",
+    "change_region": "اختر منطقة مختلفة",
+    "or_choose": "أو اختر منطقة مختلفة:",
+    "regions": {
+      "americas": "الأمريكتان",
+      "europe": "أوروبا",
+      "middle_east_africa": "الشرق الأوسط وأفريقيا",
+      "asia_pacific": "آسيا والمحيط الهادئ"
+    }
+  },
+  "forms": {
+    "email_label": "البريد الإلكتروني",
+    "email_placeholder": "أدخل بريدك الإلكتروني",
+    "name_label": "الاسم",
+    "name_placeholder": "اسمك",
+    "company_label": "الشركة",
+    "company_placeholder": "اسم الشركة",
+    "message_label": "الرسالة",
+    "message_placeholder": "كيف يمكننا المساعدة؟",
+    "submit": "إرسال",
+    "submitting": "تقديم...",
+    "success_title": "شكراً لك!",
+    "success_message": "سنتواصل معك قريباً.",
+    "error_title": "حدث خطأ ما",
+    "error_message": "يرجى المحاولة مرة أخرى لاحقاً.",
+    "required": "مطلوب",
+    "invalid_email": "الرجاء إدخال بريد إلكتروني صحيح"
+  },
+  "accessibility": {
+    "skip_to_content": "تخطي إلى المحتوى",
+    "menu": "قائمة الطعام",
+    "close_menu": "إغلاق القائمة",
+    "expand": "قم بتوسيع",
+    "collapse": "انهيار",
+    "play_video": "تشغيل الفيديو",
+    "pause_video": "إيقاف الفيديو مؤقتاً"
+  }
+}

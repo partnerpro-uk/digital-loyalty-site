@@ -1,0 +1,150 @@
+---
+// Navigation component for Digital Loyalty
+// Fetches content from Sanity CMS with i18n fallback
+import i18next from '../i18next.config';
+import { getNavigationWithFallback } from '../../sanity/lib/navigation';
+import { getSiteSettings, defaultSettings } from '../../sanity/lib/settings';
+import { getLocaleFromPathname } from '../utils/i18n';
+
+const { t } = i18next;
+
+// Get current language from URL
+const currentLang = getLocaleFromPathname(Astro.url.pathname) || 'en';
+
+// Fetch navigation from Sanity
+let navigation = null;
+let siteSettings = defaultSettings;
+try {
+  navigation = await getNavigationWithFallback(currentLang);
+  siteSettings = await getSiteSettings();
+} catch (e) {
+  console.warn('Could not fetch navigation from Sanity, using i18n fallback');
+}
+
+// Use Sanity content with i18n fallback
+const brandName = siteSettings?.siteName || t('navigation:brand.name');
+const logoUrl = siteSettings?.logo || null;
+const ctaButton = navigation?.ctaButton || {
+  text: t('common:buttons.get_started'),
+  url: '#get-started'
+};
+
+// Navigation items from Sanity or i18n fallback
+const navItems = navigation?.items || [
+  { label: t('navigation:menu.features'), href: '#features', isAnchor: true },
+  { label: t('navigation:menu.how_it_works'), href: '#how-it-works', isAnchor: true },
+  { label: t('navigation:menu.pricing'), href: '#pricing', isAnchor: true },
+  { label: t('navigation:menu.blog'), href: '/blog', isAnchor: false },
+  { label: t('navigation:menu.about'), href: '/about', isAnchor: false }
+];
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg-primary)]/80 backdrop-blur-md border-b border-[var(--border-color)]">
+  <div class="mx-auto max-w-7xl px-6">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href="/" class="flex items-center">
+        {logoUrl ? (
+          <img src={logoUrl} alt={brandName} class="h-10 w-auto" />
+        ) : (
+          <span class="text-xl font-bold text-[var(--text-primary)]">{brandName}</span>
+        )}
+      </a>
+
+      <!-- Navigation Links -->
+      <div class="hidden md:flex items-center space-x-8">
+        {navItems.map((item) => (
+          <a
+            href={item.href}
+            class={`text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors ${item.highlight ? 'font-semibold text-[var(--text-primary)]' : ''}`}
+            target={item.openInNewTab ? '_blank' : undefined}
+            rel={item.openInNewTab ? 'noopener noreferrer' : undefined}
+          >
+            {item.label}
+          </a>
+        ))}
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-3">
+        <!-- Dark Mode Toggle -->
+        <button
+          id="theme-toggle"
+          class="p-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors"
+          aria-label={t('common:actions.toggle_theme')}
+        >
+          <!-- Sun icon - shown in light mode -->
+          <svg id="theme-icon-sun" class="w-5 h-5 text-[var(--text-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+          <!-- Moon icon - shown in dark mode -->
+          <svg id="theme-icon-moon" class="w-5 h-5 text-[var(--text-primary)] hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+          </svg>
+        </button>
+
+        <script>
+          // Type declaration for toggleTheme
+          declare global {
+            interface Window {
+              toggleTheme?: () => void;
+            }
+          }
+
+          // Theme toggle with icon switching
+          function updateThemeIcon() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const sunIcon = document.getElementById('theme-icon-sun');
+            const moonIcon = document.getElementById('theme-icon-moon');
+
+            if (sunIcon && moonIcon) {
+              if (isDark) {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+              } else {
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+              }
+            }
+          }
+
+          // Update icon on page load
+          updateThemeIcon();
+
+          // Handle theme toggle click
+          document.getElementById('theme-toggle')?.addEventListener('click', () => {
+            if (window.toggleTheme) {
+              window.toggleTheme();
+              updateThemeIcon();
+            }
+          });
+
+          // Watch for theme changes (from other tabs or initial load)
+          const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              if (mutation.attributeName === 'class') {
+                updateThemeIcon();
+              }
+            });
+          });
+
+          observer.observe(document.documentElement, { attributes: true });
+        </script>
+
+        <!-- Get Started Button -->
+        <a href={ctaButton.url} class="hidden sm:flex bg-[var(--bg-accent)] hover:opacity-90 text-[var(--text-on-accent)] px-5 py-2 rounded-full font-medium transition-all">
+          {ctaButton.text}
+        </a>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="md:hidden">
+        <button class="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>

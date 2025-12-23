@@ -1,0 +1,265 @@
+---
+// Hero component for the digital loyalty site
+// Fetches content from Sanity CMS with i18n fallback
+// Supports configurable CTA modes: form_modal, form_page, app_redirect, calendar
+import i18next from '../i18next.config';
+import { getPageContentWithFallback } from '../../sanity/lib/pageContent';
+import { getLocaleFromPathname } from '../utils/i18n';
+import SmartCTA from './SmartCTA.astro';
+
+const { t } = i18next;
+
+// Get current language from URL
+const currentLang = getLocaleFromPathname(Astro.url.pathname) || 'en';
+
+// Fetch page content from Sanity
+let pageContent = null;
+try {
+  pageContent = await getPageContentWithFallback('home', currentLang);
+} catch (e) {
+  console.warn('Could not fetch page content from Sanity, using i18n fallback');
+}
+
+// Use Sanity content with i18n fallback
+const hero = pageContent?.hero;
+const heroTitle = hero?.title || t('pages:hero.title');
+const heroTitleHighlight = hero?.titleHighlight || t('pages:hero.title_highlight');
+const heroSubtitle = hero?.subtitle || t('pages:hero.subtitle');
+const primaryCtaText = hero?.primaryCta?.text || t('common:buttons.get_started_today');
+const secondaryCtaText = hero?.secondaryCta?.text || t('common:buttons.see_features');
+const secondaryCtaUrl = hero?.secondaryCta?.url || '#features';
+const trustIndicators = hero?.trustIndicators || [
+  t('common:labels.web_app'),
+  t('common:labels.fast_lightweight'),
+  t('common:labels.no_signup')
+];
+
+// Hero stats from Sanity or fallback defaults
+const heroStats = hero?.stats || [
+  { value: '500+', label: t('pages:hero.stats.businesses') || 'Businesses' },
+  { value: '2M+', label: t('pages:hero.stats.customers') || 'Customers' },
+  { value: '98%', label: t('pages:hero.stats.retention') || 'Retention' }
+];
+
+// Hero image from Sanity or default
+const heroImage = hero?.heroImage || '/phone-hero.avif';
+
+// Image display type: 'phone' (mockup), 'image' (regular), or 'none'
+const imageDisplayType = hero?.imageDisplayType || 'phone';
+
+// Floating cards from Sanity or fallback defaults
+const floatingCards = hero?.floatingCards || [
+  { title: '+127 points', subtitle: 'Earned today', iconColor: 'green', icon: 'check' },
+  { title: 'Gold Tier', subtitle: '15% off rewards', iconColor: 'purple', icon: 'currency' },
+  { title: '4.9 Rating', subtitle: '2,847 reviews', iconColor: 'amber', icon: 'star' }
+];
+
+// Icon color classes mapping
+const iconColorClasses: Record<string, string> = {
+  green: 'from-green-400 to-green-500',
+  purple: 'from-[#8b5cf6] to-[#a78bfa]',
+  amber: 'from-amber-400 to-orange-500',
+  blue: 'from-blue-400 to-blue-500',
+  pink: 'from-pink-400 to-pink-500'
+};
+
+// Card position classes for each floating card
+const cardPositions = [
+  { position: 'left-4 top-8', delay: '0s' },
+  { position: 'right-4 top-1/3', delay: '0.5s' },
+  { position: 'left-8 bottom-12', delay: '1s' }
+];
+---
+
+<section class="relative isolate overflow-hidden bg-[var(--bg-primary)] text-[var(--text-primary)]">
+  <!-- subtle glow / gradient bg -->
+  <div class="pointer-events-none absolute inset-x-0 -top-40 h-[500px] bg-[radial-gradient(60%_40%_at_50%_0%,rgba(138,92,246,0.2),transparent_70%)] dark:bg-[radial-gradient(60%_40%_at_50%_0%,rgba(138,92,246,0.3),transparent_70%)]"></div>
+
+  <div class="mx-auto max-w-7xl px-6 pt-28 pb-20">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+      <!-- Left side: Text content -->
+      <div class="text-left">
+        <!-- Trust indicators badge -->
+        <div id="heroBadge" class="inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] backdrop-blur mb-6">
+          {trustIndicators.map((indicator, i) => (
+            <>
+              <span>{indicator}</span>
+              {i < trustIndicators.length - 1 && <span class="opacity-60">•</span>}
+            </>
+          ))}
+        </div>
+
+        <h1 id="heroTitle" class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[var(--text-primary)] leading-[1.1]">
+          {heroTitle}<br /> <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#8b5cf6] to-[#a78bfa]">{heroTitleHighlight}</span>
+        </h1>
+
+        <p id="heroSub" class="mt-6 max-w-lg text-lg leading-relaxed text-[var(--text-secondary)]">
+          {heroSubtitle}
+        </p>
+
+        <div id="heroCta" class="mt-8 flex items-center gap-4 flex-wrap">
+          <SmartCTA
+            id="hero"
+            text={primaryCtaText}
+            variant="gradient"
+            size="lg"
+            context={{ source: 'hero' }}
+            showArrow={true}
+            class="group"
+          />
+          <a
+            href={secondaryCtaUrl}
+            class="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)]/30 px-8 py-4 text-lg font-semibold text-[var(--text-primary)] backdrop-blur hover:bg-[var(--bg-secondary)]/50 transition-all"
+          >
+            {secondaryCtaText}
+          </a>
+        </div>
+
+        <!-- Trust stats -->
+        <div id="heroStats" class="mt-10 flex items-center gap-8 flex-wrap">
+          {heroStats.map((stat) => (
+            <div class="text-left">
+              <div class="text-2xl sm:text-3xl font-bold text-[var(--text-primary)]">{stat.value}</div>
+              <div class="text-sm text-[var(--text-secondary)]">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Right side: Visual (Phone mockup, Image, or None) -->
+      {imageDisplayType !== 'none' && (
+        <div id="heroVisual" class="relative flex items-center justify-center lg:justify-center min-h-[400px] lg:min-h-[500px]">
+          <!-- Floating stat cards - CMS controlled (hidden on mobile for cleaner layout) -->
+          {floatingCards.slice(0, 3).map((card, index) => {
+            const posConfig = cardPositions[index] || cardPositions[0];
+            const colorClass = iconColorClasses[card.iconColor] || iconColorClasses.purple;
+
+            return (
+              <div
+                class={`absolute ${posConfig.position} z-20 hero-float-card hidden sm:block`}
+                style={`animation-delay: ${posConfig.delay};`}
+              >
+                <div class="rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)]/90 backdrop-blur-md p-3 shadow-xl">
+                  <div class="flex items-center gap-2.5">
+                    <div class={`w-9 h-9 rounded-full bg-gradient-to-br ${colorClass} flex items-center justify-center flex-shrink-0`}>
+                      {card.icon === 'check' && (
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                      )}
+                      {card.icon === 'currency' && (
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                      )}
+                      {card.icon === 'star' && (
+                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                        </svg>
+                      )}
+                      {card.icon === 'trophy' && (
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                        </svg>
+                      )}
+                      {card.icon === 'heart' && (
+                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                        </svg>
+                      )}
+                      {card.icon === 'lightning' && (
+                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M13 3L4 14h7l-2 7 9-11h-7l2-7z"></path>
+                        </svg>
+                      )}
+                    </div>
+                    <div>
+                      <p class="text-xs font-semibold text-[var(--text-primary)] leading-tight">{card.title}</p>
+                      <p class="text-[10px] text-[var(--text-secondary)]">{card.subtitle}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+
+          {/* Phone Mockup Display */}
+          {imageDisplayType === 'phone' && (
+            <div class="relative w-[200px] sm:w-[240px] lg:w-[280px]">
+              <!-- Phone frame -->
+              <div class="relative rounded-[2rem] border-[6px] border-[var(--text-primary)]/10 bg-[var(--bg-secondary)] p-1.5 shadow-2xl">
+                <!-- Screen -->
+                <div class="rounded-[1.5rem] overflow-hidden bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9] aspect-[9/19]">
+                  <img
+                    src={heroImage}
+                    alt="Digital Loyalty App"
+                    class="w-full h-full object-cover"
+                    loading="eager"
+                  />
+                </div>
+                <!-- Notch -->
+                <div class="absolute top-3 left-1/2 -translate-x-1/2 w-16 h-4 bg-[var(--text-primary)]/10 rounded-full"></div>
+              </div>
+              <!-- Glow effect behind phone -->
+              <div class="absolute inset-0 -z-10 blur-3xl opacity-30 bg-gradient-to-br from-[#8b5cf6] to-[#a78bfa] rounded-full scale-90"></div>
+            </div>
+          )}
+
+          {/* Regular Image Display */}
+          {imageDisplayType === 'image' && (
+            <div class="relative w-full max-w-[400px] lg:max-w-[480px]">
+              <img
+                src={heroImage}
+                alt="Digital Loyalty"
+                class="w-full h-auto rounded-2xl shadow-2xl"
+                loading="eager"
+              />
+              <!-- Glow effect behind image -->
+              <div class="absolute inset-0 -z-10 blur-3xl opacity-20 bg-gradient-to-br from-[#8b5cf6] to-[#a78bfa] rounded-full scale-110"></div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  </div>
+
+  <!-- Motion animations -->
+  <script type="module">
+    import { animate, inView, stagger } from "motion";
+
+    inView("#heroBadge", ({ target }) => {
+      animate(target, { opacity: [0, 1], y: [20, 0] }, { duration: 0.5, easing: "ease-out" });
+    });
+
+    inView("#heroTitle", ({ target }) => {
+      animate(target, { opacity: [0, 1], y: [30, 0] }, { duration: 0.6, easing: "ease-out", delay: 0.1 });
+    });
+
+    inView("#heroSub", ({ target }) => {
+      animate(target, { opacity: [0, 1], y: [20, 0] }, { duration: 0.5, easing: "ease-out", delay: 0.2 });
+    });
+
+    inView("#heroCta", ({ target }) => {
+      animate(target, { opacity: [0, 1], y: [20, 0] }, { duration: 0.5, easing: "ease-out", delay: 0.3 });
+    });
+
+    inView("#heroStats", ({ target }) => {
+      animate(target, { opacity: [0, 1], y: [20, 0] }, { duration: 0.5, easing: "ease-out", delay: 0.4 });
+    });
+
+    inView("#heroVisual", ({ target }) => {
+      animate(target, { opacity: [0, 1], scale: [0.95, 1] }, { duration: 0.7, easing: "ease-out", delay: 0.2 });
+    });
+  </script>
+
+  <style>
+    .hero-float-card {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+  </style>
+</section>
